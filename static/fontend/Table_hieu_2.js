@@ -128,37 +128,63 @@
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       
-  function paint_text(text) {
-    console.log(text);
-    var array_color = [ 'red' , 'blue','orange', '#34568b', '#FF6F61','#88B04B' ,'#9C4722' ,'#00A170'   , '#CE3175', '#0072B5', '	#999900', '#926AA6','#00008B' ,'#CD212A', '#282D3C' ] ;
-    let array = [] ;
- let result_array = [] ;
-
- return text.replace(/Data\$?\[[0-9]*\]\$?\[[0-9]*\]/gi, function (x) {
-
-                                                          let index_color ;
-                                                          if (array.indexOf(x)!==-1) {
-                                                            // đầu tiên mảng rỗng chạy else trước
-                                                            // lần lặp sau đó chạy lại kiểm tra xem Data[][] tiếp có chưa nếu có rồi thì lấy màu cũ , nếu chưa có xuống else push màu mới
-                                                            index_color = array.indexOf(x) ;
-                                                           
-                                                          } else {
-                                                            // đầu tiên tìm được Data[][] khớp thì push vào array
-                                                            // sau đó xác định màu cho Data[][] đó
-                                                            array.push(x);
-                                                            index_color = array.length-1 ;
-                                                          }
-                                                          // khi đã hết màu mà vẫn có Data[][] thì lặp lại màu từ đầu bằng cách nhân bản array_color 
-                                                        if (index_color>= array_color.length) { array_color = array_color.concat(array_color) ; }
-
-                                                          return `<span style='color: ${ array_color[index_color] }'>${x}</span>`;
- 
-});
-
-
-
+      function paint_text(text, vi_tri_focus) {
+  
+        text =  text.slice(0, vi_tri_focus) + "|_|_|" + text.slice(vi_tri_focus);
+        console.log(text);
+        var array_color = [ 'red' , 'blue','orange', '#34568b', '#FF6F61','#88B04B' ,'#9C4722' ,'#00A170'   , '#CE3175', '#0072B5', '	#999900', '#926AA6','#00008B' ,'#CD212A', '#282D3C' ] ;
+        let array = [] ;
+     let result_array = [] ;
+    let text_after_replace ;
+    text_after_replace =   text.replace(/Data\$?\[[0-9]*\]\$?\[[0-9]*\]/gi, function (x) {
     
-  }
+                                                              let index_color ;
+                                                              if (array.indexOf(x)!==-1) {
+                                                                // đầu tiên mảng rỗng chạy else trước
+                                                                // lần lặp sau đó chạy lại kiểm tra xem Data[][] tiếp có chưa nếu có rồi thì lấy màu cũ , nếu chưa có xuống else push màu mới
+                                                                index_color = array.indexOf(x) ;
+                                                               
+                                                              } else {
+                                                                // đầu tiên tìm được Data[][] khớp thì push vào array
+                                                                // sau đó xác định màu cho Data[][] đó
+                                                                array.push(x);
+                                                                index_color = array.length-1 ;
+                                                              }
+                                                              // khi đã hết màu mà vẫn có Data[][] thì lặp lại màu từ đầu bằng cách nhân bản array_color 
+                                                            if (index_color>= array_color.length) { array_color = array_color.concat(array_color) ; }
+    
+                                                              return `<span   style='color: ${ array_color[index_color] }'>${x}</span>`;
+     
+    });
+    let offset ;
+    let node_index ;
+    const div = document.createElement("div");
+    div.innerHTML = text_after_replace;
+    let children = div.childNodes ;
+    let array_children = Array.from(children);
+    console.log(array_children);
+    let len = array_children.length ;
+    for (var i = 0; i <len; i++) {
+      if (array_children[i].data!== undefined ) {
+        let kt = array_children[i].data.indexOf("|_|_|" ) ;
+        if (kt!== -1) {
+          node_index = i ;
+        
+          offset = kt ;
+          break ;
+    
+        }
+      }
+    }
+    
+    text_after_replace = text_after_replace.replace("|_|_|", "") ;
+    
+     
+    
+    return [text_after_replace, node_index,offset ] ;
+    
+        
+      }
 
       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_col, dia_chi_o_click_in_view_row , dia_chi_o_click_in_view_col ) {
@@ -181,12 +207,20 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      
       var input_formula = thanh_dia_chi_0.current;
       // khi di chuyển chuột trong thẻ input xác định vị trí của con chuột tới vị trí nào trong text input
-      input_.onmousedown =  function (event) {  setTimeout(() => {
+      input_.onmousedown =  function (event) { 
 
+        let range = document.createRange();
+  let selection = window.getSelection();
+ // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
+    setTimeout(() => {
+      range.setStart(input_.firstChild, 0);
+      range.setEnd(selection.anchorNode , selection.anchorOffset);
+       vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
+      console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+    }, 0);
 
-        vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart ; 
-        console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
-      }, 0);}
+    
+    }
 
 
 
@@ -199,21 +233,43 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             console.log("---------------------_input_.onkeydown") ;
             // khi ấn phím khác enter thì tiến hành ghi dữ liệu vào thẻ input
             if (event.keyCode !== 13) {
-                // thay đổi độ rộng của input phù hợp với ký tự nhập vào trước đó 
-                var length_ = ((input_.value.length + 1) * 8) ; if ( length_ >= 100) { input_.style.width =  length_ + 'px'; }
-
-                // xác dịnh vị trí focus tại vị trí nào trên thẻ input trước khi sự kiện onkeydown điền giá trị vào.
-                // sau đó ta cộng thêm 1 để xác định vị trí sau khi nhấn phím
-                vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart + 1 ; 
-                console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
+               
+              let range = document.createRange();
+              let selection = window.getSelection();
+             // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
+                setTimeout(() => {
+                  console.log(selection.anchorNode , selection.anchorOffset);
+                  range.setStart(input_.firstChild, 0);
+                  range.setEnd(selection.anchorNode , selection.anchorOffset);
+                   vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
+                  console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+                }, 0);
                
                 //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
                 // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
                     // sau đó gán giá trị khi nhấn lên input_formula
-                setTimeout(() => {  text_formular[i + i_array_2d][j + j_array_2d] = input_.value ;
+                setTimeout(() => {  
+                  text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ;
                     console.log('text_formular--'+  text_formular[i + i_array_2d][j + j_array_2d]);
+                    console.log(i + i_array_2d, j + j_array_2d);
                      input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
-                      input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  }, 0);
+                      input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+
+                    
+                      let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ) ;
+                   
+                      input_.innerHTML = paint[0] ;
+
+                    // di chuyển focus tới vị trí cũ
+                      let range = document.createRange();
+                      let selection = window.getSelection();
+                      selection.removeAllRanges(); 
+                       range.setStart(input_.childNodes[paint[1]], paint[2]);
+                       selection.addRange(range);
+                      
+                    
+                    
+                    } , 0);
           
                 
                       
@@ -246,6 +302,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
          
              key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i +1 ,j); // tô màu và focus
+             console.log('focus   ' ,(i +1 +i_array_2d)  ,(j_array_2d + j ) );
              mien_select_array_2d[0] = i_array_2d + i + 1 ;
              mien_select_array_2d[1] = j_array_2d + j ;
            
@@ -336,39 +393,78 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         console.log('xuất hiện lại thẻ input và focus') ;
                       
                       
-                          a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].innerHTML = " <input   type='text'  />"  ;
+                          a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].innerHTML = '<div  contenteditable="true"></div>'  ;
                           var input_ =  a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].children[0] ;
                           Object.assign(input_.style,css.input_focus) ;
 
-                          input_.value = text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d] ;
+                         
 
-                               // thay đổi độ rộng của input phù hợp với ký tự nhập vào
-                               var length_ = ((input_.value.length + 1) * 8) ;
-                               if ( length_ >= 100) {
-                                input_.style.width =  length_ + 'px';
-                             
-                               
-                               }
-                      
+                          if ( text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d]  === null) {           
+                            input_.focus({preventScroll:true}) ; 
+                            }else{
+
+                                // focus tại vị trí mới nhưng không set lại vi_tri_con_tro_khi_di_chuyen_trong_double_click_input. Biến này vẫn ở trạng thái trước đó
+                                let vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ;  
+                                console.log(vi_tri_focus);
+                                console.log(cong_thuc_them_vao[0]);
+                                console.log(cong_thuc_them_vao[0].length);
+                                let paint =  paint_text( text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d],vi_tri_focus ) ;
+                              
+                                input_.innerHTML = paint[0] ;
                 
-                          // focus phải đặt trong  setTimeout vì nó phải đợi thẻ input value xuất hiện đã.
-                          //****** chú ý focus trong react sẽ render ra tiêu điểm hiển thị luôn rồi chạy tiếp hoạt động giống  console. log  */
-                          // do vậy nếu ở đoạn code này ta để a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].children[0].focus({preventScroll:true});
-                          // thì khi cuộn nhanh quá sẽ có lỗi focus :Uncaught TypeError: Cannot read properties of undefined (reading 'focus') at <anonymous>
-                        //  var len = input_.value.length;
-                          setTimeout(()=>{ 
-                          //  input_.setSelectionRange(len, len); để lựa chọn vị trí focus
-                            input_.focus({preventScroll:true});
+                              // di chuyển focus tới vị trí cũ
+                              let range = document.createRange();
+                              let selection = window.getSelection();
+                              selection.removeAllRanges(); 
+                               range.setStart(input_.childNodes[paint[1]], paint[2]);
+                               // khi click vào div khác hoặc scroll thì div input_truoc_do đã bị mất focus, sự kiện mất focus diễn ra cuối cùng.
+                                  // do vậy ta phải setTimeout ở đây để lấy lại focus. => selection.addRange(range) sẽ diễn ra cuối cùng
+                               setTimeout(() => {
+                                selection.addRange(range);    
+                               }, 0);
+                                                               
+                              
+                               
+                                
+                            }
 
-
-                            run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d , j_array_2d);
+                                run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d , j_array_2d);
 
                                  // set địa chỉ ô click  sau hành động trên
                            dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
 
                            console.log(vi_tri_click_in_Data);
                            
-                          },0)
+                      
+                
+                        //   // do vậy nếu ở đoạn code này ta để a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].children[0].focus({preventScroll:true});
+                        //   // thì khi cuộn nhanh quá sẽ có lỗi focus :Uncaught TypeError: Cannot read properties of undefined (reading 'focus') at <anonymous>
+                        // //  var len = input_.value.length;
+                        //   setTimeout(()=>{ 
+
+                        //     if ( input_.textContent  === "") {
+                        //       input_.focus({preventScroll:true}) ;
+                        //     }else{
+                          
+                        //      //focus sau đó di chuyển đến cuối
+                        //      input_.focus({preventScroll:true}) ;
+                        //      let len =  input_.textContent.length  ;
+                        //      let range = document.createRange();
+                        //      let selection = window.getSelection();
+                        //      selection.removeAllRanges();  
+                        //      range.setStart(input_.childNodes[0], len) ;
+                        //      selection.addRange(range);
+                        //      //focus
+                        //     }
+
+                          //   run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d , j_array_2d);
+
+                          //        // set địa chỉ ô click  sau hành động trên
+                          //  dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
+
+                          //  console.log(vi_tri_click_in_Data);
+                           
+                          // },0)
 
                          
                       
@@ -428,6 +524,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 // ** ảnh hưởng của input và button khi click sẽ làm mất đường viền đen focus của thẻ div ; chính là thuộc tính Outline  của css
                 a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].setAttribute('tabindex', -1);
                 a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].focus({preventScroll:true}) ;
+
                 }
 
                
@@ -456,7 +553,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
      
 
-      
+      console.log('text      '+ text);
+      console.log(i+i_array_2d,j + j_array_2d);
 
       // chuyển text null bằng '' để slice không bị lỗi.
       if (text == null) { text = '' ; }
@@ -858,9 +956,11 @@ console.log('_onKeyDown------------------------------');
       if (event.key != "Enter") {
         console.log("_onKeyDown--nhập dữ liệu")
         // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-        a.current.children[i + 1].children[j+1].innerHTML = " <input   type='text'  />" ;
+        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"></div>' ;
         let input_ =  a.current.children[i +1 ].children[j+1].children[0];
-
+        // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
+        input_.focus({preventScroll:true}) ;
+        console.log(input_);
         xuat_hien_the_input = true ;
         vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1 ;
         Object.assign(input_.style,css.input_focus) ;
@@ -879,11 +979,14 @@ console.log('_onKeyDown------------------------------');
         
 
         setTimeout(() => {  
-          text_formular[i + i_array_2d][j + j_array_2d] = input_.value ; 
+          text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
            console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
             input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ; input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  } , 0);
-        input_.focus({preventScroll:true});
 
+       
+             
+
+                       
 
         
         onclick_tinh_toan = true ;
@@ -1364,14 +1467,24 @@ console.log('_onKeyDown------------------------------');
 
     function _onMouseDown(_this, i, j,event) {
 
-     
+      // khi click chuột thì ta tắt element này lắng nghe bàn phím.
+      // đồng thời phía dưới ta tạo hàm  _this.onkeydown để lắng nghe sự kiện từ bàn phím trên element này
+      // do vậy khi ta click sang ô khác hoặc scroll ta phải xoá _this.onkeydown trên element này đi  nếu không sẽ xảy ra vấn đề sau
+              // khi ta scroll elment này trở thành elment mới theo Data thực tế nó phải chưa có _this.onkeydown do ta chưa kich vào đó
+              // nhưng khi ta ấn enter xuống elment này nó đẫ có _this.onkeydown rồi nên nó sẽ lắng nghe _this.onkeydown mà mục đích khi ta ấn enter 
+              // là để elment này lắng nghe hàm _onKeyDown.
+              // mặt khác  hàm _this.onkeydown cũng chạy không ra kết quả ta mong nuốm vì nó gọi hàm ý trong cloure cũ có i_array_2d , i_array_2d lấy từ thời gian cũ trước đó
+      // xoá _this.onkeydown ở vị trí trước đi
+      a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
+      console.log(vi_tri_o_truoc[0]  ,vi_tri_o_truoc[1] , "onKeyDown = null " );
+      console.log("_onMouseDown") ;
       // nếu trạng thái fill tồn tại thì kết thúc fuction
       if (trang_thai_fill === true) {
           return ;
       }
 
 
-      console.log("_onMouseDown") ;
+      
      
       if (thanh_dia_chi_0_on_keydown === true) {
         onKeyDown_1_element = true;
@@ -1401,7 +1514,7 @@ console.log('_onKeyDown------------------------------');
                     
                       
                           console.log("_onDoubleClick");
-                        _this.innerHTML = " <input   type='text'  />" ;
+                        _this.innerHTML = '<div  contenteditable="true"></div>' ;
                         xuat_hien_the_input = true ;
                       onclick_tinh_toan = true ;
                       vi_tri_o_truoc[0] = i ;
@@ -1414,41 +1527,70 @@ console.log('_onKeyDown------------------------------');
 
                       Object.assign(input_.style,css.input_focus) ;
                       
-                      input_.value = text_formular[i+i_array_2d][j + j_array_2d] ;
-                  
-                        // thay đổi độ rộng của input phù hợp với ký tự nhập vào
-                        var length_ = ((input_.value.length + 1) * 8) ;
-                        if ( length_ >= 100) {
-                          input_.style.width =  length_ + 'px';
-                  
-                        
-                        }
+                    
+                      
                        // khi di chuyển chuột trong input này thì lưu lại vị trí của con trỏ vào biến vi_tri_con_tro_khi_di_chuyen_trong_double_click_input
                          //để khi element table _this nhận bàn phím thì làm xuất hiện thẻ input lại và focus tại vị trí trước đó 
                         //******** */ sự kiện onkeydown chỉ ảnh hưởng lên element đó khi nó được focus. Nếu nó không được lấy tiêu điểm thì không kích hoạt được sự kiện
                         // do vậy khi input xuất hiện và focus thì element cha này sẽ không lắng nghe sự kiện onkeydown nữa. ==>  _this.onkeydown  chỉ chạy được 1 lần đầu tiên duy nhất vì _this lắng nghe sự kiện onkeydown trước khi thẻ input xuất hiện. 
                           
-                        input_.onmousedown =  function (event) {  setTimeout(() => {
-                                                                                        vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart ; 
-                                                                                        console.log('input trong  event double click --vi_tri_con_tro_khi_di_chuyen_trong_double_click_input------------' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
-                                                                                      }, 0);}
+                     
+                      //  input_.textContent nếu text_formular[i+i_array_2d][j + j_array_2d] là null khi hiển thị lên thành ""
 
+                       
+
+                        if ( text_formular[i+i_array_2d][j + j_array_2d]  === null) {
+                         
+                           
+                           
+                           
+                        input_.focus({preventScroll:true}) ;
+                            
+                        }else{
+                          let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
+                          let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
+                       
+                         input_.innerHTML = paint[0] ;
+                           //focus sau đó di chuyển đến cuối 
+                          
+                            let range = document.createRange();
+                           let selection = window.getSelection();
+                           selection.removeAllRanges(); 
+                            range.setStart(input_.childNodes[paint[1]], paint[2]);
+                            selection.addRange(range);
+                           
+                              //focus
+                              console.log('--------------------------------------------------------------------------');                                                       
+                              vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = len ; 
+                              console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
+                           
+
+                        }
+                        
+                     
                         
 
-                           input_.focus({preventScroll:true}); 
-                           vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = input_.value.length ; 
-                           console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
+                           
+                              
                         
-                       //   setTimeout ở đây vì  khi double click thì sẽ chạy cả 1 click trước trong đó cũng có chỗ setTimeout => setTimeout để đoạn code này chạy cuối cùng                                                          
-                    
-                    //        setTimeout(() => {
-                    //      input_.focus({preventScroll:true}); 
-                    //      vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = input_.value.length ; 
-                    //      console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input                     ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
-                      
-                        
-                    // }, 0);
-                                
+                            
+                         
+                 
+                           input_.onmousedown =  function (event) {  
+
+                          
+                            let range = document.createRange();
+                            let selection = window.getSelection();
+                           // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
+                              setTimeout(() => {
+                                range.setStart(input_.firstChild, 0);
+                                range.setEnd(selection.anchorNode , selection.anchorOffset);
+                                 vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
+                                console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+                              }, 0);
+                          
+                                                                                      
+                                                                                      }
                 
                   
             
@@ -1525,8 +1667,10 @@ console.log('_onKeyDown------------------------------');
                       // viet tiếp công thức vào thẻ input nên phải  để  onKeyDown_1_element = true; để không lắng nghe sụ kiện keydown ở element cha của input
                       onKeyDown_1_element = true;
                       console.log(cong_thuc_chua_hoan_thanh);
-                    
-                     
+                    // không thay đổi mien_select_array_2d
+                    // mien_select_array_2d vẫn là ô click trước đó
+                      mien_select_array_2d[0] = mien_select_array_2d[2];
+                      mien_select_array_2d[1] =mien_select_array_2d[3] ;
                       // nếu công thức đang viết dở thì khi onclick sẽ viết tiếp công thức vào ô trước đó.
                       // r,c là vị trí r,c thẻ input trong khung nhìn nếu là số âm hoặc lớn hơn limit thì là vị trí đó cách toạ độ 0,0 của khung nhìn 
                       // r + i_array_2d là vị trí thực tế
@@ -1546,12 +1690,19 @@ console.log('_onKeyDown------------------------------');
 
                        
                         console.log( cong_thuc_them_vao[0]);
+                        // khi click vào ô khác lần 2,3 để thay đổi công thức viết ta cần xoá công thức cũ đã viết đi
                         // click vào ô khác lần 2,3 thì input_truoc_do.cong_thuc_them_vao[0] và  input_truoc_do.vi_tri_cong_thuc_them_vao[0]  đã được set value
                         // nếu input_truoc_do.cong_thuc_them_vao[0] === undefined tức lần nhấn đầu thì không có công thức cũ để xoá nên không làm gì
                         //  input_truoc_do.vi_tri_cong_thuc_them_vao[0] !== vi_tri_con_tro_khi_di_chuyen_trong_double_click_input nghĩa là đã di chuyển con chuột trong thẻ input tức là chấp nhận công thức đã viết nên không xoá nữa
-                       if (cong_thuc_them_vao[0] === null ||   vi_tri_cong_thuc_them_vao !== vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ) { }else{   text =   text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) + text.slice(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ,len_text)  }
+                       if (cong_thuc_them_vao[0] === null ||   vi_tri_cong_thuc_them_vao !== vi_tri_con_tro_khi_di_chuyen_trong_double_click_input )
+                        { }
+                        else
+                        { 
+                          //  xoá công thức cũ đã viết đi: độ dài xoá là cong_thuc_them_vao[0].length
+                        text =   text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) + text.slice(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ,len_text) 
+                       }
                        
-                       
+                       // update công thức mới
                        let text_update = text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) + "(Data["+(i+i_array_2d)+"]["+(j + j_array_2d )+ "])" +text.slice(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ,len_text) ;
                        
                         cong_thuc_them_vao[0] = "(Data["+(i+i_array_2d)+"]["+ (j + j_array_2d )+ "])" ;
@@ -1568,34 +1719,33 @@ console.log('_onKeyDown------------------------------');
                               
                           var input_truoc_do = a.current.children[r + 1].children[c+1].children[0]; 
 
-                     
+                         // focus tại vị trí mới nhưng không set lại vi_tri_con_tro_khi_di_chuyen_trong_double_click_input. Biến này vẫn ở trạng thái trước đó
+                         let vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ; 
+                         console.log('vi_tri_focus      ' + vi_tri_focus)
+                         console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input      ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
                               
-                                input_truoc_do.value = text_update ;
+                              
+                              console.log(text_update);
                                 text_formular[r+i_array_2d][c + j_array_2d] =  text_update;
                                 cong_thuc_chua_hoan_thanh[2] = text_update ;
-        
-                                  // thay đổi độ rộng của input phù hợp với ký tự nhập vào
-                                var length_ = ((input_truoc_do.value.length + 1) * 8) ;
-                                if ( length_ >= 100) {
-                                  input_truoc_do.style.width =  length_ + 'px';
-                              
-                                
-                                }
-                                   //**************************************************** */
-                                  //focus thẻ input
-                                  // ở đây ta dùng setTimeout vì trong react focus thực hiện trước input update value. 
-                             
-                           
-                             // focus tại vị trí mới nhưng không set lại vi_tri_con_tro_khi_di_chuyen_trong_double_click_input. Biến này vẫn ở trạng thái trước đó
-                             let vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ; 
-                            console.log('vi_tri_focus      ' + vi_tri_focus)
-                            console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input      ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
-                            
+                                let paint =  paint_text(text_update,vi_tri_focus ) ;
+                                  console.log(paint);
+                                input_truoc_do.innerHTML = paint[0] ;
+
+                                     // di chuyển focus tới vị trí cũ
+                                let range = document.createRange();
+                                let selection = window.getSelection();
+                                selection.removeAllRanges(); 
+                                  range.setStart(input_truoc_do.childNodes[paint[1]], paint[2]);
+                                  // khi click vào div khác thì div input_truoc_do đã bị mất focus, sự kiện mất focus diễn ra cuối cùng.
+                                  // do vậy ta phải setTimeout ở đây để lấy lại focus. => selection.addRange(range) sẽ diễn ra cuối cùng
+                                  // cùng hàm này nhưng ở chỗ doubleclick không cần setTimeout do không click vào div khác nên không bị mất focus
                                   setTimeout(() => {
-                                  input_truoc_do.focus({preventScroll:true});
-                                  input_truoc_do.setSelectionRange(vi_tri_focus, vi_tri_focus);
-                                 
+                                    selection.addRange(range); 
+                                                            
                                   }, 0);
+                                  
+                               
                                     
                         // hiện công thức đó lên thanh formular để người dùng viết tiếp.
                         var input_formula = thanh_dia_chi_0.current;
@@ -1694,77 +1844,84 @@ console.log('_onKeyDown------------------------------');
 
                         // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
                       
-                        a.current.children[i + 1].children[j+1].innerHTML = " <input   type='text'  />" ;
+                        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"></div>' ;
                        // biến này dùng để xác định ảnh hưởng tới scoll
                         xuat_hien_the_input = true ;  
                         var input_ =  a.current.children[i + 1].children[j+1].children[0];
 
                         Object.assign(input_.style,css.input_focus) ;
                         var input_formula = thanh_dia_chi_0.current;
-                        // gán giá trị công thức cũ vào thẻ input. Sự kiện này sẽ diễn ra trước sự kiện thêm 1 ký tự khi ấn bàn phím
-                        input_.value = text_formular[i + i_array_2d][j + j_array_2d] ; 
-                       
-                     
-                           // thay đổi độ rộng của input phù hợp với ký tự nhập vào trước khi ấn phím
-                          var length_ = ((input_.value.length + 1) * 8) ;
-                          if ( length_ >= 100) {
-                            input_.style.width =  length_ + 'px';
+                         // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
+                        input_.focus({preventScroll:true}) ;
+
+                        console.log('vi_tri_con_tro         ' +  vi_tri_con_tro_khi_di_chuyen_trong_double_click_input )
+                        if (vi_tri_con_tro_khi_di_chuyen_trong_double_click_input === undefined) {
+                          // nếu thẻ element table trước đó không được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là  undefined
+                         // ta bôi đen miền lựa chọn ở đây để khi nhấn phím sẽ xoá toàn bộ ký tự cũ nếu element table không được double click trước đó.
+                           // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
                         
-                          
-                          }
-
-                          console.log(cong_thuc_them_vao[0])
-
-                          // nếu công thức chưa hoàn thành khác ""  thì di chuyển con trỏ tới vị trí sau khi viết thêm công thức
-                          if (cong_thuc_chua_hoan_thanh != "") { vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length}
-
-
-
-                          // lúc này thẻ input sẽ thêm 1 ký tự khi ấn bàn phím
-
-                       
-                        
-                         var len = input_.value.length;
-                   
-                       console.log('vi_tri_con_tro         ' +  vi_tri_con_tro_khi_di_chuyen_trong_double_click_input )
-                         if (vi_tri_con_tro_khi_di_chuyen_trong_double_click_input === undefined) {
-                           // nếu thẻ element table trước đó được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là khác undefined
-                           // nếu thẻ element table trước đó không được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là  undefined
-                          // ta bôi đen miền lựa chọn ở đây để khi nhấn phím sẽ xoá toàn bộ ký tự cũ nếu element table không được double click trước đó.
-                          input_.setSelectionRange(0, len); 
-                          input_.focus({preventScroll:true});
-                         
-                         }
-                         else{
-                         // di chuyển con trỏ tới vị trí focus trước  đó.
-                          input_.focus({preventScroll:true});
-                          input_.setSelectionRange(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input , vi_tri_con_tro_khi_di_chuyen_trong_double_click_input );  
-                         }
-                            
-                         
-                         
-                          // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
-                        
-
-                         
                         // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
                         //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
                         // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
                         // sau đó gán giá trị khi nhấn lên input_formula
-                        setTimeout(() => {  text_formular[i + i_array_2d][j + j_array_2d] = input_.value ; 
-                           console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
-                            input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
-                             input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
-                            if (vi_tri_con_tro_khi_di_chuyen_trong_double_click_input === undefined ) {vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 0 }
-                             vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + 1 ;
+                        setTimeout(() => { 
+                          text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
+                          console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
+                           input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
+                            input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+                            vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1 ;
+
+                            } , 0);
+                        
+                        }
+                        else{
+                          // nếu trước đó double click input_ hiện lên công thức cũ đẫ viết
+                          // mục đích của người dùng là viết tiếp công thức khi ấn phím thì
+                        // di chuyển con trỏ tới vị trí focus trước  đó.
+                         // nếu thẻ element table trước đó được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là khác undefined
+                         let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
+                         let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
+                      
+                        input_.innerHTML = paint[0] ;
+                          //focus sau đó di chuyển đến cuối 
+                         
+                           let range = document.createRange();
+                          let selection = window.getSelection();
+                          selection.removeAllRanges(); 
+                           range.setStart(input_.childNodes[paint[1]], paint[2]);
+                           selection.addRange(range);
+                          
+                           
+
+                          // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
+                        
+                        // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
+                        //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
+                        // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
+                        // sau đó gán giá trị khi nhấn lên input_formula
+                        setTimeout(() => { 
+                          text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
+                          console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
+                           input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
+                            input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+                            let range = document.createRange();
+                            let selection = window.getSelection();
+                           // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
+                             
+                                console.log(selection.anchorNode , selection.anchorOffset);
+                                range.setStart(input_.firstChild, 0);
+                                range.setEnd(selection.anchorNode , selection.anchorOffset);
+                                 vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
+                                console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
                             
 
-                             } , 0);
+                            } , 0);
+                        
+                        }
+                           
 
-                          
-                       
-
-                
+                         
+                      
 
                         
                         onclick_tinh_toan = true ;
@@ -2553,7 +2710,9 @@ let vi_tri_cat_col  ;
                      
                       limit_col_view = sum_col - 1 ; 
                   
-
+                            // xoá _this.onkeydown ở vị trí trước đi
+                        a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
+                        console.log(vi_tri_o_truoc[0]  ,vi_tri_o_truoc[1] , "onKeyDown = null " );
 
                          // cập nhật lại dữ liệu khi scroll -- bước1
                          for (let index = 0; index <= (limit_view ); index++) {
@@ -2586,8 +2745,7 @@ let vi_tri_cat_col  ;
                            key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
                         console.log(vi_tri_click_in_Data);
                         console.log(vi_tri_o_truoc)
-
-
+                       
                       }
 
 
@@ -2748,24 +2906,22 @@ let vi_tri_cat_col  ;
                     var length_ = ((thanh_dia_chi_0.current.value.length + 1) * 8) ;
 
 
-                      if (input_ !== undefined) { if ( length_ >= 100) { input_.style.width =  length_ + 'px'; }; input_.value = thanh_dia_chi_0.current.value; }
+                      if (input_ !== undefined) { if ( length_ >= 100) { input_.style.width =  length_ + 'px'; }; input_.textContent = thanh_dia_chi_0.current.value; }
 
                       if (input_ === undefined) { 
                         
                     
                                       // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-                                      parent_input.innerHTML = " <input   type='text'  />" ;
+                                      parent_input.innerHTML = '<div  contenteditable="true"></div>' ;
                                   let input_ =  parent_input.children[0];
                             // biến này dùng để xác định ảnh hưởng tới scoll
                             xuat_hien_the_input = true ;  
                               
-                            if ( length_ >= 100) {
-                              input_.style.width =  length_ + 'px';
-                            };
+                           
                                   // trước gán sự kiện keydown cho input thì ta phải tắt lắng nghe sự kiện onkedown cho 1 element table cha của input 
                                   
                                   onKeyDown_1_element = true ;
-                                  input_.value = thanh_dia_chi_0.current.value;
+                                  input_.textContent = thanh_dia_chi_0.current.value;
                                   run_function_when_input_focus (input_,vi_tri_click_in_Data[2],vi_tri_click_in_Data[3],i_array_2d , j_array_2d);
   
                                       
@@ -2897,12 +3053,15 @@ let vi_tri_cat_col  ;
       }
    
       event.persist(); 
-        setTimeout(() => {vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = event.target.selectionStart  ; 
-  
-         
-          console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
-        
-        }, 0); 
+
+         setTimeout(() => {
+    let selection = window.getSelection ();
+    let vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = selection.anchorOffset;
+
+        console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+    
+  }, 0);
+
 
     }
 
@@ -3341,7 +3500,7 @@ event.persist();
       
         row_excel: { display: "table-row" },
 
-        col_excel: {   border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" },
+        col_excel: {   border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px", },
 
         // click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
         click: { backgroundColor: "moccasin" },
@@ -3390,7 +3549,7 @@ event.persist();
           <div style={{ border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black} onClick={(event)=>{ copy(event) }} > copy </div> 
           <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
           <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
-          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{    }} > clear </div>
+          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{   }} > clear </div>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
@@ -3408,14 +3567,14 @@ event.persist();
 
        <div  style={{ height : `${data_lenght }px` ,width : `${data_col_lenght }px`,  }}  ref={ a  }  >
                           
-                          <div style={  css.row_excel}  > <div    style={ css.bar_reference_col} ></div> {Data_show_0[0].map((cell, j) => { return <div  data-bar="bar"  style={css.bar_reference_row} >{j }</div>})}  </div> 
+                          <div style={  css.row_excel}  > <div    style={ css.bar_reference_col} ></div> {Data_show_0[0].map((cell, j) => { return <div   style={css.bar_reference_row} >{j }</div>})}  </div> 
                         
                           {Data_show_0.map((row, i) => {
                             return (
 
                               <div  style={  css.row_excel}    >
 
-                            <div style={ css.bar_reference_col }  data-bar="bar"  >{i }</div> {row.map((cell, j) => {   
+                            <div style={ css.bar_reference_col }  >{i }</div> {row.map((cell, j) => {   
 
                       return <div style={css.col_excel} 
                           
