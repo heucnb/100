@@ -1025,7 +1025,16 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                      // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-              a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +i_array_2d][index_j +j_array_2d];
+              if ( Data[index+i_array_2d][index_j + j_array_2d] === null) {
+              
+    
+              }else{
+
+                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div style="  position:absolute;  z-index: ${ index_j + 1};   background: inherit; "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
+    
+
+              }
+             
             }
           }               
 
@@ -1094,7 +1103,7 @@ console.log('_onKeyDown------------------------------');
       if (event.key != "Enter") {
         console.log("_onKeyDown--nhập dữ liệu")
         // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"></div>' ;
+        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"   ></div>' ;
         let input_ =  a.current.children[i +1 ].children[j+1].children[0];
         // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
         input_.focus({preventScroll:true}) ;
@@ -1739,7 +1748,8 @@ console.log('_onKeyDown------------------------------');
       // tính toán nếu chạy xong thì tô màu
       // trong khi tính toán nếu cong_thuc_chua_hoan_thanh khác ""  thì viết tiếp công thức
       // khi 1 click ta cũng tắt lắng nghe sự kiện onkedown ở element này nên ta cần gán lại sự kiện onkedown ở element này chạy ở cloure khác khi element được click để kiểm soát code dễ hơn
-      if ( (_this.kiem_tra == 0 || _this.kiem_tra == undefined)&& typeof _this.children[0] != "object"  ) {
+     
+      if ( (_this.kiem_tra == 0 || _this.kiem_tra == undefined)&&   (function() {  if (_this.children[0]!== undefined) { return _this.children[0].hasAttribute("contenteditable") ; }else{ return false ; }; })() === false  ) {
 
                 
         // huỷ bỏ miền chọn cũ
@@ -3638,12 +3648,12 @@ event.persist();
       
         row_excel: { display: "table-row" },
 
-        col_excel: {   border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px", },
+        col_excel: { backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px",overflow: 'visible',   position: 'relative',},
 
         // click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
         click: { backgroundColor: "moccasin" },
         // remove_click: { boxShadow: "",outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "" },
-        remove_click: {  backgroundColor: "" },
+        remove_click: {  backgroundColor: "white" },
         input_focus: { width: "inherit", outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
 
         select: { backgroundColor: "moccasin" },
