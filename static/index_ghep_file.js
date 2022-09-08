@@ -209,6 +209,14 @@
                       limit_col_view = sum_col - 1 ; 
                       console.log('---------------------------------'+  limit_col_view);
 
+                    for (let i = 0; i < limit_view; i++) {
+                      for (let j = 0; j < limit_col_view; j++) {
+                        a.current.children[i+1].children[ j + 1].style.zIndex = j ;    
+                        
+                      }
+                      
+                    }         
+
         vi_tri_click_in_Data = [0,0,0,0] ;
         key_enter(0,0,0,0); // tô màu và focus
 
@@ -839,7 +847,15 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
       if ( (i <= limit_view - 1 )&( i >= 0) && (j <= limit_col_view - 1 )&( j >= 0)  ) {
                                           
-        a.current.children[i +1].children[j+1].innerHTML = Data[i+i_array_2d][j + j_array_2d] ; 
+        if ( Data[i+i_array_2d][j + j_array_2d] === null) {
+              
+    
+        }else{
+
+          a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+
+
+        }
       }
      
       vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
@@ -890,7 +906,15 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
            // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-              a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +i_array_2d][index_j +j_array_2d];
+              if ( Data[i+i_array_2d][j + j_array_2d] === null) {
+              
+    
+              }else{
+
+                a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+    
+
+              }
             }
           }  
                   
@@ -933,7 +957,17 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                   // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
                   if ( (i <= limit_view - 1 )&( i >= 0) && (j <= limit_col_view - 1 )&( j >= 0) ) {
                                                       
-                    a.current.children[i +1].children[j+1].innerHTML = Data[i+i_array_2d][j + j_array_2d] ; 
+                    if ( Data[i+i_array_2d][j + j_array_2d] === null) {
+              
+    
+                    }else{
+      
+                      a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+          
+      
+                    }
+
+
                       if (vi_tri_loi_tham_chieu !== undefined) { a.current.children[vi_tri_loi_tham_chieu[0] +1 - i_array_2d].children[vi_tri_loi_tham_chieu[1]+1 - j_array_2d].innerHTML =  Data[vi_tri_loi_tham_chieu[0]][vi_tri_loi_tham_chieu[1]] ; }
                   }
                  
@@ -988,7 +1022,15 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-              a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +i_array_2d][index_j +j_array_2d];
+              if ( Data[index+i_array_2d][index_j + j_array_2d] === null) {
+              
+    
+              }else{
+
+                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;     background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
+    
+
+              }
             }
           }                   
 
@@ -1030,7 +1072,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
               }else{
 
-                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div style="  position:absolute;  z-index: ${ index_j + 1};   background: inherit; "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
+                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;     background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
     
 
               }
@@ -1773,43 +1815,8 @@ console.log('_onKeyDown------------------------------');
                     console.log("_onClick---tinh_toan");
 
                             tinh_toan(vi_tri_o_truoc[0],vi_tri_o_truoc[1], "xoa_ky_tu_cong_thuc_thua_mouse_down");
-                                
-                                onKeyDown = false ; 
-                                onclick_tinh_toan = false ;
-    
-                  }else{
-                    console.log("_onClick----------------- không tinh_toan");
-                  }
-    
-                  //2.----------------------------------------------------------------------
-    
-                    if (cong_thuc_chua_hoan_thanh === "") {
-              
-                     
-                        // điền giá trị sau khi tính toán xong bên trên xong vào. Nếu không phải tính toán thì điền giá trị lưu ở bộ nhớ trước đó vào.
-                                  // khi scroll nếu vi_tri_o_truoc[0] < 0  hoặc  > limit - 1  tức là không nằm trong khung nhìn thì không cần gán giá trị vào ô đó nữa ngược lại  tô màu
-                                
-                                  if ( vi_tri_o_truoc[0] <0 || vi_tri_o_truoc[0] > limit_view - 1  || vi_tri_o_truoc[1] <0 || vi_tri_o_truoc[1] > limit_col_view - 1     )   {           } else {     a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].innerHTML =Data[(vi_tri_o_truoc[0]+i_array_2d)][vi_tri_o_truoc[1] + j_array_2d] ;  }
-                            
-                            
-                                    console.log("_onClick---công thức hoàn thành = '', tô màu");
-                                         // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(i + i_array_2d,j + j_array_2d,i ,j) ;
-                                    // tô màu vào vị trí i,j
-                                    key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
 
-                                    mien_select_array_2d[0] = i_array_2d + i ;
-                                    mien_select_array_2d[1] = j_array_2d + j ;
-                                  
-                                    _onMouseEnter_not_event(i, j, i, j) ;
-                                  
-    
-                      
-                        
-
-                  }
-    
-                //3.---------------------------------------------------------------------------------------
+                                 //3.---------------------------------------------------------------------------------------
                     if (cong_thuc_chua_hoan_thanh != "") {
                       console.log("_onClick---viet tiếp công thức vào thẻ input");
                       // viet tiếp công thức vào thẻ input nên phải  để  onKeyDown_1_element = true; để không lắng nghe sụ kiện keydown ở element cha của input
@@ -1939,6 +1946,26 @@ console.log('_onKeyDown------------------------------');
                        
                   
                   }
+                                onKeyDown = false ; 
+                                onclick_tinh_toan = false ;
+
+    
+                  }else{
+                    console.log("_onClick----------------- không tinh_toan", "chỉ tô màu thôi");
+                                         // set địa chỉ ô click  sau hành động trên
+                           dia_chi_o_click(i + i_array_2d,j + j_array_2d,i ,j) ;
+                                    // tô màu vào vị trí i,j
+                                    key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
+
+                                    mien_select_array_2d[0] = i_array_2d + i ;
+                                    mien_select_array_2d[1] = j_array_2d + j ;
+                                  
+                                    _onMouseEnter_not_event(i, j, i, j) ;
+                  }
+    
+                 
+    
+               
     
                                                                                           
             
@@ -1961,7 +1988,31 @@ console.log('_onKeyDown------------------------------');
                            
                         console.log("enter-----không xuất hiện thẻ input không tính toán") ;
                         console.log("enter-----xuất hiện thẻ input khi double click mà không nhập gì cũng không cần tính toán") ;
-                        a.current.children[i + 1].children[j+1].innerHTML =Data[i+i_array_2d][j + j_array_2d] ;
+                        if ( Data[i+i_array_2d][j + j_array_2d] === null) {
+              
+    
+                        }else{
+
+                       
+                         let max_zindex  = limit_col_view;
+                          for (let index = limit_col_view ; index >= 0 ; index--) {
+
+                            if (Data[i+i_array_2d][index + j_array_2d] === null) {
+                            
+                            }else{
+                              a.current.children[i + 1].children[index+1].style.zIndex = max_zindex ;
+                              max_zindex = index ;
+                             console.log('--------------------------------------------------------------------');
+                            }
+                           
+                            
+                          }
+          
+                          a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;     background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;   "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+                          // console.log('------------   ', sum_z_index + 1);
+          
+                        }
+                      
 
                                // set địa chỉ ô click  sau hành động trên
                                dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
@@ -3639,16 +3690,17 @@ event.persist();
         textarea: {verticalAlign: "top",  marginLeft : "5px", marginRight : "5px", border: "1px solid #ccc", flexGrow: 1, width: `50px` , height: "50px", resize: "none" },
         thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `50px`,flexGrow: 0 ,  border: "1px solid #ccc"},
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
-        table_excel: {  borderCollapse: "collapse",  height: `${table_excel_height}px`, width :  `${table_excel_width}px`,  overflowY: "auto",  overflowX: "auto"},
+       // borderCollapse: "collapse",
+        table_excel: {    height: `${table_excel_height}px`, width :  `${table_excel_width}px`,  overflowY: "auto",  overflowX: "auto"},
 
-        bar_reference_row : {   backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell" }  ,
+        bar_reference_row : {   backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell",  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
 
-        bar_reference_col : { width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" }  ,
+        bar_reference_col : { width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" ,  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
 
       
         row_excel: { display: "table-row" },
 
-        col_excel: { backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px",overflow: 'visible',   position: 'relative',},
+        col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px",overflow: 'visible',  borderRightStyle: 'none', borderTopStyle: 'none', },
 
         // click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
         click: { backgroundColor: "moccasin" },
@@ -3708,7 +3760,7 @@ event.persist();
          
        
         
-          <canvas  ref={ canvas_  } width = {table_excel_width} height={ table_excel_height}  style={{display : "none"}}    ></canvas>  
+          <canvas  ref={ canvas_  } width = {table_excel_width} height={ table_excel_height}  style={{display : "none" ,  zIndex: 1000,}}    ></canvas>  
     <div ref={ table_excel  }   style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}   >
    
   
@@ -3724,7 +3776,7 @@ event.persist();
 
                             <div style={ css.bar_reference_col }  >{i }</div> {row.map((cell, j) => {   
 
-                      return <div style={css.col_excel} 
+                      return <div style={ css.col_excel } 
                           
                       onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
 
