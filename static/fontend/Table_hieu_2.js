@@ -71,8 +71,8 @@
                       limit_col_view = sum_col - 1 ; 
                       console.log('---------------------------------'+  limit_col_view);
 
-                    for (let i = 0; i < limit_view; i++) {
-                      for (let j = 0; j < limit_col_view; j++) {
+                    for (let i = 0; i <= limit_view; i++) {
+                      for (let j = 0; j <= limit_col_view; j++) {
                         a.current.children[i+1].children[ j + 1].style.zIndex = j ;    
                         
                       }
@@ -247,37 +247,45 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
              // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
                 setTimeout(() => {
                   console.log(selection.anchorNode , selection.anchorOffset);
-                  range.setStart(input_.firstChild, 0);
+                  console.log(input_.firstChild);
+                  if (input_.firstChild === null) {
+                    vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 0 ;
+                  } else {
+                    // xác định vị trí con trỏ trong input
+                    range.setStart(input_.firstChild, 0);
                   range.setEnd(selection.anchorNode , selection.anchorOffset);
                    vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
                   console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
-                }, 0);
-               
+
+
+
+                        
                 //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
                 // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
                     // sau đó gán giá trị khi nhấn lên input_formula
-                setTimeout(() => {  
                   text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ;
-                    console.log('text_formular--'+  text_formular[i + i_array_2d][j + j_array_2d]);
-                    console.log(i + i_array_2d, j + j_array_2d);
-                     input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
-                      input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+                  console.log('text_formular--'+  text_formular[i + i_array_2d][j + j_array_2d]);
+                  console.log(i + i_array_2d, j + j_array_2d);
+                   input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
+                    input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
 
-                    
-                      let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ) ;
-                   
-                      input_.innerHTML = paint[0] ;
+                  
+                    let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ) ;
+                 
+                    input_.innerHTML = paint[0] ;
 
-                    // di chuyển focus tới vị trí cũ
-                      let range = document.createRange();
-                      let selection = window.getSelection();
-                      selection.removeAllRanges(); 
-                       range.setStart(input_.childNodes[paint[1]], paint[2]);
-                       selection.addRange(range);
-                      
+                  // di chuyển focus tới vị trí cũ
+                    selection.removeAllRanges(); 
+                     range.setStart(input_.childNodes[paint[1]], paint[2]);
+                     selection.addRange(range);
                     
                     
-                    } , 0);
+                  }
+                  
+
+                }, 0);
+           
+               
           
                 
                       
@@ -400,7 +408,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       
                         console.log('xuất hiện lại thẻ input và focus') ;
                       
-                      
+                        a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].style.zIndex = limit_col_view + 1 ;
                           a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].innerHTML = '<div  contenteditable="true"></div>'  ;
                           var input_ =  a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].children[0] ;
                           Object.assign(input_.style,css.input_focus) ;
@@ -498,7 +506,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
               // row_vi_tri_remove = 0  thì dầu tiên remove tô màu bằng cách chạy đoạn if else trên ; sau đó chạy đoạn if dưới kích hoạt document.activeElement.blur(); 
              
-                if (row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view - 1       ||  col_vi_tri_remove < 0 || col_vi_tri_remove > limit_col_view - 1  ) 
+                if (row_vi_tri_remove < 0 || row_vi_tri_remove > limit_view        ||  col_vi_tri_remove < 0 || col_vi_tri_remove > limit_col_view   ) 
                   {        }
                  else {
                    Object.assign(a.current.children[row_vi_tri_remove +1 ].children[col_vi_tri_remove+1].style, css.remove_click); 
@@ -517,7 +525,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                // 2.Tô màu vị trí mới
                // tô màu vị trí mới  nếu vị trí trước đó = null hoặc không nằm trong khung nhìn thì set lại vị trí trước đó ngược lại  tô màu
               
-                if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view - 1         ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view - 1)   {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
+                if (row_vi_tri_add < 0 || row_vi_tri_add > limit_view          ||  col_vi_tri_add < 0 || col_vi_tri_add > limit_col_view )   
+                {      vi_tri_o_truoc[0] = row_vi_tri_add ;   vi_tri_o_truoc[1] = col_vi_tri_add ;          }
                 else {  
                   
                   Object.assign(a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].style, css.click);
@@ -687,7 +696,23 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         // hiện thị giá trị đã tính toán lên trang web bảng tính
         for (let index = 0; index <= (limit_view ); index++) {
           for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-            a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +i_array_2d][index_j +j_array_2d];
+
+               // với mỗi cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+               let max_zindex  = limit_col_view + 1;
+                
+               for (let x = limit_col_view ; x >= 0 ; x--) {
+
+                 if (Data[index+i_array_2d][x + j_array_2d] === null) {
+                 
+                 }else{
+                   a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
+                   max_zindex = x ;
+                 } 
+               }
+
+          
+               a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;       background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
+    
           }
         }  
        vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = undefined ;   
@@ -707,6 +732,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
      let _len = formular.length ;
      for (let index = 0; index < _len ; index++) {if (formular[index] !== undefined) { formular[index]()} ; }
       // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
+        // do push vào cuối nên chỉ hiện lại ô đó thôi không lặp tất cả các ô
       if ( (i <= limit_view - 1 )&( i >= 0) && (j <= limit_col_view - 1 )&( j >= 0)  ) {
                                           
         if ( Data[i+i_array_2d][j + j_array_2d] === null) {
@@ -714,7 +740,20 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
         }else{
 
-          a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+            // với  cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+            let max_zindex  = limit_col_view + 1;
+                            
+            for (let x = limit_col_view ; x >= 0 ; x--) {
+
+              if (Data[i+i_array_2d][x + j_array_2d] === null) {
+              
+              }else{
+                a.current.children[i + 1].children[x+1].style.zIndex = max_zindex ;
+                max_zindex = x ;
+              } 
+            }
+
+          a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;       background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
 
 
         }
@@ -729,7 +768,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         
         }
 
-// nếu công thức nhập vào không bị lỗi thì thực hiện đoạn code dưới đây
+// nếu công thức nhập vào không bị lỗi thì thực hiện đoạn code dưới đây -----------------------------------------------------------------------------------------------------------------------
           if (kiem_tra_loi === undefined) {
               // kiểm tra xem trong mảng formular có tồn tại vị trí index được lưu chưa. Nếu có thay đổi công thức ở vị trí đó.
               var index_; 
@@ -765,15 +804,32 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
           for (let index = 0; index < _len ; index++) { 
             console.log( formular[index]);
             if (formular[index] !== undefined) { formular[index]()} ; }
+
+
+
            // hiện thị giá trị đã tính toán lên trang web bảng tính
           for (let index = 0; index <= (limit_view ); index++) {
             for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-              if ( Data[i+i_array_2d][j + j_array_2d] === null) {
+              if ( Data[index+i_array_2d][index_j + j_array_2d] === null) {
               
     
               }else{
 
-                a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+                  // với mỗi cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                  let max_zindex  = limit_col_view + 1;
+                
+                  for (let x = limit_col_view ; x >= 0 ; x--) {
+  
+                    if (Data[index+i_array_2d][x + j_array_2d] === null) {
+                    
+                    }else{
+                      a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
+                      max_zindex = x ;
+                    } 
+                  }
+  
+
+                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;       background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
     
 
               }
@@ -817,14 +873,31 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
 
                   // hiện thị giá trị đã tính toán lên trang web bảng tính nếu giá trị tính toán sau khi scroll nằm trong khung nhìn
+                  // do push vào cuối nên chỉ hiện lại ô đó thôi không lặp tất cả các ô
                   if ( (i <= limit_view - 1 )&( i >= 0) && (j <= limit_col_view - 1 )&( j >= 0) ) {
                                                       
                     if ( Data[i+i_array_2d][j + j_array_2d] === null) {
               
     
                     }else{
+
+                        // với  cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                            let max_zindex  = limit_col_view + 1;
+                            
+                            for (let x = limit_col_view ; x >= 0 ; x--) {
+
+                              if (Data[i+i_array_2d][x + j_array_2d] === null) {
+                              
+                              }else{
+                                a.current.children[i + 1].children[x+1].style.zIndex = max_zindex ;
+                                max_zindex = x ;
+                              } 
+                            }
+
+
+
       
-                      a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+                      a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;       background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
           
       
                     }
@@ -889,7 +962,21 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
               }else{
 
-                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;     background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
+                    // với mỗi cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                let max_zindex  = limit_col_view + 1;
+                
+                for (let x = limit_col_view ; x >= 0 ; x--) {
+
+                  if (Data[index+i_array_2d][x + j_array_2d] === null) {
+                  
+                  }else{
+                    a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
+                    max_zindex = x ;
+                  } 
+                }
+
+
+                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
     
 
               }
@@ -934,7 +1021,22 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     
               }else{
 
-                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;     background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
+                // với mỗi cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                let max_zindex  = limit_col_view + 1;
+                
+                for (let x = limit_col_view ; x >= 0 ; x--) {
+
+                  if (Data[index+i_array_2d][x + j_array_2d] === null) {
+                  
+                  }else{
+                    a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
+                    max_zindex = x ;
+                  } 
+                }
+
+
+
+                a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;  "> ${ Data[index +i_array_2d][index_j +j_array_2d]}  </div>`;
     
 
               }
@@ -1565,7 +1667,8 @@ console.log('_onKeyDown------------------------------');
                     
                       
                           console.log("_onDoubleClick");
-                        _this.innerHTML = '<div  contenteditable="true"></div>' ;
+                          _this.style.zIndex = limit_col_view + 1 ;
+                        _this.innerHTML = '<div  contenteditable="true"  ></div>' ;
                         xuat_hien_the_input = true ;
                       onclick_tinh_toan = true ;
                       vi_tri_o_truoc[0] = i ;
@@ -1678,7 +1781,9 @@ console.log('_onKeyDown------------------------------');
 
                             tinh_toan(vi_tri_o_truoc[0],vi_tri_o_truoc[1], "xoa_ky_tu_cong_thuc_thua_mouse_down");
 
-                                 //3.---------------------------------------------------------------------------------------
+
+                      // khi tính toán xong nếu trả về   cong_thuc_chua_hoan_thanh khác ""  thì viết tiếp công thức vào thẻ input
+                      // ngược lại  cong_thuc_chua_hoan_thanh bằng ""  thì tô màu và focus  
                     if (cong_thuc_chua_hoan_thanh != "") {
                       console.log("_onClick---viet tiếp công thức vào thẻ input");
                       // viet tiếp công thức vào thẻ input nên phải  để  onKeyDown_1_element = true; để không lắng nghe sụ kiện keydown ở element cha của input
@@ -1807,9 +1912,29 @@ console.log('_onKeyDown------------------------------');
                       
                        
                   
+                  }else{
+
+
+                          //khi tính toán ở trên xong nếu cong_thuc_chua_hoan_thanh === ""
+                          // thì tô màu và focus
+                          // set địa chỉ ô click  sau hành động trên
+                          dia_chi_o_click(i + i_array_2d,j + j_array_2d,i ,j) ;
+                          // tô màu vào vị trí i,j
+                          key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],i ,j); // tô màu và focus
+
+                          mien_select_array_2d[0] = i_array_2d + i ;
+                          mien_select_array_2d[1] = j_array_2d + j ;
+                        
+                          _onMouseEnter_not_event(i, j, i, j) ;
+                               onKeyDown = false ; 
+                               onclick_tinh_toan = false ;
+
+
+
                   }
-                                onKeyDown = false ; 
-                                onclick_tinh_toan = false ;
+
+
+                             
 
     
                   }else{
@@ -1831,191 +1956,185 @@ console.log('_onKeyDown------------------------------');
     
                                                                                           
             
-                  _this.onkeydown  =  function (event) {
-
-                   //  elment lắng nghe 2 sự kiện 
-                   //1.onkeydown mặc định khi khởi tạo  => tắt sự kiện này onkeydown === false
-                  //2. khi elment được click thì onkeydown === false => ta đã tắt onkeydown lúc khởi tạo rồi nên ở đây ta viết hàm này để elment nhận lại onkeydown ở cloure khác
-                              //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
-                              // khi xuất hiện thẻ input thì onKeyDown_1_element === true
-                              // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện  ở elment _this.onkeydown  này  
-                              console.log(onKeyDown_1_element) ;
-                    if (onKeyDown_1_element === false) {
-
-                      
-                      console.log("_onMouseDown_onKeyDown") ;
-                     // enter-----xuất hiện thẻ input khi double click mà không nhập gì chỉ ấn enter cũng không cần tính toán
-                     // khi nhập phím khác enter thì sẽ kích hoạt thẻ input mọi việc tiếp theo thẻ input lo
-                      if (event.keyCode === 13 ) {
-                           
-                        console.log("enter-----không xuất hiện thẻ input không tính toán") ;
-                        console.log("enter-----xuất hiện thẻ input khi double click mà không nhập gì cũng không cần tính toán") ;
-                        if ( Data[i+i_array_2d][j + j_array_2d] === null) {
-              
-    
-                        }else{
-
-                       
-                         let max_zindex  = limit_col_view;
-                          for (let index = limit_col_view ; index >= 0 ; index--) {
-
-                            if (Data[i+i_array_2d][index + j_array_2d] === null) {
-                            
-                            }else{
-                              a.current.children[i + 1].children[index+1].style.zIndex = max_zindex ;
-                              max_zindex = index ;
-                             console.log('--------------------------------------------------------------------');
-                            }
-                           
-                            
-                          }
-          
-                          a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;    z-index: 1;     background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;   "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
-                          // console.log('------------   ', sum_z_index + 1);
-          
-                        }
-                      
-
-                               // set địa chỉ ô click  sau hành động trên
-                               dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
-                        key_enter(i,j,i+1,j); // tô màu và focus
-                        mien_select_array_2d[0] = i_array_2d + i  + 1;
-                        mien_select_array_2d[1] = j_array_2d + j ;
-                       
-                        _onMouseEnter_not_event(i +1, j, i +1, j) ;
-                       
-                        xuat_hien_the_input = false ;   
-                        onKeyDown = false ; 
-                        onclick_tinh_toan = false ;
-                        onKeyDown_1_element = false;
-                         
-          
-          
-                        
-                      }
-
-
-
-
-                       // khi nhập phím khác enter thì sẽ kích hoạt thẻ input, đoạn code dưới chỉ sử lý ký tự đầu tiên khi nhận từ bàn phím mọi việc tiếp theo thẻ input lo
-
-                        //chỉ sử lý ký tự đầu tiên khi nhận từ bàn phím vì khi xuất hiện thẻ input phải tắt lắng nghe sụ kiện của element này bằng  onKeyDown_1_element = true ;
-                      if (event.keyCode != 13) {
-                        console.log("_onMouseDown_onKeyDown_keyCodekhac enter") ;
-
-                        // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-                      
-                        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"></div>' ;
-                       // biến này dùng để xác định ảnh hưởng tới scoll
-                        xuat_hien_the_input = true ;  
-                        var input_ =  a.current.children[i + 1].children[j+1].children[0];
-
-                        Object.assign(input_.style,css.input_focus) ;
-                        var input_formula = thanh_dia_chi_0.current;
-                         // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
-                        input_.focus({preventScroll:true}) ;
-
-                        console.log('vi_tri_con_tro         ' +  vi_tri_con_tro_khi_di_chuyen_trong_double_click_input )
-                        if (vi_tri_con_tro_khi_di_chuyen_trong_double_click_input === undefined) {
-                          // nếu thẻ element table trước đó không được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là  undefined
-                         // ta bôi đen miền lựa chọn ở đây để khi nhấn phím sẽ xoá toàn bộ ký tự cũ nếu element table không được double click trước đó.
-                           // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
-                        
-                        // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
-                        //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
-                        // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
-                        // sau đó gán giá trị khi nhấn lên input_formula
-                        setTimeout(() => { 
-                          text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
-                          console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
-                           input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
-                            input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
-                            vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1 ;
-
-                            } , 0);
-                        
-                        }
-                        else{
-                          // nếu trước đó double click input_ hiện lên công thức cũ đẫ viết
-                          // mục đích của người dùng là viết tiếp công thức khi ấn phím thì
-                        // di chuyển con trỏ tới vị trí focus trước  đó.
-                         // nếu thẻ element table trước đó được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là khác undefined
-                         let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
-                         let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
-                      
-                        input_.innerHTML = paint[0] ;
-                          //focus sau đó di chuyển đến cuối 
-                         
-                           let range = document.createRange();
-                          let selection = window.getSelection();
-                          selection.removeAllRanges(); 
-                           range.setStart(input_.childNodes[paint[1]], paint[2]);
-                           selection.addRange(range);
-                          
-                           
-
-                          // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
-                        
-                        // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
-                        //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
-                        // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
-                        // sau đó gán giá trị khi nhấn lên input_formula
-                        setTimeout(() => { 
-                          text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
-                          console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
-                           input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
-                            input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
-                            let range = document.createRange();
-                            let selection = window.getSelection();
-                           // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
-                             
-                                console.log(selection.anchorNode , selection.anchorOffset);
-                                range.setStart(input_.firstChild, 0);
-                                range.setEnd(selection.anchorNode , selection.anchorOffset);
-                                 vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
-                                console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
-                            
-
-                            } , 0);
-                        
-                        }
-                           
-
-                         
-                      
-
-                        
-                        onclick_tinh_toan = true ;
-                        
-                        vi_tri_o_truoc[0] = i ;
-                        vi_tri_o_truoc[1] = j ;
-                      // tắt lắng nghe sự kiện onKeyDown cho div element
-                      onKeyDown_1_element = true ;
                   
-                          
-                       run_function_when_input_focus (input_,i,j,i_array_2d, j_array_2d);
-          
-
-                    }
-                                                                                                          
-                    
-                                        
-                                        
-        
-
-
-
-
-                      
-                    }
-              
-                   
-
-                  }
     
     
     
       }
+
+          ///////////////////////////////////////////////
+          // khi click vào element thì gán sự kiện onkeydown cho element đó
+      _this.onkeydown  =  function (event) {
+
+        //  elment lắng nghe 2 sự kiện 
+        //1.onkeydown mặc định khi khởi tạo  => tắt sự kiện này onkeydown === false
+       //2. khi elment được click thì onkeydown === false => ta đã tắt onkeydown lúc khởi tạo rồi nên ở đây ta viết hàm này để elment nhận lại onkeydown ở cloure khác
+                   //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
+                   // khi xuất hiện thẻ input thì onKeyDown_1_element === true
+                   // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện  ở elment _this.onkeydown  này  
+                   console.log(onKeyDown_1_element) ;
+         if (onKeyDown_1_element === false) {
+
+           
+           console.log("_onMouseDown_onKeyDown") ;
+          // enter-----xuất hiện thẻ input khi double click mà không nhập gì chỉ ấn enter cũng không cần tính toán
+          // khi nhập phím khác enter thì sẽ kích hoạt thẻ input mọi việc tiếp theo thẻ input lo
+           if (event.keyCode === 13 ) {
+                
+             console.log("enter-----không xuất hiện thẻ input không tính toán") ;
+             console.log("enter-----xuất hiện thẻ input khi double click mà không nhập gì cũng không cần tính toán") ;
+             if ( Data[i+i_array_2d][j + j_array_2d] === null) {
+   
+
+             }else{
+
+            
+            // với  cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                 let max_zindex  = limit_col_view + 1;
+                 
+                 for (let x = limit_col_view ; x >= 0 ; x--) {
+
+                   if (Data[i+i_array_2d][x + j_array_2d] === null) {
+                   
+                   }else{
+                     a.current.children[i + 1].children[x+1].style.zIndex = max_zindex ;
+                     max_zindex = x ;
+                   } 
+                 }
+
+               a.current.children[i + 1].children[j+1].innerHTML = ` <div    style="  position:absolute;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;   "> ${ Data[i +i_array_2d][j +j_array_2d]}  </div>`;
+             
+
+             }
+           
+
+                    // set địa chỉ ô click  sau hành động trên
+                    dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
+             key_enter(i,j,i+1,j); // tô màu và focus
+             mien_select_array_2d[0] = i_array_2d + i  + 1;
+             mien_select_array_2d[1] = j_array_2d + j ;
+            
+             _onMouseEnter_not_event(i +1, j, i +1, j) ;
+            
+             xuat_hien_the_input = false ;   
+             onKeyDown = false ; 
+             onclick_tinh_toan = false ;
+             onKeyDown_1_element = false;
+              
+
+
+             
+           }
+
+
+
+
+            // khi nhập phím khác enter thì sẽ kích hoạt thẻ input, đoạn code dưới chỉ sử lý ký tự đầu tiên khi nhận từ bàn phím mọi việc tiếp theo thẻ input lo
+
+             //chỉ sử lý ký tự đầu tiên khi nhận từ bàn phím vì khi xuất hiện thẻ input phải tắt lắng nghe sụ kiện của element này bằng  onKeyDown_1_element = true ;
+           if (event.keyCode != 13) {
+             console.log("_onMouseDown_onKeyDown_keyCodekhac enter") ;
+
+             // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
+             a.current.children[i + 1].children[j+1].style.zIndex = limit_col_view + 1 ;
+             a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"></div>' ;
+            // biến này dùng để xác định ảnh hưởng tới scoll
+             xuat_hien_the_input = true ;  
+             var input_ =  a.current.children[i + 1].children[j+1].children[0];
+
+             Object.assign(input_.style,css.input_focus) ;
+             var input_formula = thanh_dia_chi_0.current;
+              // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
+             input_.focus({preventScroll:true}) ;
+
+             console.log('vi_tri_con_tro         ' +  vi_tri_con_tro_khi_di_chuyen_trong_double_click_input )
+             if (vi_tri_con_tro_khi_di_chuyen_trong_double_click_input === undefined) {
+               // nếu thẻ element table trước đó không được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là  undefined
+              // ta bôi đen miền lựa chọn ở đây để khi nhấn phím sẽ xoá toàn bộ ký tự cũ nếu element table không được double click trước đó.
+                // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
+             
+             // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
+             //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
+             // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
+             // sau đó gán giá trị khi nhấn lên input_formula
+             setTimeout(() => { 
+               text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
+               console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
+                input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
+                 input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+                 vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1 ;
+
+                 } , 0);
+             
+             }
+             else{
+               // nếu trước đó double click input_ hiện lên công thức cũ đẫ viết
+               // mục đích của người dùng là viết tiếp công thức khi ấn phím thì
+             // di chuyển con trỏ tới vị trí focus trước  đó.
+              // nếu thẻ element table trước đó được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là khác undefined
+              let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
+              let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
+           
+             input_.innerHTML = paint[0] ;
+               //focus sau đó di chuyển đến cuối 
+              
+                let range = document.createRange();
+               let selection = window.getSelection();
+               selection.removeAllRanges(); 
+                range.setStart(input_.childNodes[paint[1]], paint[2]);
+                selection.addRange(range);
+               
+                
+
+               // lúc này sự kiện ghi ký  tự đã nhấn vào input_ sẽ chạy và thêm ký tự vào( hoặc xoá ký tự nếu nhấn phím backspace)
+             
+             // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input đó sẽ láng nghe sự kiện onkeydown để gán tiếp
+             //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
+             // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
+             // sau đó gán giá trị khi nhấn lên input_formula
+             setTimeout(() => { 
+               text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
+               console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
+                input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
+                 input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+                 let range = document.createRange();
+                 let selection = window.getSelection();
+                // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
+                  
+                     console.log(selection.anchorNode , selection.anchorOffset);
+                     range.setStart(input_.firstChild, 0);
+                     range.setEnd(selection.anchorNode , selection.anchorOffset);
+                      vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
+                     console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
+                 
+
+                 } , 0);
+             
+             }
+                
+
+              
+           
+
+             
+             onclick_tinh_toan = true ;
+             
+             vi_tri_o_truoc[0] = i ;
+             vi_tri_o_truoc[1] = j ;
+           // tắt lắng nghe sự kiện onKeyDown cho div element
+           onKeyDown_1_element = true ;
+       
+               
+            run_function_when_input_focus (input_,i,j,i_array_2d, j_array_2d);
+
+
+         }
+            
+         }
+   
+        
+
+       }
     
     
     
@@ -2772,19 +2891,56 @@ let vi_tri_cat_col  ;
                       limit_col_view = sum_col - 1 ; 
                   
                             // xoá _this.onkeydown ở vị trí trước đi
-                        a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
-                        console.log(vi_tri_o_truoc[0]  ,vi_tri_o_truoc[1] , "onKeyDown = null " );
+                            try {
+                              a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
+                              console.log(vi_tri_o_truoc[0]  ,vi_tri_o_truoc[1] , "onKeyDown = null " );
+                            } catch (error) {
+                              // bỏ qua lỗi
+                            }
+                           
 
                          // cập nhật lại dữ liệu khi scroll -- bước1
-                         for (let index = 0; index <= (limit_view ); index++) {
+                         for (let index = 0; index <= limit_view ; index++) {
                       
                           a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
                          
-                          for (let index_j = 0; index_j <=(limit_col_view ) ; index_j++) {
-                           if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
-                          
-                            a.current.children[index + 1].children[index_j+1].innerHTML = Data[index +vi_tri_cat][index_j +vi_tri_cat_col];
-                          }
+                          for (let index_j = 0; index_j <= limit_col_view  ; index_j++) {
+                                      if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
+
+                                          
+
+                                        // với  cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                                        let max_zindex  = limit_col_view + 1;
+                                                  
+                                        for (let x = limit_col_view ; x >= 0 ; x--) {
+
+                                          if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
+
+                                            a.current.children[index + 1].children[x+1].style.zIndex = index ;
+                                          
+                                          }else{
+                                            a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
+                                            max_zindex = x ;
+                                          } 
+                                        }
+
+
+                      
+                                        if ( Data[index + vi_tri_cat][index_j + vi_tri_cat_col] === null) {
+                                                      
+                                                 
+                                      a.current.children[index + 1].children[index_j+1].innerHTML = null ;
+                                  
+                                        }else{
+
+                                          
+                                      a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;   "> ${ Data[index + vi_tri_cat  ][index_j + vi_tri_cat_col]  }  </div>`;
+                                  
+                                               
+                                        }
+       
+                        
+                        }
                         }  
 
                         
@@ -2973,6 +3129,7 @@ let vi_tri_cat_col  ;
                         
                     
                                       // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
+                                      parent_input.style.zIndex = limit_col_view + 1 ;
                                       parent_input.innerHTML = '<div  contenteditable="true"></div>' ;
                                   let input_ =  parent_input.children[0];
                             // biến này dùng để xác định ảnh hưởng tới scoll
@@ -3562,13 +3719,13 @@ event.persist();
       
         row_excel: { display: "table-row" },
 
-        col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px",overflow: 'visible',  borderRightStyle: 'none', borderTopStyle: 'none', },
+        col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px",  borderRightStyle: 'none', borderTopStyle: 'none', },
 
         // click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
-        click: { backgroundColor: "moccasin" },
+        click: { backgroundColor: "moccasin" , outline: 'none', },
         // remove_click: { boxShadow: "",outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "" },
         remove_click: {  backgroundColor: "white" },
-        input_focus: { width: "inherit", outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
+        input_focus: { display: 'inline-block', position: 'absolute', width: "500px", outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
 
         select: { backgroundColor: "moccasin" },
         remove_select: { backgroundColor: "" },
