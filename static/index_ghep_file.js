@@ -174,7 +174,9 @@
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       var limit_view   ;
       var limit_col_view  ;
+      let tro_ve_vi_tri_begin ;
       useEffect(() => {
+         tro_ve_vi_tri_begin = a.current.children[ 1].children[limit_col+1].getBoundingClientRect().left ;
         
         document.body.style.zoom = "100%";
     
@@ -3054,7 +3056,7 @@ let vi_tri_cat_col  ;
 
                                           if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
 
-                                            a.current.children[index + 1].children[x+1].style.zIndex = index ;
+                                            a.current.children[index + 1].children[x+1].style.zIndex = x ;
                                           
                                           }else{
                                             a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
@@ -3081,7 +3083,47 @@ let vi_tri_cat_col  ;
                         }
                         }  
 
-                        
+
+
+
+
+                      
+                        for (let index = 0; index <= limit_view ; index++) {
+                          let sum_col_hide = 1 ;
+                          for (let x = vi_tri_cat_col - 1 ; x >= 0 ; x--) {
+                            a.current.children[ index + 1].children[limit_col+1].style.visibility = "hidden";
+                          
+  
+                            if (Data[index + vi_tri_cat ][x ] === null) {
+  
+                          sum_col_hide = sum_col_hide + 1 ;
+                            
+                            }else{
+                              a.current.children[ index + 1].children[limit_col+1].style.visibility = "visible";
+                              a.current.children[ index + 1].children[limit_col+1].innerHTML = Data[index + vi_tri_cat][x]  ;
+                              a.current.children[ index + 1].children[limit_col+1].style.left = (-tro_ve_vi_tri_begin -sum_col_hide*85) + 'px' ;
+                                        for (let x = 0 ; x <= limit_col_view ; x++) {
+                                          if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
+
+                                          
+                                          
+                                          }else{
+                                            a.current.children[ index + 1].children[limit_col+1].style.zIndex = x ;
+                                            break ;
+                                          } 
+
+                                        }
+
+                              break ;
+                            } 
+  
+                          }
+                        }
+                       
+                       
+                       
+
+
                     //Bước 2:  nếu công thức chưa hoàn thành(xuất hiện thẻ input)
 
                     if (xuat_hien_the_input) {
@@ -3852,7 +3894,7 @@ event.persist();
 
         bar_reference_row : {   backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell",  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
 
-        bar_reference_col : { width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" ,  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
+        bar_reference_col : {  position: 'relative', zIndex: 100,    width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" ,  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
 
       
         row_excel: { display: "table-row" },
@@ -3917,13 +3959,15 @@ event.persist();
          
        
         
-          <canvas  ref={ canvas_  } width = {table_excel_width} height={ table_excel_height}  style={{display : "none" ,  zIndex: 1000,}}    ></canvas>  
+          <canvas  ref={ canvas_  } width = {table_excel_width} height={ table_excel_height}  style={{display : "none" ,  zIndex: 100,}}    ></canvas>  
+        
     <div ref={ table_excel  }   style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}   >
    
   
 
        <div  style={{ height : `${data_lenght }px` ,width : `${data_col_lenght }px`,  }}  ref={ a  }  >
-                          
+                            
+                         
                           <div style={  css.row_excel}  > <div    style={ css.bar_reference_col} ></div> {Data_show_0[0].map((cell, j) => { return <div   style={css.bar_reference_row} >{j }</div>})}  </div> 
                         
                           {Data_show_0.map((row, i) => {
@@ -3941,12 +3985,13 @@ event.persist();
                       // biến onKeyDown mặc định là false
                       onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
                       >   </div>
-                                })}
+                                })}    <div style={ {  zIndex: limit_col_view,  position: "relative", display : "inline-block",  backgroundColor: "white"}} > them moi </div>
 
-                              </div>
+                              </div> 
 
                             );
-                          })}  
+                          })}    
+                          
                 </div>   
  
    
