@@ -243,6 +243,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
             console.log("---------------------_input_.onkeydown") ;
             // khi ấn phím khác enter thì tiến hành ghi dữ liệu vào thẻ input
             if (event.keyCode !== 13) {
+
+            
                
               let range = document.createRange();
               let selection = window.getSelection();
@@ -275,6 +277,9 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                     let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ) ;
                  
                     input_.innerHTML = paint[0] ;
+                    let width_input_focus = ( table_excel.current.clientWidth - (a.current.children[i + 1].children[j+1].getBoundingClientRect().x -  table_excel.current.getBoundingClientRect().x ) -6 )+ 'px' ;
+                  
+                    Object.assign(input_.style, { width: width_input_focus}) ;
 
                   // di chuyển focus tới vị trí cũ
                     selection.removeAllRanges(); 
@@ -410,22 +415,27 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                       
                         console.log('xuất hiện lại thẻ input và focus') ;
                       
-                        a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].style.zIndex = limit_col_view + 1 ;
+                        a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].style.zIndex = 100 ;
                           a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].innerHTML = '<div  contenteditable="true"></div>'  ;
                           var input_ =  a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].children[0] ;
-                          Object.assign(input_.style,css.input_focus) ;
-
-                         
-
+                          let width_input_focus = ( table_excel.current.clientWidth - (a.current.children[row_vi_tri_add + 1].children[col_vi_tri_add+1].getBoundingClientRect().x -  table_excel.current.getBoundingClientRect().x ) -6 )+ 'px' ;
+                          Object.assign(input_.style,css.input_focus , { width: width_input_focus} ) ;
+     
+                      
                           if ( text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d]  === null) {           
                             input_.focus({preventScroll:true}) ; 
                             }else{
 
                                 // focus tại vị trí mới nhưng không set lại vi_tri_con_tro_khi_di_chuyen_trong_double_click_input. Biến này vẫn ở trạng thái trước đó
-                                let vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ;  
+                                let vi_tri_focus ;
+                                if (cong_thuc_them_vao[0] === null) {
+                                   vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input  ;  
+                                } else {
+                                   vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ;  
+                                }
+                               
                                 console.log(vi_tri_focus);
-                                console.log(cong_thuc_them_vao[0]);
-                                console.log(cong_thuc_them_vao[0].length);
+                             
                                 let paint =  paint_text( text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d],vi_tri_focus ) ;
                               
                                 input_.innerHTML = paint[0] ;
@@ -455,38 +465,6 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                            
                       
                 
-                        //   // do vậy nếu ở đoạn code này ta để a.current.children[row_vi_tri_add].children[col_vi_tri_add+1].children[0].focus({preventScroll:true});
-                        //   // thì khi cuộn nhanh quá sẽ có lỗi focus :Uncaught TypeError: Cannot read properties of undefined (reading 'focus') at <anonymous>
-                        // //  var len = input_.value.length;
-                        //   setTimeout(()=>{ 
-
-                        //     if ( input_.textContent  === "") {
-                        //       input_.focus({preventScroll:true}) ;
-                        //     }else{
-                          
-                        //      //focus sau đó di chuyển đến cuối
-                        //      input_.focus({preventScroll:true}) ;
-                        //      let len =  input_.textContent.length  ;
-                        //      let range = document.createRange();
-                        //      let selection = window.getSelection();
-                        //      selection.removeAllRanges();  
-                        //      range.setStart(input_.childNodes[0], len) ;
-                        //      selection.addRange(range);
-                        //      //focus
-                        //     }
-
-                          //   run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d , j_array_2d);
-
-                          //        // set địa chỉ ô click  sau hành động trên
-                          //  dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
-
-                          //  console.log(vi_tri_click_in_Data);
-                           
-                          // },0)
-
-                         
-                      
-                         
 
               }
 
@@ -1111,14 +1089,19 @@ console.log('_onKeyDown------------------------------');
       if (event.key != "Enter") {
         console.log("_onKeyDown--nhập dữ liệu")
         // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"   ></div>' ;
+        a.current.children[i + 1].children[j+1].style.zIndex = 100 ;
+      
+        a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"  ></div>' ;
         let input_ =  a.current.children[i +1 ].children[j+1].children[0];
         // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
+
         input_.focus({preventScroll:true}) ;
         console.log(input_);
         xuat_hien_the_input = true ;
         vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1 ;
-        Object.assign(input_.style,css.input_focus) ;
+                  
+        Object.assign(input_.style,css.input_focus ) ;
+
 
          // lúc này input nhận giá trị từ bàn phím hiện lên thẻ input 
 
@@ -1136,7 +1119,8 @@ console.log('_onKeyDown------------------------------');
         setTimeout(() => {  
           text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
            console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
-            input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ; input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  } , 0);
+            input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ; input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ;  } 
+            , 0);
 
        
              
@@ -1182,6 +1166,7 @@ console.log('_onKeyDown------------------------------');
           console.log('vẽ canvas');
           console.log(mien_select_array_2d);
       // xoá biểu tượng fill đã xuất hiện khi move mouse
+      console.log('xoá biểu tượng fill');
       var  ctx = canvas_.current.getContext("2d");
       ctx.clearRect(0, 0, canvas_.current.width, canvas_.current.height) ;
  
@@ -1233,21 +1218,21 @@ console.log('_onKeyDown------------------------------');
           css.canvas_.top = y_r0c0 - ref_0.current.getBoundingClientRect().y + 'px' ;
 
           css.canvas_.left = x_r0c0 -  ref_0.current.getBoundingClientRect().x + 'px';
-          // css.canvas_.borderRight = "2px solid #00A170";
+      
        
           if ( ( x_r0c0 -  ref_0.current.getBoundingClientRect().x)  +  (x_r0c1 - x_r0c0 - 4)  >= table_excel.current.clientWidth) {
             css.canvas_.width =( table_excel.current.clientWidth - (x_r0c0 -  table_excel.current.getBoundingClientRect().x ) )+ 'px'  ;
          
-            // css.canvas_.borderRight = "none";
+           
           }
           if ( ( y_r0c0 -  table_excel.current.getBoundingClientRect().y)  +  (y_r1c0 - y_r0c0 - 4)  >= table_excel.current.clientHeight) {
             css.canvas_.height =( table_excel.current.clientHeight - (y_r0c0 -  table_excel.current.getBoundingClientRect().y ) )+ 'px'  ;
          
-            // css.canvas_.borderRight = "none";
+          
           }
 
   // vẽ lại  biểu tượng fill 
-
+  console.log('vẽ lại biểu tượng fill');
           let ty_le_canvas_width = table_excel_width/(x_r0c1 - x_r0c0 - 4);
           let ty_le_canvas_height = table_excel_height/(y_r1c0 - y_r0c0 - 4);
 
@@ -1256,12 +1241,16 @@ console.log('_onKeyDown------------------------------');
             ctx.beginPath();
              if (mien_select[2]>= mien_select[0]&&mien_select[3]>= mien_select[1] ) {
               ctx.fillRect(ty_le_canvas_width*(x_r0c1 - x_r0c0 - 4) -10*ty_le_canvas_width, ty_le_canvas_height*(y_r1c0 - y_r0c0 - 4) - 10*ty_le_canvas_height, 10*ty_le_canvas_width, 10*ty_le_canvas_height);
-             }else if(mien_select[3]<= mien_select[1]&&mien_select[2]>= mien_select[0]) {
+              ctx.globalAlpha = 0.3;
+            }else if(mien_select[3]<= mien_select[1]&&mien_select[2]>= mien_select[0]) {
               ctx.fillRect(0, ty_le_canvas_height*(y_r1c0 - y_r0c0 - 4) - 10*ty_le_canvas_height, 10*ty_le_canvas_width, 10*ty_le_canvas_height);
+              ctx.globalAlpha = 0.3;
             }else if(mien_select[3]>= mien_select[1]&&mien_select[2]<= mien_select[0]) {
               ctx.fillRect(ty_le_canvas_width*(x_r0c1 - x_r0c0 - 4) -10*ty_le_canvas_width, 0, 10*ty_le_canvas_width, 10*ty_le_canvas_height);
+              ctx.globalAlpha = 0.3;
             }else {
               ctx.fillRect(0, 0, 10*ty_le_canvas_width, 10*ty_le_canvas_height);
+              ctx.globalAlpha = 0.3;
             }
               ctx.closePath();
 
@@ -1271,7 +1260,8 @@ console.log('_onKeyDown------------------------------');
               console.log('ve-------------------enter');
               ctx.beginPath(); 
               ctx.fillRect(ty_le_canvas_width*(x_r0c1 - x_r0c0 - 4) -10*ty_le_canvas_width, ty_le_canvas_height*(y_r1c0 - y_r0c0 - 4) - 10*ty_le_canvas_height, 10*ty_le_canvas_width, 10*ty_le_canvas_height);
-                ctx.closePath();        
+              ctx.globalAlpha = 0.3;
+              ctx.closePath();        
             }
           }
 
@@ -1669,7 +1659,7 @@ console.log('_onKeyDown------------------------------');
                     
                       
                           console.log("_onDoubleClick");
-                          _this.style.zIndex = limit_col_view + 1 ;
+                          _this.style.zIndex = 100 ;
                         _this.innerHTML = '<div  contenteditable="true"  ></div>' ;
                         xuat_hien_the_input = true ;
                       onclick_tinh_toan = true ;
@@ -1681,7 +1671,7 @@ console.log('_onKeyDown------------------------------');
 
                       let input_ =  _this.children[0];
 
-                      Object.assign(input_.style,css.input_focus) ;
+                 
                       
                     
                       
@@ -1698,11 +1688,15 @@ console.log('_onKeyDown------------------------------');
                         if ( text_formular[i+i_array_2d][j + j_array_2d]  === null) {
                          
                            
-                           
+                          Object.assign(input_.style,css.input_focus  ) ;
                            
                         input_.focus({preventScroll:true}) ;
                             
                         }else{
+                          let width_input_focus = ( table_excel.current.clientWidth - (a.current.children[i + 1].children[j+1].getBoundingClientRect().x -  table_excel.current.getBoundingClientRect().x ) -6 )+ 'px' ;
+                          Object.assign(input_.style,css.input_focus , { width: width_input_focus} ) ;
+     
+                        
                           let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
                           let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
                        
@@ -1986,8 +1980,9 @@ console.log('_onKeyDown------------------------------');
              console.log("enter-----không xuất hiện thẻ input không tính toán") ;
              console.log("enter-----xuất hiện thẻ input khi double click mà không nhập gì cũng không cần tính toán") ;
              if ( Data[i+i_array_2d][j + j_array_2d] === null) {
-   
-
+              a.current.children[i + 1].children[j+1].innerHTML = null ;
+              // nếu xuất hiện thẻ input khi double click mà  không nhập gì cũng không cần tính toán nhưng phải thay đỏi zindex về như cũ vì khi double click ta đã xác định zIndex: là 100
+              a.current.children[i + 1].children[j+1].style.zIndex = j ;
              }else{
 
             
@@ -2038,13 +2033,17 @@ console.log('_onKeyDown------------------------------');
              console.log("_onMouseDown_onKeyDown_keyCodekhac enter") ;
 
              // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-             a.current.children[i + 1].children[j+1].style.zIndex = limit_col_view + 1 ;
+             a.current.children[i + 1].children[j+1].style.zIndex = 100 ;
              a.current.children[i + 1].children[j+1].innerHTML = '<div  contenteditable="true"></div>' ;
             // biến này dùng để xác định ảnh hưởng tới scoll
              xuat_hien_the_input = true ;  
              var input_ =  a.current.children[i + 1].children[j+1].children[0];
 
-             Object.assign(input_.style,css.input_focus) ;
+           
+             
+                  
+             Object.assign(input_.style,css.input_focus ) ;
+
              var input_formula = thanh_dia_chi_0.current;
               // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
              input_.focus({preventScroll:true}) ;
@@ -2948,8 +2947,9 @@ let vi_tri_cat_col  ;
 
 
 
-
-                      
+                        // các cell bị ẩn bên trái trục
+                        // tìm các cell cell bị ẩn bên trái trục gần nhất để hiện dữ liệu lên div show các cell ẩn
+                      // sau đó di chuyển div đó phù hợp với khung nhìn
                         for (let index = 0; index <= limit_view ; index++) {
                           let sum_col_hide = 1 ;
                           for (let x = vi_tri_cat_col - 1 ; x >= 0 ; x--) {
@@ -2962,8 +2962,11 @@ let vi_tri_cat_col  ;
                             
                             }else{
                               a.current.children[ index + 1].children[limit_col+1].style.visibility = "visible";
+                              // div đó hiện dữ liệu
                               a.current.children[ index + 1].children[limit_col+1].innerHTML = Data[index + vi_tri_cat][x]  ;
+                              // di chuyển div đó phù hợp với khung nhìn
                               a.current.children[ index + 1].children[limit_col+1].style.left = (-tro_ve_vi_tri_begin -sum_col_hide*85) + 'px' ;
+                                        // xác dịnh zindex cho div đó
                                         for (let x = 0 ; x <= limit_col_view ; x++) {
                                           if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
 
@@ -3171,7 +3174,7 @@ let vi_tri_cat_col  ;
                         
                     
                                       // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-                                      parent_input.style.zIndex = limit_col_view + 1 ;
+                                      parent_input.style.zIndex = 100 ;
                                       parent_input.innerHTML = '<div  contenteditable="true"></div>' ;
                                   let input_ =  parent_input.children[0];
                             // biến này dùng để xác định ảnh hưởng tới scoll
@@ -3404,12 +3407,22 @@ event.persist();
           
            
               console.log('ve-------------------move');
+
               var  ctx = canvas_.current.getContext("2d");
+                // xoá biểu tượng fill đã xuất hiện khi move mouse
+            console.log('xoá biểu tượng fill');
+    
+            ctx.clearRect(0, 0, canvas_.current.width, canvas_.current.height) ;
+
+              // vẽ lại biểu tượng fill
+              console.log('vẽ lại biểu tượng fill');
               ctx.beginPath();
                   
               ctx.fillRect(ty_le_canvas_width*(x_r0c1 - x_r0c0 - 4) -10*ty_le_canvas_width, ty_le_canvas_height*(y_r1c0 - y_r0c0 - 4) - 10*ty_le_canvas_height, 10*ty_le_canvas_width, 10*ty_le_canvas_height);
-          
+              ctx.globalAlpha = 0.3;
                 ctx.closePath();
+
+
                 trang_thai_fill = true  ;
                 if ( mien_select_array_2d[0]===  mien_select_array_2d[2] &&  mien_select_array_2d[1]===  mien_select_array_2d[3] ) {
                  kieu_fill = 1 ;
@@ -3761,17 +3774,17 @@ event.persist();
       
         row_excel: { display: "table-row" },
 
-        col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: 4, paddingRight : "4px",  borderRightStyle: 'none', borderTopStyle: 'none', },
+        col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: "4px", paddingRight : "4px",  borderRightStyle: 'none', borderTopStyle: 'none', },
 
         // click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
         click: { backgroundColor: "moccasin" , outline: 'none', },
         // remove_click: { boxShadow: "",outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "" },
         remove_click: {  backgroundColor: "white" },
-        input_focus: { display: 'inline-block', position: 'absolute', width: "500px", outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
+        input_focus: {   height: "inherit", paddingLeft: "4px", display: 'inline-block', position: 'absolute', zIndex: 100 ,  outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
 
         select: { backgroundColor: "moccasin" },
         remove_select: { backgroundColor: "" },
-        canvas_ : {  position: "absolute", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' },
+        canvas_ : {  position: "absolute", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' , },
       
 
       }
@@ -3847,7 +3860,9 @@ event.persist();
                       // biến onKeyDown mặc định là false
                       onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
                       >   </div>
-                                })}    <div style={ {  zIndex: limit_col_view,  position: "relative", display : "inline-block",  backgroundColor: "white"}} > them moi </div>
+                                })}   
+                                 {/* div này để show data bị ẩn bên trái trục */}
+                                 <div style={ {  zIndex: limit_col_view,  position: "relative", display : "inline-block",  backgroundColor: "white"}} ></div>
 
                               </div> 
 
