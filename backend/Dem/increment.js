@@ -2,7 +2,7 @@ module.exports =  function (req, res, con) {
  
     
   
-    return  res.send('gggggggggg'); ;
+    return  res.send([0,1,2,3]); 
      
    
 

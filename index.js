@@ -45,14 +45,53 @@ app.use(express.json());
       // readdirSync(Folder)  : đọc Folder sẽ được tên các file
     // tao array Url vào [] file_name
     const Folder = './backend';
-    var file_name = "";
+    let file_name = "";
     fs.readdirSync(Folder).forEach(file => { 
      if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," +"/" + file + "/" + file_con.slice(0,file_con.length - 3) ;}) };
      if (path.extname(file) == ".js"){ file_name  =   file_name + "," +"/" + file.slice(0, file.length - 3) };
     });
     file_name = file_name.split(",");
     file_name = file_name.slice(1);
-var model = [];
+let model = [];
+
+app.get('/file',function(req,res){
+  
+  const Folder = './static/file';
+  let file_name = [];
+  fs.readdirSync(Folder).forEach(file => { 
+    file_name.push(file)
+  });
+ 
+  return  res.send(file_name); 
+ 
+});
+
+
+app.get('/hh.html',function(req,res){
+  const data = fs.readFileSync('./static/hh.html', 'utf8');
+ 
+  res.write(data); 
+  return res.end();
+
+});
+
+
+//  model[index] là fuction khớp với file_name[index]    
+// vd: model[index]  là  function (req, res, con) { return  res.send(req.body["id"].toString()); }
+// vd: app.all(  "/decrement"  , function (req, res) {    model[index](req, res, con); }); 
+
+// vd: http://localhost:8000/Dem/increment
+for (let index = 0; index < file_name.length; index++) {
+  console.log(file_name[index]);
+
+ model.push( require("./backend" + file_name[index] + ".js"));
+
+ app.all(file_name[index], function (req, res) {    model[index](req, res, con); });
+
+}
+
+
+
 app.use( function (req, res) {
 
   console.log(req.path);
@@ -69,25 +108,6 @@ app.use( function (req, res) {
       
 });
 
-app.get('/hh.html',function(req,res){
-  const data = fs.readFileSync('./static/hh.html', 'utf8');
- 
-  res.write(data); 
-  return res.end();
 
-});
-
-
-//  model[index] là fuction khớp với file_name[index]    
-// vd: model[index]  là  function (req, res, con) { return  res.send(req.body["id"].toString()); }
-// vd: app.all(  "/decrement"  , function (req, res) {    model[index](req, res, con); }); 
-for (let index = 0; index < file_name.length; index++) {
-  console.log(file_name[index]);
-
- model.push( require("./backend" + file_name[index] + ".js"));
-
- app.all(file_name[index], function (req, res) {    model[index](req, res, con); });
-
-}
-
+// http://localhost:8000
 app.listen(port, () => console.log("Backend server live on " + port));

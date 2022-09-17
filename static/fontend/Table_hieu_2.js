@@ -3,15 +3,30 @@
 
 
   // dùng fill chậm hơn một ít không đáng kể so với for 
-  var Data = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
-  var  text_formular = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
-  var  index_formular = new Array(10000).fill(null).map((i)=> i = new Array(500).fill(null)) ;
+  var Data = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
+  var  text_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
+  var  index_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
   var  formular = [];
 
   function Table_hieu_2(props) {
+
+
+if (props.value === undefined) {
+  
+} else {
+  Data = props.value[0] ;
+  text_formular = props.value[1] ;
+  index_formular = props.value[2] ;
+  formular = props.value[3] ;
+}
+
+
+
+    console.log('-----------------------------------------------------');
+    console.log(props.value);
   let myname = 'Table_hieu_2-' ;
 
-
+let ref_file =  useRef(null) ;
   
 
     var vi_tri_o_truoc = [null,null] ;
@@ -1576,7 +1591,7 @@ console.log('_onKeyDown------------------------------');
           };
 
 
-          // khi nhấn chuột vào khung canvas_  thì ẩn canvas_ đi
+          // khi nhấn chuột hoặc bàn phím gõ vào khung canvas_  thì ẩn canvas_ đi
           // lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
           // và nó sẽ lắng nghe sự kiện _onMouseEnter nhưng lúc này ta thiết lập   turn_off_onMouseEnter = true
           // để chạy sự kiện giống như click chuột vào 1 ô trong bảng tính
@@ -3754,6 +3769,29 @@ event.persist();
     }
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+function get_file_from_sever(event, file_name) {
+
+
+console.log(file_name);
+
+  
+  
+  fetch(`/file/${ file_name }`) .then(response =>response.json()) .then(data =>  { console.log(file_name);
+   } );
+  
+
+  if (change_trang_thai === 0) 
+  { ReactDOM.render( <Table_hieu_2  />  , document.getElementById('root'))  ;
+    change_trang_thai = 1 
+   } 
+  else 
+  { ReactDOM.render( <div> <Table_hieu_2  /> </div>   , document.getElementById('root'))  ;
+    change_trang_thai = 0 
+   } 
+  
+}
+
+   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function css() {
      
      
@@ -3764,7 +3802,7 @@ event.persist();
         textarea: {verticalAlign: "top",  marginLeft : "5px", marginRight : "5px", border: "1px solid #ccc", flexGrow: 1, width: `50px` , height: "50px", resize: "none" },
         thanh_dia_chi : {marginLeft : "5px",marginTop : "10px",verticalAlign: "top", backgroundColor: "white", height:  `30px` , padding:"5px", width : `50px`,flexGrow: 0 ,  border: "1px solid #ccc"},
         //overflow: "auto" : Khi chiều cao của box không đủ chứa text, thì thanh scroll sẽ tự động hiển thị ; Khi sử dụng thành phần này sẽ xuất hiện thanh scroll dọc
-       // borderCollapse: "collapse",
+      
         table_excel: {    height: `${table_excel_height}px`, width :  `${table_excel_width}px`,  overflowY: "auto",  overflowX: "auto"},
 
         bar_reference_row : {   backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell",  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
@@ -3776,13 +3814,13 @@ event.persist();
 
         col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: "4px", paddingRight : "4px",  borderRightStyle: 'none', borderTopStyle: 'none', },
 
-        // click: {boxShadow: "4px 4px 5px  Grey", outlineStyle: "ridge", outlineColor: "coral", outlineWidth: "5px", backgroundColor: "moccasin" },
+       
         click: { backgroundColor: "moccasin" , outline: 'none', },
-        // remove_click: { boxShadow: "",outlineStyle: "", outlineColor: "", outlineWidth: "", backgroundColor: "" },
+      
         remove_click: {  backgroundColor: "white" },
         input_focus: {   height: "inherit", paddingLeft: "4px", display: 'inline-block', position: 'absolute', zIndex: 100 ,  outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
 
-        select: { backgroundColor: "moccasin" },
+        select: { backgroundColor: "moccasin"   ,  },
         remove_select: { backgroundColor: "" },
         canvas_ : {  position: "absolute", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' , },
       
@@ -3795,7 +3833,7 @@ event.persist();
 /////////////////////////////////////////////////////////////////////////////////////////////////////
     function pseudo() {
       var _class = [
-         ['.black',':hover',' {  color: hotpink ; border: 2px solid red; }'] ,
+         ['.black',':hover',' {  color: hotpink ; }'] ,
 
 
 
@@ -3824,6 +3862,30 @@ event.persist();
           <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
           <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
           <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{   }} > clear </div>
+          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  
+              
+           onClick={ (event) =>{    
+            fetch('/file') .then(response =>response.json()) .then(data =>  {  ref_file.current.style.display = 'block'   ;
+             ReactDOM.render( <div   >  
+                         
+                         
+                  
+                  <div>
+                    Open
+                  </div> 
+                <hr></hr>
+                  {  data.map((i)=>{ return  <div  className={ pseudo.black} onClick={ (event) =>{ ;  get_file_from_sever(event, i) ;  }}  > { i } </div>  ; })  } </div> 
+                  
+
+
+
+
+            ,  ref_file.current)  }   
+            );
+              } 
+            }
+           
+           > file </div>    <div  style={{ display: 'none' ,  zIndex: 200 ,   backgroundColor: '#FFFFF7', position: "absolute",  width : '500px' ,  height: '500px' ,  border: "2px solid #00A170",  }}   ref={ ref_file  } > </div>
           </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
