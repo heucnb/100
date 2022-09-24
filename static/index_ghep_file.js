@@ -1,53 +1,6 @@
 
 
-   function From_1() {
-
-    let ref_return =  useRef(null) ;
-    let ref_year =  useRef(null) ;
-    let ref_trai =  useRef(null) ;
-    return ( <div>
-        <h2>From_1 </h2>
-        <input ref = {ref_year }  type="text" placeholder="year"  />
-        <input ref = {ref_trai }  type="text" placeholder="trai" />
-        <button  onClick={ () => ReactDOM.render( "80%" ,  ref_return.current)}  >ty_le_phoi</button>
-        <div  ref = {ref_return }> Dữ liệu</div>
-      </div>
-    );
-
-   } ;
-
-   function From_2() {
-
-    let ref_return =  useRef(null) ;
-    let ref_year =  useRef(null) ;
-    let ref_trai =  useRef(null) ;
-    return ( <div>
-        <h2>From_1 </h2>
-        <input ref = {ref_year }  type="text" placeholder="year"  />
-        <input ref = {ref_trai }  type="text" placeholder="trai" />
-        <button  onClick={ () => ReactDOM.render( "90%" ,  ref_return.current)}  >ty_le_đẻ</button>
-        <div  ref = {ref_return }> Dữ liệu</div>
-      </div>
-    );
-
-   } ;
-
-   function From_3() {
-
-    let ref_return =  useRef(null) ;
-    let ref_year =  useRef(null) ;
-    let ref_trai =  useRef(null) ;
-    return ( <div>
-        <h2>From_1 </h2>
-        <input ref = {ref_year }  type="text" placeholder="year"  />
-        <input ref = {ref_trai }  type="text" placeholder="trai" />
-        <button  onClick={ () => ReactDOM.render( "100%" ,  ref_return.current)}  >cai sữa</button>
-        <div  ref = {ref_return }> Dữ liệu</div>
-      </div>
-    );
-
-   } ;
-
+ 
 
    function Footer() {
 
@@ -84,6 +37,8 @@
 
  function App() { 
 
+ 
+
     let ref_1 =  useRef(null) ;
     let ref_2 =  useRef(null) ;
     let ref_3 =  useRef(null) ;
@@ -91,39 +46,123 @@
 
   
 
-    let path_name = window.location.pathname ; 
+  
     console.log(path_name);
  
    if (  path_name.startsWith('/excel') ) {
+   
     return ( <div> <Table_hieu_2 /> </div> ); 
      
    
+
+
    }
-   else if ( path_name.startsWith('/a')) {
+   else if ( path_name.startsWith('/A')) {
   
   
-    useEffect(() => {
+              function A() {
 
-        if (path_name.startsWith('/a/F1')) { ReactDOM.render( <From_1 /> ,  ref_return.current); }
-        if (path_name.startsWith('/a/F2')) { ReactDOM.render( <From_2 /> ,  ref_return.current); }
-        if (path_name.startsWith('/a/F3')) { ReactDOM.render( <From_3 /> ,  ref_return.current); }
-     }, []);
+                function From_1() {
 
-    return ( <div>
-        <div  ref ={ ref_1 }   onClick={ () => ReactDOM.render( <From_1 /> ,  ref_return.current)} > From 1</div>
-        <div  ref ={ ref_2 }   onClick={ () => ReactDOM.render( <From_2 /> ,  ref_return.current)} > From 2</div>
-        <div  ref ={ ref_3 }   onClick={ () => ReactDOM.render( <From_3 /> ,  ref_return.current)}> From 3</div>
+                  let ref_return =  useRef(null) ;
+                  let ref_year =  useRef(null) ;
+                  let ref_trai =  useRef(null) ;
+                  return ( <div>
+                      <h2>From_1 </h2>
+                      <input ref = {ref_year }  type="text" placeholder="year"  />
+                      <input ref = {ref_trai }  type="text" placeholder="trai" />
+                      <button  onClick={ () => ReactDOM.render( "80%" ,  ref_return.current)}  >ty_le_phoi</button>
+                      <div  ref = {ref_return }> Dữ liệu</div>
+                    </div>
+                  );
+              
+                 } ;
+              
+                 function From_2() {
+              
+                  let ref_return =  useRef(null) ;
+                  let ref_year =  useRef(null) ;
+                  let ref_trai =  useRef(null) ;
+                  return ( <div>
+                      <h2>From_2 </h2>
+                      <input ref = {ref_year }  type="text" placeholder="year"  />
+                      <input ref = {ref_trai }  type="text" placeholder="trai" />
+                      <button  onClick={ () => ReactDOM.render( "90%" ,  ref_return.current)}  >ty_le_đẻ</button>
+                      <div  ref = {ref_return }> Dữ liệu</div>
+                    </div>
+                  );
+              
+                 } ;
+              
+                 function From_3() {
+              
+                  let ref_return =  useRef(null) ;
+                  let ref_year =  useRef(null) ;
+                  let ref_trai =  useRef(null) ;
+                  return ( <div>
+                      <h2>From_3 </h2>
+                      <input ref = {ref_year }  type="text" placeholder="year"  />
+                      <input ref = {ref_trai }  type="text" placeholder="trai" />
+                      <button  onClick={ () => ReactDOM.render( "100%" ,  ref_return.current)}  >cai sữa</button>
+                      <div  ref = {ref_return }> Dữ liệu</div>
+                    </div>
+                  );
+              
+                 } ;
 
-        <div   ref ={ ref_return }   > Data</div>
 
-        <div    > {  Footer()  }</div>
+                 function get_A_get_From_1(event) {
 
-    </div> ); 
+                  ReactDOM.render( <From_1 /> ,  ref_return.current) ;
+
+                  let url_change = "/A/From_1" ;
+                  window.history.replaceState(null, null, url_change);
+
+                 }
+              
+                 function get_A_get_From_2(event) {
+
+                  ReactDOM.render( <From_2 /> ,  ref_return.current) ;
+                  let url_change = "/A/From_2" ;
+                  window.history.replaceState(null, null, url_change);
+                 }
+                 function get_A_get_From_3(event) {
+
+                  ReactDOM.render( <From_3 /> ,  ref_return.current) ;
+                  let url_change =  "/A/From_3" ;
+                  window.history.replaceState(null, null, url_change);
+                 }
+              
+
+
+                useEffect(() => {
+
+               
+                  if (  path_name_test(path_name ,'/A/From_1' ) ) {  get_A_get_From_1() ;  }
+                  if ( path_name_test(path_name ,'/A/From_2' ) ) {  get_A_get_From_2() ; }
+                  if ( path_name_test(path_name ,'/A/From_3' ) ) {  get_A_get_From_3() ; }
+              }, []);
+
+              return ( <div>
+                  <div  ref ={ ref_1 }   onClick={ (event) => { get_A_get_From_1(event)}  } > From 1</div>
+                  <div  ref ={ ref_2 }   onClick={ (event) => { get_A_get_From_2(event)}  } > From 2</div>
+                  <div  ref ={ ref_3 }   onClick={ (event) => { get_A_get_From_3(event)}  }> From 3</div>
+
+                  <div   ref ={ ref_return }   > Data</div>
+
+                  <div    > {  Footer()  }</div>
+
+              </div> ); 
+          
+              }
+
+
+return ( <div> <A /> </div> ); 
      
    }
 
-   else if ( path_name.startsWith('/b')) {
-    return 'trang b'; 
+   else if ( path_name.startsWith('/B')) {
+    return 'trang B'; 
      
    }
    else {
@@ -136,7 +175,20 @@
    
    
     
-};
+};function path_name_test( path_name, string_test) {
+
+    if ( path_name === string_test ||  path_name === ( string_test + "/") ) {
+      return true ;
+    }else{
+  
+      return false
+    }
+  
+  
+  }
+
+
+
 // convert string to obj: JSON.parse(string_obj);  string to array: string_aray.split(' |_| ');
  // vd obj :  JSON.stringify(obj); number:  number.toString(); array: array.join(' |_| '); // 'Wind |_| Water'
 
@@ -182,23 +234,42 @@ if (tim_thay_string_selector === false) {
   var  text_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
   var  index_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
   var  formular = [];
+  var  Data_show;
+  var Data_show_0 ;
+    let limit = 100 ;
+  let limit_col = 50 ;
 
   function Table_hieu_2(props) {
 
 
 if (props.value === undefined) {
+
   
+ 
 } else {
-  Data = props.value[0] ;
-  text_formular = props.value[1] ;
-  index_formular = props.value[2] ;
-  formular = props.value[3] ;
+ 
+
+  let Data_save = props.value.Data_save ;
+  let _len = Data_save.length ;
+
+          for (let index = 0; index < _len ; index++) {
+            Data[Data_save[index][0]][Data_save[index][1]] = Data_save[index][2] ;
+            text_formular[Data_save[index][0]][Data_save[index][1]] = Data_save[index][3] ;
+            index_formular[Data_save[index][0]][Data_save[index][1]] = Data_save[index][4] ;
+            }
+  let len_formular = props.value.formular.length ;
+ 
+let formular_save = props.value.formular ;
+for (let index = 0; index < len_formular ; index++) { formular.push( eval( formular_save[index]  )) ; }
+
 }
 
 
+  Data_show = Data.slice(0,limit)   ;
+ Data_show_0 = Data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
 
-    console.log('-----------------------------------------------------');
-    console.log(props.value);
+ 
+   
   let myname = 'Table_hieu_2-' ;
 
 let ref_file =  useRef(null) ;
@@ -221,6 +292,7 @@ let ref_file =  useRef(null) ;
       var a =  useRef(null) ;
      var canvas_ = useRef(null) ;
      var ref_0 = useRef(null) ;
+     var ref_file_name = useRef(null) ;
       var thanh_dia_chi_0 =  useRef(null);
       var thanh_dia_chi_1 =  useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,6 +300,14 @@ let ref_file =  useRef(null) ;
       var limit_col_view  ;
       let tro_ve_vi_tri_begin ;
       useEffect(() => {
+
+     
+
+
+
+
+
+
          tro_ve_vi_tri_begin = a.current.children[ 1].children[limit_col+1].getBoundingClientRect().left ;
         
         document.body.style.zoom = "100%";
@@ -318,9 +398,21 @@ let ref_file =  useRef(null) ;
         
        
       });
+
+
+
+
+
+
+
+
+
+
       
       
-   
+      if ( path_name_test(path_name,"/excel/save" )  ) { get_excel_get_save() ; }
+      if ( path_name.startsWith("/excel/file")  ) { get_excel_get_file() ; }
+
        
       }, []);
 
@@ -2978,11 +3070,7 @@ data_array_2d.push(data_array_col) ;
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
   let table_excel_height = window.innerHeight - 87.742 -60 ;
   let table_excel_width = window.innerWidth -40 ;
-  let limit = 100 ;
-  let limit_col = 50 ;
 
-  var  Data_show = Data.slice(0,limit)   ;
- var Data_show_0 = Data_show.map((item, index)=>{    return  item.slice(0, limit_col)}) ;
  // ở zoom 100 % 1 click scroll ở chrome di chuyển 40 pixcel 
  let zoom = window.devicePixelRatio;
   let click_scroll_dichuyen = 40/zoom ;
@@ -3944,27 +4032,139 @@ event.persist();
     }
 
    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function get_file_from_sever(event, file_name) {
+   function get_excel_get_file(event) {
+
+   
+
+              if ( path_name_test(path_name, "/excel/file") === false && path_name_test(path_name, "/excel") === false ) {
+
+              return  axios.get(path_name).then(function (response) {
+
+                  console.log(response.data);
+                }) ;
+                
+              }
 
 
-console.log(file_name);
+              function  get_excel_get_file_get_file_name(event, file_name) {
+
+                  axios.get(`/excel/file/${ file_name }`).then(function (response) {
+
+                    let url_change =`/excel/file/${ file_name }?`+ "&home=true" ;
+
+                    window.history.replaceState(null, null, url_change);
+
+                    // lệnh này để gỡ bỏ Dom ảo react gắn vào root
+                    ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+                    // update root Dom react lại từ đầu
+                    ReactDOM.render( <Table_hieu_2   value = { response.data  } />  , document.getElementById('root'))  ;
+
+
+                  }) ;
+                
+
+                }
+
+
+              
+                axios.get('/excel/file').then(function (response) {
+
+                  
+       
+                  ref_file.current.style.display = 'block'   ;
+                  ReactDOM.render( <div   >  
+                   
+                       <div>
+                         Open
+                       </div> 
+                     <hr></hr>
+                       {  response.data.map((i)=>{ return  <div  className={ pseudo.black} onClick={ (event) =>{   get_excel_get_file_get_file_name(event, i) ;  }}  > { i } </div>  ; })  } </div> 
+                 
+                 ,  ref_file.current)  
+
+
+
+
+
+
+                 let url_change = "/excel/file?" + "&home=true" ;
+                 console.log(url_change);
+                 console.log(window.history);
+                 window.history.replaceState(null, null, url_change);
+                 
+                
+                })
+              
 
   
-  
-  fetch(`/file/${ file_name }`) .then(response =>response.json()) .then(data =>  { console.log(file_name);
-   } );
-  
+     
+        
 
-  if (change_trang_thai === 0) 
-  { ReactDOM.render( <Table_hieu_2  />  , document.getElementById('root'))  ;
-    change_trang_thai = 1 
-   } 
-  else 
-  { ReactDOM.render( <div> <Table_hieu_2  /> </div>   , document.getElementById('root'))  ;
-    change_trang_thai = 0 
-   } 
-  
+   }
+
+   ////////////////////////////////////////////////////////////////////////////////////
+
+
+   function get_excel_get_save(event) {
+    console.time();
+       let Data_save = []  ;    
+       for (let i = 0; i < Data.length; i++) {
+
+         for (let j = 0; j < Data[0].length; j++) {
+
+          if ( Data[i][j] !== null ) {
+
+            Data_save.push(  [i,j,Data[i][j], text_formular[i][j], index_formular[i][j] ] )  ;
+ 
+           
+          }
+
+           
+         }
+       
+       }
+
+       let file_name ;
+       
+       file_name = ref_file_name.current.textContent ;
+        // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
+       // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
+       let query = { 
+        Data_save : Data_save,
+        formular : [],
+        file_name : file_name
+         } ; 
+     
+
+       for (let index = 0; index < formular.length; index++) {
+        query.formular[index] = "("+formular[index]+")" ;
+        
+       }
+
+      console.log(query,);
+
+       axios.post( `/excel/save` ,   { a: query } ).then(function (response) {
+       
+        console.log(response.data);
+        let url_change = response.request.responseURL + "&home=true" ;
+        window.history.replaceState(null, null, url_change);
+
+      
+        alert("0k") ;
+
+       
+   
+      })
+
+      
+    
+
+      console.timeEnd();
+
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+
 
    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function css() {
@@ -4032,36 +4232,16 @@ console.log(file_name);
       
         <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ ref_0  } style={{  position: "relative"}}  > 
          
-          <div style={{   display: "flex", }} >
-          <div style={{ border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black} onClick={(event)=>{ copy(event) }} > copy </div> 
-          <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
-          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
-          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{   }} > clear </div>
-          <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  
-              
-           onClick={ (event) =>{    
-            fetch('/file') .then(response =>response.json()) .then(data =>  {  ref_file.current.style.display = 'block'   ;
-             ReactDOM.render( <div   >  
-                         
-                         
-                  
-                  <div>
-                    Open
-                  </div> 
-                <hr></hr>
-                  {  data.map((i)=>{ return  <div  className={ pseudo.black} onClick={ (event) =>{ ;  get_file_from_sever(event, i) ;  }}  > { i } </div>  ; })  } </div> 
-                  
-
-
-
-
-            ,  ref_file.current)  }   
-            );
-              } 
-            }
-           
-           > file </div>    <div  style={{ display: 'none' ,  zIndex: 200 ,   backgroundColor: '#FFFFF7', position: "absolute",  width : '500px' ,  height: '500px' ,  border: "2px solid #00A170",  }}   ref={ ref_file  } > </div>
-          </div>
+          <div style={{   display: "flex",   flexWrap: 'wrap', }} > 
+                 <div style={{  flexBasis: '100%',  display: "flex", }} > <div  ref={ ref_file_name  } contenteditable="true" style={{   border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black}  > New file {  new Date().getFullYear()+ "_"+ (new Date().getMonth() + 1 )  + "_" + new Date().getDate()} </div>  </div>  
+                    <div style={{ border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black} onClick={(event)=>{ copy(event) }} > copy </div> 
+                    <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
+                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
+                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{   }} > clear </div>
+                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black} onClick={ (event) => {  get_excel_get_file(event) ; } } > file </div>  
+                    <div  style={{ display: 'none' ,  zIndex: 200 ,   backgroundColor: '#FFFFF7', position: "absolute",  width : '500px' ,  height: '500px' ,  border: "2px solid #00A170",  }}   ref={ ref_file  } > </div>
+                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black} onClick={ (event) => {  get_excel_get_save(event) ; } } > save </div>  
+         </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
           {/* không để khoảng trắng (space) ở giữa <textarea >  </textarea> như vậy vì sẽ tạo khoảng trắng trước + nên không tính được công thức*/}
@@ -4096,7 +4276,7 @@ console.log(file_name);
                       onMouseEnter={(event)=>{  clearTimeout(myInterval_0); clearTimeout(myInterval); let a_1 = vi_tri_o_truoc[0]; let b_1 = vi_tri_o_truoc[1] ; if (a_1 <  0) { a_1 = 0 } ; if (b_1 <  0) { b_1 = 0 } ; if (a_1 >  limit_view - 1) { a_1 =  limit_view - 1} ;  if (b_1 >  limit_col_view) {b_1 =  limit_col_view} ; _onMouseEnter(event,a_1, b_1,i,j)}  } 
                       // biến onKeyDown mặc định là false
                       onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
-                      >   </div>
+                      > {cell}  </div>
                                 })}   
                                  {/* div này để show data bị ẩn bên trái trục */}
                                  <div style={ {  zIndex: limit_col_view,  position: "relative", display : "inline-block",  backgroundColor: "white"}} ></div>
@@ -4128,6 +4308,6 @@ console.log(file_name);
     };
     
 const { useState , useRef, useEffect  } = React ;
-let change_trang_thai = 0  ;
-const render = () => { ReactDOM.render( <App /> , document.getElementById('root')); };
+let path_name = window.location.pathname ; 
+const render = () => { ReactDOM.render( <App /> , document.getElementById('root'))  };
 render();

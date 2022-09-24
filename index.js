@@ -16,6 +16,30 @@ const app = express();
 const port = process.env.port;
 //vd: truy cập file /static/product_index.js trên url gõ localhost/product_index.js
 
+
+
+
+
+app.use( function (req, res, next) {
+
+  if (req.query.home === "true") {
+
+    res.write(index_html); 
+    return res.end();
+   
+    
+  }
+// phải dùng next() ở đây vì sau khi trả về trang index_html 
+// trong trang index_html có code lại truy cập đến server  rồi vào  app.use ở đây trước 
+// tại đây không có next nó sẽ không sang được app khác
+  next() ;
+      
+});
+
+
+
+
+
 var options = {
   etag: true,
   redirect: true,
@@ -31,17 +55,19 @@ var options = {
   }
 }
 
-
-
-
-
-
 app.use(express.static((__dirname + "/static") , options   )  );
 
 
-// nhận body post từ axios
+
+
 app.use(express.urlencoded({extended: true }));
+// nhận body post từ axios phải dùng app.use(express.json());
+//  để gửi data dữ liệu lớn lên server phải dùng post  .   
+// dùng get giới hạn dữ liệu gửi đi
 app.use(express.json());
+
+
+
       // readdirSync(Folder)  : đọc Folder sẽ được tên các file
     // tao array Url vào [] file_name
     const Folder = './backend';
@@ -54,15 +80,50 @@ app.use(express.json());
     file_name = file_name.slice(1);
 let model = [];
 
-app.get('/file',function(req,res){
+app.get('/excel/file',function(req,res){
+
+  if (req.query.home === "true") {
+
+   
+    res.send(index_html); 
+    
+  } else {
+
+    const Folder = './static/excel/file';
+    let file_name = [];
+    fs.readdirSync(Folder).forEach(file => { 
+      file_name.push(file)
+    });
   
-  const Folder = './static/file';
-  let file_name = [];
-  fs.readdirSync(Folder).forEach(file => { 
-    file_name.push(file)
-  });
+    return  res.send(file_name); 
+  
+  }
+  
+  
+});
+
+app.post('/excel/save',function(req,res){
+
+
+if (req.query.home === "true") {
+  res.send(index_html); 
+} else {
+
+  let data = req.body.a ;
+
  
-  return  res.send(file_name); 
+
+
+ fs.writeFile(`./static/excel/file/${data.file_name}.json`, JSON.stringify(data), (err) => {
+   if (err) throw err;
+  
+});
+
+ return  res.send("ok"); 
+  
+}
+
+
  
 });
 
@@ -96,12 +157,11 @@ app.use( function (req, res) {
 
   console.log(req.path);
   let string_path = req.path ;
-  // lấy string đầu tiên có /a và đừng sau là bất kì ký tự gì
+  // lấy string đầu tiên có / và đừng sau là bất kì ký tự gì
  let path_match =  string_path.match(/\/.*/) ;
  console.log(path_match[0]);
       if (string_path === path_match[0]) {
-        res.write(index_html); 
-        return res.end();
+        return  res.send(index_html); 
         
       }
 
