@@ -50,7 +50,7 @@ var options = {
     // max-age tính bằng giây  604800 là 1 tuần
     res.set({
 
-        'Cache-Control' :  (_path.includes('index_ghep_file.js')||_path.includes('styles.css') ) ? 'no-store' : 'public, max-age=604800'
+        'Cache-Control' :  (_path.includes('index_ghep_file.js')||_path.includes('styles.css')||_path.includes('/excel/file') ) ? 'no-store' : 'public, max-age=604800'
       });
   }
 }

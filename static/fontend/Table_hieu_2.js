@@ -35,6 +35,13 @@ if (props.value === undefined) {
 let formular_save = props.value.formular ;
 for (let index = 0; index < len_formular ; index++) { formular.push( eval( formular_save[index]  )) ; }
 
+
+setTimeout(() => {
+
+  ref_file_name.current.innerHTML = props.file_name  ;
+  
+}, 0);
+
 }
 
 
@@ -532,6 +539,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // hàm tô màu và focus khi click hoặc enter
       function key_enter(row_vi_tri_remove,col_vi_tri_remove, row_vi_tri_add, col_vi_tri_add) {
+        // khi click vào cell nếu có file đang mở thì ẩn đi
+        ref_file.current.style.display = "none";
 
           // chuyển trạng thái onKeyDown_1_element = false; vì khi input trước đó xuất hiện onKeyDown_1_element là true do có chỗ settimeout
       onKeyDown_1_element = false;
@@ -3830,7 +3839,7 @@ event.persist();
                     // lệnh này để gỡ bỏ Dom ảo react gắn vào root
                     ReactDOM.unmountComponentAtNode(document.getElementById('root'));
                     // update root Dom react lại từ đầu
-                    ReactDOM.render( <Table_hieu_2   value = { response.data  } />  , document.getElementById('root'))  ;
+                    ReactDOM.render( <Table_hieu_2   value = { response.data  } file_name = { file_name }    />  , document.getElementById('root'))  ;
 
 
                   }) ;
@@ -3845,13 +3854,23 @@ event.persist();
                   
        
                   ref_file.current.style.display = 'block'   ;
-                  ReactDOM.render( <div   >  
+                  ReactDOM.render( 
+                  <div   >  
                    
-                       <div>
-                         Open
-                       </div> 
-                     <hr></hr>
-                       {  response.data.map((i)=>{ return  <div  className={ pseudo.black} onClick={ (event) =>{   get_excel_get_file_get_file_name(event, i) ;  }}  > { i } </div>  ; })  } </div> 
+                            <div> Open </div> 
+                          <hr></hr>
+                            {  response.data.map((i)=>{ return   (  
+                              <div   style={{   display: "flex",   flexWrap: 'wrap', }}   >
+                                  <div className='far fa-file-excel'  style={{    fontSize: '16px', color: '#00A170 ' }}  ></div> 
+                                  <div  className={ pseudo.black} onClick={ (event) =>{   get_excel_get_file_get_file_name(event, i) ;  }}  > { i } </div> 
+                            
+                              </div>
+                           
+                            )  ;
+                          
+                                                       })  } 
+                            
+                </div> 
                  
                  ,  ref_file.current)  
 
@@ -4006,7 +4025,7 @@ event.persist();
         <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ ref_0  } style={{  position: "relative"}}  > 
          
           <div style={{   display: "flex",   flexWrap: 'wrap', }} > 
-                 <div style={{  flexBasis: '100%',  display: "flex", }} > <div  ref={ ref_file_name  } contenteditable="true" style={{   border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black}  > New file {  new Date().getFullYear()+ "_"+ (new Date().getMonth() + 1 )  + "_" + new Date().getDate()} </div>  </div>  
+                 <div style={{  flexBasis: '100%',  display: "flex", }} >   <div className='far fa-file-excel'  style={{    fontSize: '16px', color: '#00A170 ',padding : '2px', margin : '2px 2px 2px 0px', }}  ></div>    <div  ref={ ref_file_name  } contentEditable="true" style={{  padding : '2px', margin : '2px 2px 2px 0px' ,   minWidth: '200px',}}  className={ pseudo.black}  > New file {  new Date().getFullYear()+ "_"+ (new Date().getMonth() + 1 )  + "_" + new Date().getDate()} </div>  </div>  
                     <div style={{ border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black} onClick={(event)=>{ copy(event) }} > copy </div> 
                     <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
                     <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
