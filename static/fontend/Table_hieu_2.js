@@ -2,7 +2,10 @@
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
 
-  // dùng fill chậm hơn một ít không đáng kể so với for 
+
+  function Table_hieu_2(props) {
+
+      // dùng fill chậm hơn một ít không đáng kể so với for 
   var Data = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
   var  text_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
   var  index_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
@@ -11,8 +14,7 @@
   var Data_show_0 ;
     let limit = 100 ;
   let limit_col = 50 ;
-
-  function Table_hieu_2(props) {
+  let fileHandle ;
 
 
 if (props.value === undefined) {
@@ -3862,7 +3864,7 @@ event.persist();
                             {  response.data.map((i)=>{ return   (  
                               <div   style={{   display: "flex",   flexWrap: 'wrap', }}   >
                                   <div className='far fa-file-excel'  style={{    fontSize: '16px', color: '#00A170 ' }}  ></div> 
-                                  <div  className={ pseudo.black} onClick={ (event) =>{   get_excel_get_file_get_file_name(event, i) ;  }}  > { i } </div> 
+                                  <div  className={ 'black'} onClick={ (event) =>{   get_excel_get_file_get_file_name(event, i) ;  }}  > { i } </div> 
                             
                               </div>
                            
@@ -3955,10 +3957,151 @@ event.persist();
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function open_file_computer() {
+  [fileHandle] = await window.showOpenFilePicker();
+
+ let fileData = await fileHandle.getFile();
+ let text = await fileData.text();
+
+ var myobj = JSON.parse(text);
+     // lệnh này để gỡ bỏ Dom ảo react gắn vào root
+     ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+  
+     // update root Dom react lại từ đầu
+ var myobj = JSON.parse(text);
+    ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
+  setTimeout(() => {
+    id_0.style.cursor = 'pointer' ;
+  }, 0);
+  
+
+}
+
 
 
    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   async function save_as_file_computer() {
+    const opts = {
+      types: [{
+        description: 'json file',
+        accept: {'text/plain': ['.json']},
+      }],
+  
+    }
+  
+  fileHandle = await window.showSaveFilePicker(opts);
+  
+  // create a FileSystemWritableFileStream to write to
+  const writableStream = await fileHandle.createWritable();
+
+
+  let Data_save = []  ;    
+  for (let i = 0; i < Data.length; i++) {
+
+    for (let j = 0; j < Data[0].length; j++) {
+
+     if ( Data[i][j] !== null ) {
+
+       Data_save.push(  [i,j,Data[i][j], text_formular[i][j], index_formular[i][j] ] )  ;
+
+      
+     }
+
+      
+    }
+  
+  }
+
+  let file_name ;
+  
+  file_name = ref_file_name.current.textContent ;
+   // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
+  // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
+  let query = { 
+   Data_save : Data_save,
+   formular : [],
+   file_name : file_name
+    } ; 
+
+
+  for (let index = 0; index < formular.length; index++) {
+    query.formular[index] = "("+formular[index]+")" ;
+   
+  }
+
+  let text_save ;
+  text_save  =     JSON.stringify(query);
+  
+  // write our file
+  await writableStream.write(text_save);
+  
+  // close the file and write the contents to disk.
+  await writableStream.close();
+   
+  
+  
+  }
+
+
+
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   async function save_file_computer() {
+
+
+    let stream = await fileHandle.createWritable();
+    
+    let Data_save = []  ;    
+  for (let i = 0; i < Data.length; i++) {
+
+    for (let j = 0; j < Data[0].length; j++) {
+
+     if ( Data[i][j] !== null ) {
+
+       Data_save.push(  [i,j,Data[i][j], text_formular[i][j], index_formular[i][j] ] )  ;
+
+      
+     }
+
+      
+    }
+  
+  }
+
+  let file_name ;
+  
+  file_name = ref_file_name.current.textContent ;
+   // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
+  // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
+  let query = { 
+   Data_save : Data_save,
+   formular : [],
+   file_name : file_name
+    } ; 
+
+
+  for (let index = 0; index < formular.length; index++) {
+    query.formular[index] = "("+formular[index]+")" ;
+   
+  }
+
+  let text_save ;
+  text_save  =     JSON.stringify(query);
+
+    await stream.write( text_save  ) ;
+    
+    await stream.close() ;
+
+
+console.log('save');
+
+
+   }
+
+
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function css() {
      
      
@@ -3975,22 +4118,23 @@ event.persist();
         bar_reference_row : {   backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc", minWidth: "85px", height: "20px", display: "table-cell",  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
 
         bar_reference_col : {  position: 'relative', zIndex: 100,    width: "auto" , textAlign: "center",  paddingLeft : "4px" , paddingRight : "4px",  backgroundColor: "#d8dcd6", borderBottomStyle: "none", textAlign: "center" ,        border: "1px ridge #ccc",  height: "20px", display: "table-cell" ,  borderRightStyle: 'none', borderTopStyle: 'none', }  ,
-
-      
         row_excel: { display: "table-row" },
-
         col_excel: {    position: 'relative',  backgroundColor: "white" ,  border: "1px ridge #ccc", width: "85px", height: "20px", display: "table-cell", paddingLeft: "4px", paddingRight : "4px",  borderRightStyle: 'none', borderTopStyle: 'none', },
 
        
         click: { backgroundColor: "moccasin" , outline: 'none', },
-      
         remove_click: {  backgroundColor: "white" },
+
         input_focus: {   height: "inherit", paddingLeft: "4px", display: 'inline-block', position: 'absolute', zIndex: 100 ,  outlineWidth: "0px", border: "0px", backgroundColor: "moccasin" },
 
         select: { backgroundColor: "moccasin"   ,  },
         remove_select: { backgroundColor: "" },
+
+
         canvas_ : {  position: "absolute", display : "inline-block",  border: "2px solid #00A170",  borderRight: '2px solid #00A170' , },
       
+        button : { border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'},
+        file : { display: 'none' ,  zIndex: 200 ,   backgroundColor: '#FFFFF7', position: "absolute",  width : '500px' ,  height: '500px' ,  border: "2px solid #00A170", }
 
       }
     }
@@ -3998,24 +4142,7 @@ event.persist();
     var css = css();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-    function pseudo() {
-      var _class = [
-         ['.black',':hover',' {  color: hotpink ; }'] ,
-
-
-
-         ] ;
-
-     
-        let mySheet = document.getElementById("style").sheet ; var obj = {}; let len = _class.length ; for (let index = 0; index < len; index++) { let x = _class[index][0].slice(1) ; sheet_style(  '.' + myname + x  + _class[index][1],  _class[index][2], mySheet )  ; obj[x] =myname + x ; } return obj ;
-    }
-
-
-    var pseudo = pseudo() ;
-
-
-
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
 // bắt sự kiện onMouseMove  và onMouseOut ở đây chứ không để ở table_excel vì có ưu điểm
 // sự kiện cha lắng nghe onMouseMove  không bị thẻ con canvas che mất nên toạ độ nhận được chính xác và nhạy (nhanh) hơn để ở table_excel
 // để ở table_excel bị canvas che mất nên ra khỏi canvas mới nhận toạ độ và kích hoạt lắng nghe sự kiện nên chậm. Khi người dùng dùng chuột với tốc độ cực kỳ nhanh nó sẽ khồng lắng nghe kịp
@@ -4025,14 +4152,17 @@ event.persist();
         <div   onMouseMove ={(event) => { _onMouseMove(event)    }} onMouseOut ={(event) => { _onMouseOut(event)    }}  ref={ ref_0  } style={{  position: "relative"}}  > 
          
           <div style={{   display: "flex",   flexWrap: 'wrap', }} > 
-                 <div style={{  flexBasis: '100%',  display: "flex", }} >   <div className='far fa-file-excel'  style={{    fontSize: '16px', color: '#00A170 ',padding : '2px', margin : '2px 2px 2px 0px', }}  ></div>    <div  ref={ ref_file_name  } contentEditable="true" style={{  padding : '2px', margin : '2px 2px 2px 0px' ,   minWidth: '200px',}}  className={ pseudo.black}  > New file {  new Date().getFullYear()+ "_"+ (new Date().getMonth() + 1 )  + "_" + new Date().getDate()} </div>  </div>  
-                    <div style={{ border: "1px solid #00A170" , padding : '2px', margin : '2px 2px 2px 0px'}}  className={ pseudo.black} onClick={(event)=>{ copy(event) }} > copy </div> 
-                    <div style={{ border: "1px solid #00A170" ,  padding : '2px', margin : '2px'}}  className={ pseudo.black} onClick={(event)=>{  paste(event)  }} > paste </div>
-                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',  margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{  fill(event)  }} > fill </div> 
-                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black}  onClick={(event)=>{   }} > clear </div>
-                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black} onClick={ (event) => {  get_excel_get_file(event) ; } } > file </div>  
-                    <div  style={{ display: 'none' ,  zIndex: 200 ,   backgroundColor: '#FFFFF7', position: "absolute",  width : '500px' ,  height: '500px' ,  border: "2px solid #00A170",  }}   ref={ ref_file  } > </div>
-                    <div  style={{ border: "1px solid #00A170" ,  padding : '2px',   margin : '2px'}} className={ pseudo.black} onClick={ (event) => {  get_excel_get_save(event) ; } } > save </div>  
+                 <div style={{  flexBasis: '100%',  display: "flex", }} >   <div className='far fa-file-excel'  style={{    fontSize: '16px', color: '#00A170 ',padding : '2px', margin : '2px 2px 2px 0px', }}  ></div>    <div  ref={ ref_file_name  } contentEditable="true" style={{  padding : '2px', margin : '2px 2px 2px 0px' ,   minWidth: '200px',}}  className={ 'black'}  > New file {  new Date().getFullYear()+ "_"+ (new Date().getMonth() + 1 )  + "_" + new Date().getDate()} </div>  </div>  
+                    <div style={ Object.assign({},css.button,  {  margin : '2px 2px 2px 0px'}) }  className={ 'black'} onClick={(event)=>{ copy(event) }} > copy </div> 
+                    <div  style={css.button} className={ 'black'} onClick={(event)=>{  paste(event)  }} > paste </div>
+                    <div  style={css.button} className={ 'black'}  onClick={(event)=>{  fill(event)  }} > fill </div> 
+                    <div  style={css.button} className={ 'black'}  onClick={(event)=>{   }} > clear </div>
+                    <div  style={css.button} className={ 'black'} onClick={ (event) => {  get_excel_get_file(event) ; } } > file </div>  
+                    <div  style={css.file}   ref={ ref_file  } > </div>
+                    <div  style={css.button} className={ 'black'} onClick={ (event) => {  get_excel_get_save(event) ; } } > save </div>  
+                    <div  style={css.button} className={ 'black'} onClick={ (event) => {   open_file_computer(event) ; } } > file_computer </div>  
+                    <div  style={css.button} className={ 'black'} onClick={ (event) => {  save_as_file_computer(event) ; } } > save_as_computer </div>  
+                    <div  style={css.button} className={ 'black'} onClick={ (event) => {  save_file_computer(event) ; } } > save_computer </div>  
          </div>
 
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
