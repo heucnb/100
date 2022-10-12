@@ -200,6 +200,33 @@ function path_name_test( path_name, string_test) {
 // convert string to obj: JSON.parse(string_obj);  string to array: string_aray.split(' |_| ');
  // vd obj :  JSON.stringify(obj); number:  number.toString(); array: array.join(' |_| '); // 'Wind |_| Water'
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// điều kiện trong file html trong body phải có    <div id="convert_text_to_pixcel"></div>
+ function convert_text_to_pixcel(text) {
+  let _div = document.createElement('div');
+     _div.textContent = text ;
+     _div.setAttribute( 'style', 'display: inline;', );
+   let _root = document.getElementById("convert_text_to_pixcel") ;  
+   _root.appendChild(_div);
+   let _width = _root.children[ 0].getBoundingClientRect().width ;
+   _root.removeChild(_root.children[ 0]);
+   return _width ;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// trên Dom dùng onMouseOver để lắng nghe
+function hover(event, object_style) { 
+  // không dùng this bởi vì this không truyền vào Dom được vì truyền vào sẽ trở thành this của Dom
+     hover.style_old_dom = {} ;
+      // lặp qua các array key của object để tạo object mới
+     Object.keys(object_style).map(( i, index )=>{  hover.style_old_dom [i] = event.target.style[i]  }) ;
+ 
+         Object.assign(  event.target.style, object_style) ;
+     
+         event.target.onmouseout = function () { Object.assign(  event.target.style,  hover.style_old_dom  ) ; };
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
@@ -4161,23 +4188,24 @@ event.persist();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function open_file_computer() {
+  id_0.style.cursor = 'pointer' ;
   [fileHandle] = await window.showOpenFilePicker();
 
- let fileData = await fileHandle.getFile();
- let text = await fileData.text();
+//  let fileData = await fileHandle.getFile();
+//  let text = await fileData.text();
 
- var myobj = JSON.parse(text);
-     // lệnh này để gỡ bỏ Dom ảo react gắn vào root
-     ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+//  var myobj = JSON.parse(text);
+//      // lệnh này để gỡ bỏ Dom ảo react gắn vào root
+//      ReactDOM.unmountComponentAtNode(document.getElementById('root'));
   
-     // update root Dom react lại từ đầu
- var myobj = JSON.parse(text);
-    ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
-  setTimeout(() => {
-    id_0.style.cursor = 'pointer' ;
-  }, 0);
+//      // update root Dom react lại từ đầu
+//  var myobj = JSON.parse(text);
+//     ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
   
-
+  //  setTimeout(() => {
+  //   thanh_dia_chi_0.current.style.width = "1000px";
+  //   thanh_dia_chi_0.current.style.height = "1000px";
+  //  }, 0);
 }
 
 
@@ -4370,7 +4398,7 @@ console.log('save');
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
           {/* không để khoảng trắng (space) ở giữa <textarea >  </textarea> như vậy vì sẽ tạo khoảng trắng trước + nên không tính được công thức*/}
           <div ref={ thanh_dia_chi_1  }  style={css.thanh_dia_chi} >ADJK65ggg </div>  <textarea ref={ thanh_dia_chi_0  }  style={css.textarea}  onKeyDown={(event)=>{thanh_dia_chi_onkeydown(event)}}   onMouseDown={(event)=> {thanh_dia_chi_onMouseDown(event) }} ></textarea>
-      
+         
           </div>
          
        

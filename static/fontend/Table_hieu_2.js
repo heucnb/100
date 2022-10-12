@@ -3959,23 +3959,24 @@ event.persist();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function open_file_computer() {
+  id_0.style.cursor = 'pointer' ;
   [fileHandle] = await window.showOpenFilePicker();
 
- let fileData = await fileHandle.getFile();
- let text = await fileData.text();
+//  let fileData = await fileHandle.getFile();
+//  let text = await fileData.text();
 
- var myobj = JSON.parse(text);
-     // lệnh này để gỡ bỏ Dom ảo react gắn vào root
-     ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+//  var myobj = JSON.parse(text);
+//      // lệnh này để gỡ bỏ Dom ảo react gắn vào root
+//      ReactDOM.unmountComponentAtNode(document.getElementById('root'));
   
-     // update root Dom react lại từ đầu
- var myobj = JSON.parse(text);
-    ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
-  setTimeout(() => {
-    id_0.style.cursor = 'pointer' ;
-  }, 0);
+//      // update root Dom react lại từ đầu
+//  var myobj = JSON.parse(text);
+//     ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
   
-
+  //  setTimeout(() => {
+  //   thanh_dia_chi_0.current.style.width = "1000px";
+  //   thanh_dia_chi_0.current.style.height = "1000px";
+  //  }, 0);
 }
 
 
@@ -4168,7 +4169,7 @@ console.log('save');
           <div  style={{ paddingLeft : "5px", paddingTop : "5px", paddingBottom :" 5px",  backgroundColor: "#bdcebe" ,   display: "flex"}} >
           {/* không để khoảng trắng (space) ở giữa <textarea >  </textarea> như vậy vì sẽ tạo khoảng trắng trước + nên không tính được công thức*/}
           <div ref={ thanh_dia_chi_1  }  style={css.thanh_dia_chi} >ADJK65ggg </div>  <textarea ref={ thanh_dia_chi_0  }  style={css.textarea}  onKeyDown={(event)=>{thanh_dia_chi_onkeydown(event)}}   onMouseDown={(event)=> {thanh_dia_chi_onMouseDown(event) }} ></textarea>
-      
+         
           </div>
          
        
