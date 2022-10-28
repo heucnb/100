@@ -7,13 +7,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react')) :
   typeof define === 'function' && define.amd ? define(['exports', 'react'], factory) :
   (global = global || self, factory(global.ReactDOM = {}, global.React));
-}(this, (function (exports, React) { 'use strict';
+}(this, (function (exports, React) { 
 
   var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED; // Prevent newer renderers from RTE when used with older react package versions.
   // Current owner and dispatcher used to share the same ref,

@@ -7,13 +7,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = global || self, factory(global.React = {}));
-}(this, (function (exports) { 'use strict';
+}(this, (function (exports) { 
 
   var ReactVersion = '16.14.0';
 

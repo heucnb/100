@@ -216,6 +216,7 @@ function path_name_test( path_name, string_test) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // trên Dom dùng onMouseOver để lắng nghe
 function hover(event, object_style) { 
+  
   // không dùng this bởi vì this không truyền vào Dom được vì truyền vào sẽ trở thành this của Dom
      hover.style_old_dom = {} ;
       // lặp qua các array key của object để tạo object mới
@@ -223,7 +224,11 @@ function hover(event, object_style) {
  
          Object.assign(  event.target.style, object_style) ;
      
-         event.target.onmouseout = function () { Object.assign(  event.target.style,  hover.style_old_dom  ) ; };
+         event.target.onmouseout = function (event) {
+        
+        
+           Object.assign(  event.target.style,  hover.style_old_dom  ) ; 
+          };
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1587,9 +1592,10 @@ console.log('_onKeyDown------------------------------');
               return ;  
             }
     
-
+        // event.persist();    dùng để biến  sự kiện trên react  thành sự kiện gốc trên dom  vd: onMouseEnter  thành  onmouseenter
       // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
-          event.persist();
+        
+      event.persist();
 
     
         if (event.buttons == 1) {
@@ -1915,8 +1921,13 @@ console.log('_onKeyDown------------------------------');
               // là để elment này lắng nghe hàm _onKeyDown.
               // mặt khác  hàm _this.onkeydown cũng chạy không ra kết quả ta mong nuốm vì nó gọi hàm ý trong cloure cũ có i_array_2d , i_array_2d lấy từ thời gian cũ trước đó
       // xoá _this.onkeydown ở vị trí trước đi
-      a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
+
       console.log(vi_tri_o_truoc[0]  ,vi_tri_o_truoc[1] , "onKeyDown = null " );
+      if (vi_tri_o_truoc[0]>=0 && vi_tri_o_truoc[1]>=0) {
+        a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
+      }
+      
+    
       console.log("_onMouseDown") ;
       // nếu trạng thái fill tồn tại thì kết thúc fuction
       if (trang_thai_fill === true) {
@@ -3605,6 +3616,11 @@ let vi_tri_cat_col  ;
   
  
       }
+
+      
+        // event.persist();    dùng để biến  sự kiện trên react  thành sự kiện gốc trên dom  vd: onMouseEnter  thành  onmouseenter
+      // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
+        
    
       event.persist(); 
 
@@ -3629,6 +3645,10 @@ let vi_tri_cat_col  ;
   var j_truyen ;
 
   function _onMouseMove (event) {
+    
+        // event.persist();    dùng để biến  sự kiện trên react  thành sự kiện gốc trên dom  vd: onMouseEnter  thành  onmouseenter
+      // react thiết lập event.buttons bằng null : không điều khiển nút chuột để tăng hiệu suất. Để thiết lập event.buttons như javascript gốc cần chạy hàm event.persist();
+        
 
 event.persist();
 

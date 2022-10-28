@@ -1,6 +1,7 @@
 ﻿const express = require("express");
 
 var fs = require("fs");
+
 // lưu file index.html vào ram
 var index_html =  fs.readFileSync('./'+ '/' + 'index.html', 'utf8') ;
 
@@ -68,18 +69,6 @@ app.use(express.json());
 
 
 
-      // readdirSync(Folder)  : đọc Folder sẽ được tên các file
-    // tao array Url vào [] file_name
-    const Folder = './backend';
-    let file_name = "";
-    fs.readdirSync(Folder).forEach(file => { 
-     if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," +"/" + file + "/" + file_con.slice(0,file_con.length - 3) ;}) };
-     if (path.extname(file) == ".js"){ file_name  =   file_name + "," +"/" + file.slice(0, file.length - 3) };
-    });
-    file_name = file_name.split(",");
-    file_name = file_name.slice(1);
-let model = [];
-
 app.get('/excel/file',function(req,res){
 
   if (req.query.home === "true") {
@@ -133,9 +122,31 @@ app.get('/hh.html',function(req,res){
  
   res.write(data); 
   return res.end();
+  
+});
+
+
+
+app.get('/file.html',function(req,res){
+ 
+  const data = fs.readFileSync('./file.html', 'utf8');
+  res.write(data); 
+  return res.end();
 
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // readdirSync(Folder)  : đọc Folder sẽ được tên các file
+    // tao array Url vào [] file_name
+    const Folder = './backend';
+    let file_name = "";
+    fs.readdirSync(Folder).forEach(file => { 
+     if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," +"/" + file + "/" + file_con.slice(0,file_con.length - 3) ;}) };
+     if (path.extname(file) == ".js"){ file_name  =   file_name + "," +"/" + file.slice(0, file.length - 3) };
+    });
+    file_name = file_name.split(",");
+    file_name = file_name.slice(1);
+let model = [];
 
 //  model[index] là fuction khớp với file_name[index]    
 // vd: model[index]  là  function (req, res, con) { return  res.send(req.body["id"].toString()); }
@@ -147,9 +158,10 @@ for (let index = 0; index < file_name.length; index++) {
 
  model.push( require("./backend" + file_name[index] + ".js"));
 
- app.all(file_name[index], function (req, res) {    model[index](req, res, con); });
+ app.all(file_name[index], function (req, res ) {  model[index](req, res, con , fs) });
 
 }
+
 
 
 

@@ -150,7 +150,7 @@
 
                   <div   ref ={ ref_return }   > Data</div>
 
-                  <div    > {  Footer()  }</div>
+                  <div    > { <Footer />  }</div>
 
               </div> ); 
           
