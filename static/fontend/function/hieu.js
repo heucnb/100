@@ -99,3 +99,24 @@ function hover(event, object_style,object_style_leave, dom) {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 
+function _alert(componet_react) {
+  function Alert() {
+
+    return ( <div  style={  { position: 'absolute', padding: '1rem 1rem', top : '10%',  left : '30%', border: '1px solid transparent', borderRadius: '0.25rem',   backgroundColor: '#fff3cd', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'}  } >
+      <div> {componet_react} </div>
+        <button  style={  {boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', borderRadius: '0.25rem',  color: 'white', backgroundColor: '#0275d8',  border: '1px solid transparent' ,   marginLeft: '70%',  marginTop: 15, padding: 5, }  } onClick ={( )=>{   ReactDOM.unmountComponentAtNode( _div);  }} >Thoát</button>
+        </div> 
+    )
+    
+  }
+
+  let _div = document.createElement("_div");
+  document.getElementById("root").appendChild(_div);
+  return   ReactDOM.render( <Alert />  ,  _div ) ;
+   
+}
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
