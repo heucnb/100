@@ -165,20 +165,20 @@ for (let index = 0; index < file_name.length; index++) {
 
 
 
-// app.use( function (req, res) {
+app.use( function (req, res) {
 
-//   console.log(req.path);
-//   let string_path = req.path ;
-//   // lấy string đầu tiên có / và đừng sau là bất kì ký tự gì
-//  let path_match =  string_path.match(/\/.*/) ;
-//  console.log(path_match[0]);
-//       if (string_path === path_match[0]) {
-//         return  res.send(index_html); 
+  console.log(req.path);
+  let string_path = req.path ;
+  // lấy string đầu tiên có / và đừng sau là bất kì ký tự gì
+ let path_match =  string_path.match(/\/.*/) ;
+ console.log(path_match[0]);
+      if (string_path === path_match[0]) {
+        return  res.send(index_html); 
         
-//       }
+      }
 
       
-// });
+});
 
 
 // http://localhost:8000

@@ -3,8 +3,9 @@ const express = require("express");
 const app = express();
 const fs = require('fs');
 const path = require('path');
-function ma_hoa(){
- let data_text =   fs.readFileSync('./file_can_ma_hoa.js' , 'utf8') ;
+function ma_hoa(path_file){
+ let data_text =   fs.readFileSync(path_file , 'utf8') ;
+ // lấy tên tất cả các function trong file cần mã hoá cho vào mảng
    let array_name_fuction = [];
    data_text.replace(/function\s*[a-zA-Z0-9_]*_[a-zA-Z0-9_]*\s*\(/gi, function (x) {
   let   name_fuction = `${x.slice(8,-1).trim()}`;
@@ -90,7 +91,7 @@ return name_function_after_replace;
                
 };
 
-ma_hoa();
+ma_hoa('./static/index_ghep_file.js');
 
 
 //sau khi chạy ma_hoa() xong thì các hàm ta viết sẽ bị đổi tên khó hiểu được

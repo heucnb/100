@@ -18,7 +18,7 @@
 
   
    return (
-  <div>
+  <div >
     <div style={css.center_bottom}>
       <h3>Foolish Developer</h3>
       <p>
@@ -150,7 +150,7 @@
 
                   <div   ref ={ ref_return }   > Data</div>
 
-                  <div    > {  Footer()  }</div>
+                  <div    > { <Footer />  }</div>
 
               </div> ); 
           
@@ -183,55 +183,6 @@ let array_style = mySheet.cssRules ;
  //  sheet chỉ truy cập được bằng document.getElementById
 mySheet.insertRule('  .black:hover    {      color: hotpink ;         }  ');
 mySheet.insertRule('  .black:hover    {       border: 1px solid #5f0de2       }  ');
-function path_name_test( path_name, string_test) {
-
-    if ( path_name === string_test ||  path_name === ( string_test + "/") ) {
-      return true ;
-    }else{
-  
-      return false
-    }
-  
-  
-  }
-
-
-
-// convert string to obj: JSON.parse(string_obj);  string to array: string_aray.split(' |_| ');
- // vd obj :  JSON.stringify(obj); number:  number.toString(); array: array.join(' |_| '); // 'Wind |_| Water'
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// điều kiện trong file html trong body phải có    <div id="convert_text_to_pixcel"></div>
- function convert_text_to_pixcel(text) {
-  let _div = document.createElement('div');
-     _div.textContent = text ;
-     _div.setAttribute( 'style', 'display: inline;', );
-   let _root = document.getElementById("convert_text_to_pixcel") ;  
-   _root.appendChild(_div);
-   let _width = _root.children[ 0].getBoundingClientRect().width ;
-   _root.removeChild(_root.children[ 0]);
-   return _width ;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// trên Dom dùng onMouseOver để lắng nghe
-function hover(event, object_style) { 
-  
-  // không dùng this bởi vì this không truyền vào Dom được vì truyền vào sẽ trở thành this của Dom
-     hover.style_old_dom = {} ;
-      // lặp qua các array key của object để tạo object mới
-     Object.keys(object_style).map(( i, index )=>{  hover.style_old_dom [i] = event.target.style[i]  }) ;
- 
-         Object.assign(  event.target.style, object_style) ;
-     
-         event.target.onmouseout = function (event) {
-        
-        
-           Object.assign(  event.target.style,  hover.style_old_dom  ) ; 
-          };
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
@@ -240,13 +191,13 @@ function hover(event, object_style) {
   function Table_hieu_2(props) {
 
       // dùng fill chậm hơn một ít không đáng kể so với for 
-  var Data = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
-  var  text_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
-  var  index_formular = new Array(1000).fill(null).map((i)=> i = new Array(50).fill(null)) ;
+  var Data = new Array(1000).fill(null).map((i)=> i = new Array(1000).fill(null)) ;
+  var  text_formular = new Array(1000).fill(null).map((i)=> i = new Array(1000).fill(null)) ;
+  var  index_formular = new Array(1000).fill(null).map((i)=> i = new Array(1000).fill(null)) ;
   var  formular = [];
   var  Data_show;
   var Data_show_0 ;
-    let limit = 100 ;
+    let limit = 50 ;
   let limit_col = 50 ;
   let fileHandle ;
 
@@ -286,7 +237,7 @@ setTimeout(() => {
 
  
    
-  let myname = 'Table_hieu_2-' ;
+
 
 let ref_file =  useRef(null) ;
   
@@ -320,7 +271,7 @@ let ref_file =  useRef(null) ;
      
 
 
-
+        table_excel.current.addEventListener("scroll", _onScroll);
 
 
 
@@ -335,7 +286,7 @@ let ref_file =  useRef(null) ;
 
         width_bar_reference_col = a.current.children[0].children[0].clientWidth ;
         console.log(width_bar_reference_col);
-        document.body.style.margin  = "20px 20px 20px 20px" ;
+        document.body.style.margin  = "0px 20px 20px 20px" ;
 
         console.log(table_excel.current.clientHeight);
 
@@ -1339,50 +1290,89 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     // lắng nghe các sự khiện khi thao tác với bàn phím (dùng bàn phím)
-    function _onKeyDown(event,i,j) {
+    async  function _onKeyDown(event,i,j) {
     
 console.log('_onKeyDown------------------------------');
     //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
     // khi xuất hiện thẻ input thì onKeyDown_1_element === true
     // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện _onKeyDown ở elment này
     if (onKeyDown_1_element === false) {
-
+    
       let i_array_2d =parseInt((a.current.children[0 +1 ].children[0].innerHTML)); 
       let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML));  
       
       
       // 1. element được kích hoạt và element không ở trạng thái tính toán mà bấm phím enter sẽ xuống dòng 
       if (event.key =="Enter" ) {
-
-        // nếu vị trí ô ấn enter ở cạnh limit_view thì cuộn xuống 1 ô 
-        if (i >= limit_view - 1) {
-          // ta không truyền table_excel.current.scrollTop = table_excel.current.scrollTop  * click_scroll_dichuyen 
-          // vì mỗi lần truyền và sự kiện onscroll nhận table_excel.current.scrollTop sẽ có sai số
-          // khi enter nhiều lần sẽ cộng các sai số lại nên khi làm tròn vị trí cát bị sai 1 đợn vị nên có lỗi.
-         table_excel.current.scrollTop = (i_array_2d + 1)  * click_scroll_dichuyen ;  
-
-          
-        }
-
-        console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán") ;
-         
        
-               // set địa chỉ ô click  sau hành động trên
-        dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
 
-        key_enter(i,j,i+1,j); // tô màu và focus
-        mien_select_array_2d[0] = i_array_2d + i  + 1;
-        mien_select_array_2d[1] = j_array_2d + j ;
+                        function enter_not_scroll() {
+                          
+                          console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán") ;
+                      
+                                          
+                                // set địa chỉ ô click  sau hành động trên
+                        dia_chi_o_click(i +1+ i_array_2d,j + j_array_2d,i +1 ,j) ;
+
+                        key_enter(i,j,i+1,j); // tô màu và focus
+                        mien_select_array_2d[0] = i_array_2d + i  + 1;
+                        mien_select_array_2d[1] = j_array_2d + j ;
+
+                        _onMouseEnter_not_event(i +1, j, i +1, j) ;
+
+
+                        xuat_hien_the_input = false ;   
+                        onKeyDown = false ; 
+                        onclick_tinh_toan = false ;  
+                        onKeyDown_1_element = false;
+
+                        
+                        }
+
+
+                      function enter_affter_scroll() {
+                        
+                        console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán") ;
+                    
+                                     
+                              // set địa chỉ ô click  sau hành động trên
+                      dia_chi_o_click(i -1+1+ i_array_2d,j + j_array_2d,i -1+1 ,j) ;
+
+                      key_enter(i-1,j,i+1-1,j); // tô màu và focus
+                      mien_select_array_2d[0] = i_array_2d + i  + 1-1;
+                      mien_select_array_2d[1] = j_array_2d + j ;
+
+                      _onMouseEnter_not_event(i-1 +1, j, i-1 +1, j) ;
+
+
+                      xuat_hien_the_input = false ;   
+                      onKeyDown = false ; 
+                      onclick_tinh_toan = false ;  
+                      onKeyDown_1_element = false;
+
+                      // table_excel.current.removeEventListener("scroll", enter_affter_scroll);   
+                      }
+
+
+          if (  (i >= limit_view - 1) ) {
+            // ta không truyền table_excel.current.scrollTop = table_excel.current.scrollTop  * click_scroll_dichuyen 
+         // vì mỗi lần truyền và sự kiện onscroll nhận table_excel.current.scrollTop sẽ có sai số
+         // khi enter nhiều lần sẽ cộng các sai số lại nên khi làm tròn vị trí cát bị sai 1 đợn vị nên có lỗi.
+             window.requestAnimationFrame(enter_affter_scroll);
+            table_excel.current.scrollTop = (i_array_2d + 1)  * click_scroll_dichuyen ;
+              // ta có thể dùng addEventListener để các hàm bất đồng bộ chạy theo thứ tự ( chú ý ở đây   table_excel.current.addEventListener  sẽ chạy trước nhưng sau đó table_excel.current.scrollTop chạy làm phát sinh scroll nên hàm trong scroll mới chạy.  hoạt động như vậy nó sẽ nhanh hơn setTimeout)
+              // hoặc dùng
+              // window.requestAnimationFrame(enter_affter_scroll);  khi đó hàm enter_affter_scroll không cần dòng   table_excel.current.removeEventListener("scroll", enter_affter_scroll);   này nữa
+              // chú ý  requestAnimationFrame sẽ chạy sau  scrollTop nhưng chạy trước setTimeout
+              // không dùng setTimeout được vì setTimeout và scrollTop là 2 hàm bất đồng bộ nên khi ấn giữ chặt enter nó sẽ chạy không theo thứ tự mà mục đích ta muốn hàm chạy theo thứ tự
+              // table_excel.current.addEventListener("scroll", enter_affter_scroll);
+           
+            
+           }else{
+
+            enter_not_scroll();
+           }
        
-        _onMouseEnter_not_event(i +1, j, i +1, j) ;
-        
-
-        xuat_hien_the_input = false ;   
-        onKeyDown = false ; 
-        onclick_tinh_toan = false ;  
-        onKeyDown_1_element = false;
-
-
         
       }
     
@@ -1413,9 +1403,6 @@ console.log('_onKeyDown------------------------------');
         // sau đó gán giá trị khi nhấn lên input_formula
         var input_formula = thanh_dia_chi_0.current;
 
-     
-        
-
         setTimeout(() => {  
           text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
            console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
@@ -1423,10 +1410,6 @@ console.log('_onKeyDown------------------------------');
             , 0);
 
        
-             
-
-                       
-
         
         onclick_tinh_toan = true ;
       
@@ -1923,7 +1906,7 @@ console.log('_onKeyDown------------------------------');
       // xoá _this.onkeydown ở vị trí trước đi
 
       console.log(vi_tri_o_truoc[0]  ,vi_tri_o_truoc[1] , "onKeyDown = null " );
-      if (vi_tri_o_truoc[0]>=0 && vi_tri_o_truoc[1]>=0) {
+      if (vi_tri_o_truoc[0]>=0 && vi_tri_o_truoc[1]>=0 &&vi_tri_o_truoc[0]<=limit_view && vi_tri_o_truoc[1]<=limit_col_view) {
         a.current.children[vi_tri_o_truoc[0] + 1].children[vi_tri_o_truoc[1]+1].onkeydown = null  ;
       }
       
@@ -1935,7 +1918,6 @@ console.log('_onKeyDown------------------------------');
       }
 
 
-      
      
       if (thanh_dia_chi_0_on_keydown === true) {
         onKeyDown_1_element = true;
@@ -3090,7 +3072,7 @@ data_array_2d.push(data_array_col) ;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // khi di chuyển scroll đến vị trí cuối nếu để scroll động scrollHeight sẽ tự động tăng kích thước.
   // cố định scrollHeight thì mới scroll đến cuối được.
-  // cố định scrollHeight bằng mã if ( Math.round(event.target.scrollTop) >= data_lenght - 100*20 )
+  // cố định scrollHeight bằng mã if ( Math.round(_table.scrollTop) >= data_lenght - 100*20 )
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
   let table_excel_height = window.innerHeight - 87.742 -60 ;
   let table_excel_width = window.innerWidth -40 ;
@@ -3099,20 +3081,20 @@ data_array_2d.push(data_array_col) ;
  let zoom = window.devicePixelRatio;
   let click_scroll_dichuyen = 40/zoom ;
 
-  let data_lenght = (10000 ) *click_scroll_dichuyen ; 
-  let data_col_lenght = (500 ) *click_scroll_dichuyen ; 
+  let data_lenght = (900 ) *click_scroll_dichuyen ; 
+  let data_col_lenght = (950 ) *click_scroll_dichuyen ; 
 
 var width_bar_reference_col ;
 var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
 
-
   function _onScroll(event) {
+  
     let vi_tri_cat  ;
 let vi_tri_cat_col  ;
-
- var di_chuyen  = event.target.scrollTop  ; 
- var di_chuyen_col =event.target.scrollLeft; 
- console.log('_onScroll-----------------------');
+let _table  = table_excel.current;
+ var di_chuyen  = _table.scrollTop  ; 
+ var di_chuyen_col =_table.scrollLeft; 
+ console.log('_onScroll-----------------------'+ di_chuyen);
 
         vi_tri_cat = Math.round(di_chuyen/ click_scroll_dichuyen) ; 
         vi_tri_cat_col =  Math.round(di_chuyen_col/ click_scroll_dichuyen) ; 
@@ -3131,25 +3113,57 @@ let vi_tri_cat_col  ;
 
            
             // dừng scroll tại vị trí muốn
-              if (di_chuyen <=(data_lenght - click_scroll_dichuyen*100)) {
-                
+       
+              if (di_chuyen <=data_lenght ) {
+               
+              
+              
               }
               else
               {
-                event.target.scrollTo(0, (data_lenght - click_scroll_dichuyen*100)) ;
-                di_chuyen = (data_lenght - click_scroll_dichuyen*100);
+                
+                // chú ý *****
+                // ở chỗ khác thì (bình thường không cần quan tâm thứ tự sắp xếp hàm scrollTop sẽ chạy đầu tiên sau đó requestAnimationFrame cuối cùng là setTimeout)
+                // nhưng ở đây scrollTop sử dụng trong hàm scroll (scrollTop được tạo bởi addEventListener scroll) tức là nó phải đợi các hàm trong sự kiện scroll ở đây 
+                // chạy xong thì nó mới kích hoạt hàm scrollTop nên ở đây thứ tự sẽ là requestAnimationFrame sau đó setTimeout sau đó scrollTop
+                // do đó ở đây ta không dùng được    // window.requestAnimationFrame(remove_scroll); tức là đợi scrollTop scroll tới vị trí mong muốn rồi xoa bỏ lắng nghe scroll  được
+                // vì  window.requestAnimationFrame sẽ chạy trước scrollTop
+                // mà thay vào đó ta phải dùng  // window.requestAnimationFrame(_onScroll); hoặc có thể chỉ dùng ********   _onScroll();  
+                // mục đích để khi gọi hàm _onScroll tức là sự kiện scroll được kích hoạt do đó hàm scrollTop sẽ được kích hoạt chạy luôn
+                // ở đây hàm này chạy trước để quay lại vòng lặp chỗ này 1 hoặc 2 lần tuỳ ta scroll mạnh không rồi brower patting nên không bị lác.
+              
+                // nếu không dùng window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll()  mà chỉ có  _table.scrollTop = data_lenght ;  sẽ bị lác vì sự kiện oncsroll sẽ bị lắng nghe rất nhiều lần rồi scrollTop mới chạy do đó sẽ được patting trước scrollTop nên gây lác
+                // nếu viết thêm window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll() thì nó sẽ kích hoạt hàm scrollTop sẽ được kích hoạt chạy luôn trước khi lắng nghe  
+                // các sự kiện oncsroll khác mà hàm scrollTop chạy tốn thời gian nên các sự kiện oncsroll khác chỉ chạy thêm được 1 lần khi ta scrool mạnh thôi.
+                // *** giải thích thêm 
+                // sự kiện oncsroll sẽ bị lắng nghe rất nhiều lần nếu không dùng window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll() vì
+                // scrollTop là hàm bất đồng bộ sẽ bị đẩy ra để các sự kiện oncsroll được lắng nghe
+                // khi oncsroll được lắng nghe nó lặp lại đoạn code này do đoạn code này trả về ngay nên trong khoảng thời gian 16ms lắng nghe và thực thi code  nó sẽ được lắng nghe rất nhiều lần
+               // chú ý thêm ****
+               // nếu chỉ dùng _onScroll(); thì _onScroll(); phải đặt sau  _table.scrollTop = data_lenght ;
+               // vì nếu đặt trước thì sẽ tạo thành vòng lặp vô hạn nên lỗi
+               // đặt sau thì _onScroll() sẽ kích hoạt lập tức scrollTop sẽ rẽ nhánh bên trên thoát khỏi vòng lặp
+                _table.scrollTop = data_lenght ;
+                _onScroll();
+                //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
+           
+                  return di_chuyen = data_lenght ;
+               
               }
 
              
 
                  // dừng scroll tại vị trí muốn tthanh cuộn ngang
-                 if ( di_chuyen_col <=(data_col_lenght - click_scroll_dichuyen*10)) {
+                 if ( di_chuyen_col <=data_col_lenght) {
                  
                 }
                 else
                 {
-                  event.target.scrollLeft = (data_col_lenght - click_scroll_dichuyen*10) ;
-                  di_chuyen_col = (data_col_lenght - click_scroll_dichuyen*10);
+                
+                  //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
+                  _table.scrollLeft = data_col_lenght  ;
+                  _onScroll();
+                  return di_chuyen_col = data_col_lenght ;
                 }
                
           
@@ -3392,6 +3406,7 @@ let vi_tri_cat_col  ;
                             if (j >  limit_col_view) {j =  limit_col_view}
                           _onMouseEnter_not_event(x, y,i , j, false)  ;
                       
+                          
                        
                        }
                        if (position_mouse_brower === 'on_thanh_dia_chi_onMouseDown') {
@@ -3420,13 +3435,10 @@ let vi_tri_cat_col  ;
                    }
 
 
-                 
-                
+
+            
 
 
-
-                  
-                   
 
 
   }
@@ -4149,7 +4161,7 @@ event.persist();
 
 
    function get_excel_get_save(event) {
-    console.time();
+   
        let Data_save = []  ;    
        for (let i = 0; i < Data.length; i++) {
 
@@ -4202,7 +4214,7 @@ event.persist();
       
     
 
-      console.timeEnd();
+    
 
 }
 
@@ -4425,7 +4437,7 @@ console.log('save');
         
           <canvas  ref={ canvas_  } width = {table_excel_width} height={ table_excel_height}  style={{display : "none" ,  zIndex: 100,}}    ></canvas>  
         
-    <div ref={ table_excel  }   style={css.table_excel}    onScroll={(event) => { _onScroll(event)    }}   >
+    <div ref={ table_excel  }   style={css.table_excel}    >
    
   
 

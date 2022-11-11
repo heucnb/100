@@ -18,7 +18,7 @@
 
   
    return (
-  <div>
+  <div >
     <div style={css.center_bottom}>
       <h3>Foolish Developer</h3>
       <p>

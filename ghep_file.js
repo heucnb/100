@@ -6,34 +6,46 @@ const path = require('path');
 function ghep_file(){
     const Folder = './static/fontend';
    
-    var file_name = "";
-
-     //  fs.readdirSync(Folder)  đọc tên các file trong folder
-    // đọc tên các file trong folder
+    var get_all_path_in_folder = function(srcDir) {
    
-    fs.readdirSync(Folder).forEach(file => {
-         
-     if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," + file + "/" + file_con;}) };
-     if (path.extname(file) == ".js" && file !== 'index.js' ){ file_name  =   file_name + "," + file };
-    
-      console.log(file_name);
-    });
+     var list =  fs.readdirSync(srcDir) ;
+     let ket_qua = [] ;
+     let ket_qua_end = [] ;
+     var src;
+     list.forEach(function(file) {
+         src = srcDir + '/' + file;
+     
+         ket_qua.push(src);
+         var stat = fs.statSync(src);
+         if (stat && stat.isDirectory()) {
+             // hàm đệ quy
+             get_all_path_in_folder(src) ;
+         } 
+     });
 
-    // tạo mảng file_name chứa tên các file
-    file_name = file_name.split(",");
-    
-    file_name = file_name.slice(1);
-     // cho file index.js cuối cùng
-    file_name.push('index.js')
-    console.log(file_name);
+
+      for (let index = 0 , len = ket_qua.length ; index < len ; index++) { 
+          if (path.extname(ket_qua[index]) === ".js" && ket_qua[index] !== './static/fontend/index.js' ){
+               ket_qua_end.push(ket_qua[index]);
+          }
+
+       }
+
+       ket_qua_end.push('./static/fontend/index.js');
+     return ket_qua_end;
+ }
+
+
+
+ let all_path_js = get_all_path_in_folder(Folder) ;
   
     var fileData = [];
 
      
-    for (let index = 0; index < file_name.length; index++) {
+    for (let index = 0,  len = all_path_js.length; index <len ; index++) {
          // đọc data các file 
     
-        fileData.push(fs.readFileSync('./static/fontend'+ '/' + file_name[index] , 'utf8'));
+        fileData.push(fs.readFileSync(all_path_js[index] , 'utf8'));
    }
 
   
@@ -46,7 +58,7 @@ function ghep_file(){
 
 
       fs.writeFile('./static/index_ghep_file.js', file, { flag: 'w+' }, err => {});
-    
+    console.log('ok');
     
     // convert string jsx của react thành javascript với babel
 

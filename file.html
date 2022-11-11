@@ -7,8 +7,8 @@
    <title>React CDN</title>
    <!-- Font Awesome 5  Icon File -->
 
- <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  
+ <link rel="stylesheet"  href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ <link rel="stylesheet" href="http://localhost:8000/fontend/style.css">
 <!--     
    <link rel="stylesheet" href="http://localhost:8000/CDN/font-awesome.min.css"> -->
     <!-- react 17 -->
@@ -38,7 +38,7 @@ body, html{
   
    </style>
 </head>
-<body>
+<body > 
    <div id="root"></div>
  
 </body>
@@ -805,7 +805,7 @@ if ( change_width === true ) {
 
         {
           name_foder_and_file.map( ( i, index )=>{ 
-              return <div  style={{  backgroundColor: 'white', display: "flex",   width: '100%', boxSizing: 'border-box' , paddingLeft: 2 }}     >
+              return <div   style={{   backgroundColor: 'white', display: "flex",   width: '100%', boxSizing: 'border-box' , paddingLeft: 2 }}     >
               
                         
                           <div  style={ Object.assign({},css._row,  {  display: "flex",   boxSizing: 'border-box', })   } >      <div    style={css.icon} className={' far fa fa-file '} > </div>  <div  >{i[0]}</div>                </div>
