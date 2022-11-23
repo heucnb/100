@@ -15,18 +15,6 @@ function path_name_test( path_name, string_test) {
 // convert string to obj: JSON.parse(string_obj);  string to array: string_aray.split(' |_| ');
  // vd obj :  JSON.stringify(obj); number:  number.toString(); array: array.join(' |_| '); // 'Wind |_| Water'
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// điều kiện trong file html trong body phải có    <div id="convert_text_to_pixcel"></div>
-//  function convert_text_to_pixcel(text) {
-//   let _div = document.createElement('div');
-//      _div.textContent = text ;
-//      _div.setAttribute( 'style', 'display: inline;', );
-//    let _root = document.getElementById("convert_text_to_pixcel") ;  
-//    _root.appendChild(_div);
-//    let _width = _root.children[ 0].getBoundingClientRect().width ;
-//    _root.removeChild(_root.children[ 0]);
-//    return _width ;
-// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

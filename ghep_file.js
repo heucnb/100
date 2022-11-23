@@ -1,43 +1,66 @@
 const express = require("express");
-let babel = require('@babel/core');
+var babel = require("@babel/core");
+var UglifyJS = require("uglify-js");
 const app = express();
 const fs = require('fs');
 const path = require('path');
 function ghep_file(){
     const Folder = './static/fontend';
-   
-    var get_all_path_in_folder = function(srcDir) {
-   
-     var list =  fs.readdirSync(srcDir) ;
+    function get_all_path_in_folder(folder) {
+
      let ket_qua = [] ;
-     let ket_qua_end = [] ;
-     var src;
-     list.forEach(function(file) {
-         src = srcDir + '/' + file;
-     
-         ket_qua.push(src);
-         var stat = fs.statSync(src);
-         if (stat && stat.isDirectory()) {
-             // hàm đệ quy
-             get_all_path_in_folder(src) ;
-         } 
-     });
-
-
-      for (let index = 0 , len = ket_qua.length ; index < len ; index++) { 
-          if (path.extname(ket_qua[index]) === ".js" && ket_qua[index] !== './static/fontend/index.js' ){
-               ket_qua_end.push(ket_qua[index]);
+     // let ket_qua_end = [] ;
+               function get_all_path_in_folder_run(srcDir) {
+          
+               var list =  fs.readdirSync(srcDir) ;
+          
+               var src;
+               list.forEach(function(file) {
+                    src = srcDir + '/' + file;
+               
+               
+                    var stat = fs.statSync(src);
+                    if (stat && stat.isDirectory()) {
+                    // hàm đệ quy
+              
+                    get_all_path_in_folder_run(src) ;
+                    } else{
+          
+                    ket_qua.push(src);
+                    }
+               });
+          
+               return ket_qua ;
+          
           }
 
-       }
+          return get_all_path_in_folder_run(folder)
 
-       ket_qua_end.push('./static/fontend/index.js');
-     return ket_qua_end;
- }
+     
+    }
+   
+
+ let array_path = get_all_path_in_folder(Folder) ;
+ let all_path_js = [] ;
+
+ for (let index = 0 , len = array_path.length ; index < len ; index++) { 
+     if (path.extname(array_path[index]) === ".js" && array_path[index] !== './static/fontend/index.js' ){
+          all_path_js.push(array_path[index]);
+     }
+
+  }
+
+  all_path_js.push('./static/fontend/index.js');
 
 
 
- let all_path_js = get_all_path_in_folder(Folder) ;
+
+
+
+
+
+
+ console.log(all_path_js);
   
     var fileData = [];
 
@@ -57,30 +80,69 @@ function ghep_file(){
       }
 
 
-      fs.writeFile('./static/index_ghep_file.js', file, { flag: 'w+' }, err => {});
-    console.log('ok');
     
+    console.log('ok');
     // convert string jsx của react thành javascript với babel
 
-             
+// cách 1 sử dụng hàm đòng bộ --------------------------------------------------------------
+ let data_convert =   babel.transformSync(file,
+     {
+          babelrc: true,
+          filename: '.babelrc',
 
-               // babel.transform(
-               //      file,
-               //      {
-               //      babelrc: true,
-               //      filename: '.babelrc'
-               //      },
-               //      function(err, result) {
-               //      fs.writeFile('./static/index_ghep_file.js', result.code, { flag: 'w+' }, err => {});
-                    
-               //      }
-               // )
-               
+          });
+
+// console.log(data_convert);
+
+fs.writeFileSync("./static/index_ghep_file.js", data_convert.code, { flag: 'w+' });
+
+//minify file  tiếp----------------------------------------------------------------------------
+// var result = UglifyJS.minify(data_convert.code);
+// console.log(result.code);
+
+// fs.writeFileSync("./static/index_ghep_file.js", result.code, { flag: 'w+' });
+
+
+/// cách 2 sử dụng hàm bất đòng bộ --------------------------------------------------------------
+//     babel.transform(file,
+//      {
+//           babelrc: true,
+//           filename: '.babelrc',
+        
+//           },
+         
+//        function(err, result) {
+
+         
+//           fs.writeFile('./static/index_ghep_file.js', result.code, { flag: 'w+' }, err => {  console.log(err);});
+//    });
+
+
+    
                
 };
-ghep_file();
 
-app.listen(7000, () => console.log("Khi có sự thay đổi ở fontend sẽ ghép các file lại thành file index_ghep_file.js----" + 7000));
+
+
+
+
+
+var start = new Date().getTime();
+console.time();
+ghep_file();
+console.timeEnd();
+
+  // hiện thông báo lên màn hình
+  const notifier = require('node-notifier');
+  var end = new Date().getTime();
+  var time = end - start;
+  notifier.notify( Intl.DateTimeFormat('vi-VN', {  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( new Date())  + '----' + time  );
+    
+ 
+
+
+
+app.listen(7000, () => console.log(   Intl.DateTimeFormat('vi-VN', {  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( new Date()) ));
 
 // chạy command line trong node js
 //------

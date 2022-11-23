@@ -201,14 +201,14 @@ let ref_file =  useRef(null) ;
 
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
+      // hàm này trả về array trong đó array[1], và array[2] dùng để xác định vị trí của con trỏ trong text mới
       function paint_text(text, vi_tri_focus) {
   
         text =  text.slice(0, vi_tri_focus) + "|_|_|" + text.slice(vi_tri_focus);
         console.log(text);
         var array_color = [ 'red' , 'blue','orange', '#34568b', '#FF6F61','#88B04B' ,'#9C4722' ,'#00A170'   , '#CE3175', '#0072B5', '	#999900', '#926AA6','#00008B' ,'#CD212A', '#282D3C' ] ;
         let array = [] ;
-     let result_array = [] ;
+   
     let text_after_replace ;
     text_after_replace =   text.replace(/Data\$?\[[0-9]*\]\$?\[[0-9]*\]/gi, function (x) {
     
@@ -732,7 +732,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
               index_ = index_formular[(i+i_array_2d)][(j+ j_array_2d )] ;
               console.log( "khac nhau" ) ;
-  
+              // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
           formular[index_]  = eval("(function(){return "+  "Data["+(i+i_array_2d)+"]["+(j + j_array_2d)+"]" +" = " + "'"  + error.message + "'"  +  ";})")   
           formular[index_]();
           // tính toán lại tất cả các công thức đã viết
@@ -767,7 +767,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
         } 
     else {  
       console.log( "push 1 cong thuc vao cuoi ----------------" ) ;
-    
+     // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
       formular.push(eval("(function(){return "+  "Data["+(i+i_array_2d)+"]["+(j + j_array_2d)+"]" +" = " + "'"  + error.message + "'" +  ";})")  ) 
       index_formular[(i+i_array_2d)][(j+ j_array_2d )]  = formular.length - 1 ;
       
@@ -833,7 +833,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                   text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if (j_item!==null) {   if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
                                   
                                   if ( (array_loi_tham_chieu.some((item,index) => { vi_tri_loi_tham_chieu = item ;  return text.indexOf("Data["+item[0]+ "]["+item[1]+"]") !== -1 }) === true) ){
-
+                                       // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
                                     formular[index_]  = eval("(function(){return "+  "Data["+(i+i_array_2d)+"]["+(j + j_array_2d )+"]" +" ="+"'#REF!'"+";})")   ;
                                     formular[index_]();
                                     Data[vi_tri_loi_tham_chieu[0]][vi_tri_loi_tham_chieu[1]] = "#REF!" ;
@@ -896,7 +896,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                    text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if (j_item!==null) {  console.log(j_item); if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
                    
                    if ( (array_loi_tham_chieu.some((item,index) => { vi_tri_loi_tham_chieu = item ;  return text.indexOf("Data["+item[0]+ "]["+item[1]+"]") !== -1 }) === true) ){
-
+                      // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
                      formular.push(eval("(function(){return "+  "Data["+(i+i_array_2d)+"]["+(j + j_array_2d )+"]" +" ="+"'#REF!'"+";})") )  ;
                    
                      Data[vi_tri_loi_tham_chieu[0]][vi_tri_loi_tham_chieu[1]] = "#REF!" ;
@@ -3925,7 +3925,6 @@ event.persist();
 
                 }
 
-
               
                 axios.get('/excel/file').then(function (response) {
 
@@ -3999,6 +3998,7 @@ event.persist();
        file_name = ref_file_name.current.textContent ;
         // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
        // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
+        // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
        let query = { 
         Data_save : Data_save,
         formular : [],
