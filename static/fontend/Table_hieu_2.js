@@ -975,7 +975,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                 // nếu người dùng nhập số  vào input thì hàm + text  sẽ chuyển ký tự khác số thành số. Vd: có nhiều phím cách "  59" sẽ chuyển thành 59, "  .2" sẽ chuyển thành 2 
                   if (isNaN(Number(text)) == false) {
                     Data[i+i_array_2d][j + j_array_2d] = + text;
-                    console.log( "Data["+(i+i_array_2d)+"]["+(j+ j_array_2d)+"]       "    +    Data[i+i_array_2d][j+ j_array_2d]);
+               
                     // nếu người dùng không nhập gì thì isNaN(Number(text))  sẽ trả về false khi đó ta gán Data[i+i_array_2d][j] = '' ;
                     if (text==="") {  Data[i+i_array_2d][j+ j_array_2d] = ""}
                    
@@ -3132,7 +3132,7 @@ let _table  = table_excel.current;
                     {
 
                         // Bước 2: nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
-                        console.log('key_enter:   '+vi_tri_o_truoc[0]+'__'+vi_tri_o_truoc[1]+'__'+(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do))+'__'+(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
+                        console.log('key_enter:   ',vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-vi_tri_cat + vi_tri_cat_truoc_do,vi_tri_o_truoc[1]-vi_tri_cat_col + vi_tri_cat_truoc_do_col ) ;
                             // set địa chỉ ô click  sau hành động trên
                            dia_chi_o_click(vi_tri_o_truoc[0]+ i_array_2d,vi_tri_o_truoc[1] + j_array_2d,(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do)) ,(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
                            key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
@@ -3401,7 +3401,7 @@ let _table  = table_excel.current;
               key_enter(vi_tri_click_in_Data[2],vi_tri_click_in_Data[3],vi_tri_click_in_Data[2]+1,vi_tri_click_in_Data[3]); // tô màu và focus
 
               _onMouseEnter_not_event(vi_tri_click_in_Data[2]+1,vi_tri_click_in_Data[3],vi_tri_click_in_Data[2]+1,vi_tri_click_in_Data[3])
-              console.log('ô tô màu'+ (vi_tri_click_in_Data[2]+1 )+ "," + vi_tri_click_in_Data[3] );
+          
               
                      // set địa chỉ ô click  sau hành động trên
                      dia_chi_o_click(vi_tri_click_in_Data[0] +1 ,vi_tri_click_in_Data[1] ,vi_tri_click_in_Data[2] +1  ,vi_tri_click_in_Data[3] ) ;

@@ -127,14 +127,6 @@ app.get('/hh.html',function(req,res){
 
 
 
-app.get('/file.html',function(req,res){
- 
-  const data = fs.readFileSync('./file.html', 'utf8');
-  res.write(data); 
-  return res.end();
-
-});
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // readdirSync(Folder)  : đọc Folder sẽ được tên các file
     // tao array Url vào [] file_name
@@ -173,7 +165,7 @@ app.use( function (req, res) {
  let path_match =  string_path.match(/\/.*/) ;
  console.log(path_match[0]);
       if (string_path === path_match[0]) {
-        return  res.send(index_html); 
+        return  res.send(index_html +   " <script > Router() ;  </script>  "); 
         
       }
 

@@ -96,12 +96,6 @@ function ghep_file(){
 
 fs.writeFileSync("./static/index_ghep_file.js", data_convert.code, { flag: 'w+' });
 
-//minify file  tiếp----------------------------------------------------------------------------
-// var result = UglifyJS.minify(data_convert.code);
-// console.log(result.code);
-
-// fs.writeFileSync("./static/index_ghep_file.js", result.code, { flag: 'w+' });
-
 
 /// cách 2 sử dụng hàm bất đòng bộ --------------------------------------------------------------
 //     babel.transform(file,
@@ -124,9 +118,6 @@ fs.writeFileSync("./static/index_ghep_file.js", data_convert.code, { flag: 'w+' 
 
 
 
-
-
-
 var start = new Date().getTime();
 console.time();
 ghep_file();
@@ -139,9 +130,6 @@ console.timeEnd();
   notifier.notify( Intl.DateTimeFormat('vi-VN', {  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( new Date())  + '----' + time  );
     
  
-
-
-
 app.listen(7000, () => console.log(   Intl.DateTimeFormat('vi-VN', {  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( new Date()) ));
 
 // chạy command line trong node js

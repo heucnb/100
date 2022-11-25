@@ -123,7 +123,7 @@ console.log('ok----------------');
 // sau đó ta minifier bằng UglifyJS 3: Online JavaScript minifier
 // sau đó xoá console.log bằng
 // console\.log\(([^)]|\n)*\)(;|,)*
-// điều kiện là đã minifile bằng UglifyJS. phải minifile mới xoá console.log đúng được
-// trong console.log không được chứa hàm VD console.log(ham()); sẽ không xoá được
+// trong console.log không được chứa hàm VD console.log(ham()); hoặc trong đó enter xuống dòng sẽ không xoá được
+// điều kiện là đã minifile bằng UglifyJS. 
 // nó tìm thấy cả console.log trong comment nên đôi khi số lượng console.log tìm thấy trong file gốc lớn hơn trong file minifier
 // sau đó bảo mật bằng https://javascriptobfuscator.com/Javascript-Obfuscator.aspx

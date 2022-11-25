@@ -1,142 +1,98 @@
-
-
-
-function Footer() {
-  function css() {
-    return {
-      center_bottom: {
-        backgroundColor: "#d8dcd6",
-        textAlign: "center",
-        border: "1px ridge #ccc"
-      }
-    };
-  }
-  var css = css();
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: css.center_bottom
-  }, /*#__PURE__*/React.createElement("h3", null, "Foolish Developer"), /*#__PURE__*/React.createElement("p", null, "Foolish Developer is a blog website where you will find great tutorials on web design and development")));
+function App() {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(F, null), /*#__PURE__*/React.createElement(Footer, null));
 }
 ;
-function App() {
+function F() {
   let ref_1 = useRef(null);
   let ref_2 = useRef(null);
   let ref_3 = useRef(null);
   let ref_return = useRef(null);
-  console.log(path_name);
-  if (path_name.startsWith('/excel')) {
-    return /*#__PURE__*/React.createElement("div", null, " ", /*#__PURE__*/React.createElement(Table_hieu_2, null), " ");
-  } else if (path_name.startsWith('/A')) {
-    function A() {
-      function From_1() {
-        let ref_return = useRef(null);
-        let ref_year = useRef(null);
-        let ref_trai = useRef(null);
-        return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "From_1 "), /*#__PURE__*/React.createElement("input", {
-          ref: ref_year,
-          type: "text",
-          placeholder: "year"
-        }), /*#__PURE__*/React.createElement("input", {
-          ref: ref_trai,
-          type: "text",
-          placeholder: "trai"
-        }), /*#__PURE__*/React.createElement("button", {
-          onClick: () => ReactDOM.render("80%", ref_return.current)
-        }, "ty_le_phoi"), /*#__PURE__*/React.createElement("div", {
-          ref: ref_return
-        }, " D\u1EEF li\u1EC7u"));
-      }
-      ;
-      function From_2() {
-        let ref_return = useRef(null);
-        let ref_year = useRef(null);
-        let ref_trai = useRef(null);
-        return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "From_2 "), /*#__PURE__*/React.createElement("input", {
-          ref: ref_year,
-          type: "text",
-          placeholder: "year"
-        }), /*#__PURE__*/React.createElement("input", {
-          ref: ref_trai,
-          type: "text",
-          placeholder: "trai"
-        }), /*#__PURE__*/React.createElement("button", {
-          onClick: () => ReactDOM.render("90%", ref_return.current)
-        }, "ty_le_\u0111\u1EBB"), /*#__PURE__*/React.createElement("div", {
-          ref: ref_return
-        }, " D\u1EEF li\u1EC7u"));
-      }
-      ;
-      function From_3() {
-        let ref_return = useRef(null);
-        let ref_year = useRef(null);
-        let ref_trai = useRef(null);
-        return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "From_3 "), /*#__PURE__*/React.createElement("input", {
-          ref: ref_year,
-          type: "text",
-          placeholder: "year"
-        }), /*#__PURE__*/React.createElement("input", {
-          ref: ref_trai,
-          type: "text",
-          placeholder: "trai"
-        }), /*#__PURE__*/React.createElement("button", {
-          onClick: () => ReactDOM.render("100%", ref_return.current)
-        }, "cai s\u1EEFa"), /*#__PURE__*/React.createElement("div", {
-          ref: ref_return
-        }, " D\u1EEF li\u1EC7u"));
-      }
-      ;
-      function get_A_get_From_1(event) {
-        ReactDOM.render( /*#__PURE__*/React.createElement(From_1, null), ref_return.current);
-        let url_change = "/A/From_1";
-        window.history.replaceState(null, null, url_change);
-      }
-      function get_A_get_From_2(event) {
-        ReactDOM.render( /*#__PURE__*/React.createElement(From_2, null), ref_return.current);
-        let url_change = "/A/From_2";
-        window.history.replaceState(null, null, url_change);
-      }
-      function get_A_get_From_3(event) {
-        ReactDOM.render( /*#__PURE__*/React.createElement(From_3, null), ref_return.current);
-        let url_change = "/A/From_3";
-        window.history.replaceState(null, null, url_change);
-      }
-      useEffect(() => {
-        if (path_name_test(path_name, '/A/From_1')) {
-          get_A_get_From_1();
-        }
-        if (path_name_test( path_name, '/A/From_2')) {
-          get_A_get_From_2();
-        }
-        if (path_name_test(path_name, '/A/From_3')) {
-          get_A_get_From_3();
-        }
-      }, []);
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-        ref: ref_1,
-        onClick: event => {
-          get_A_get_From_1(event);
-        }
-      }, " From 1"), /*#__PURE__*/React.createElement("div", {
-        ref: ref_2,
-        onClick: event => {
-          get_A_get_From_2(event);
-        }
-      }, " From 2"), /*#__PURE__*/React.createElement("div", {
-        ref: ref_3,
-        onClick: event => {
-          get_A_get_From_3(event);
-        }
-      }, " From 3"), /*#__PURE__*/React.createElement("div", {
-        ref: ref_return
-      }, " Data"), /*#__PURE__*/React.createElement("div", null, " ", /*#__PURE__*/React.createElement(Footer, null)));
-    }
-    return /*#__PURE__*/React.createElement("div", null, " ", /*#__PURE__*/React.createElement(A, null), " ");
-  } else if (path_name.startsWith('/B')) {
-    return 'trang B';
-  } else {
-    return 'trang chủ';
+  function From_1() {
+    let ref_return = useRef(null);
+    let ref_year = useRef(null);
+    let ref_trai = useRef(null);
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "From_1 "), /*#__PURE__*/React.createElement("input", {
+      ref: ref_year,
+      type: "text",
+      placeholder: "year"
+    }), /*#__PURE__*/React.createElement("input", {
+      ref: ref_trai,
+      type: "text",
+      placeholder: "trai"
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: () => ReactDOM.render("80%", ref_return.current)
+    }, "ty_le_phoi"), /*#__PURE__*/React.createElement("div", {
+      ref: ref_return
+    }, " D\u1EEF li\u1EC7u"));
   }
+  ;
+  function From_2() {
+    let ref_return = useRef(null);
+    let ref_year = useRef(null);
+    let ref_trai = useRef(null);
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "From_2 "), /*#__PURE__*/React.createElement("input", {
+      ref: ref_year,
+      type: "text",
+      placeholder: "year"
+    }), /*#__PURE__*/React.createElement("input", {
+      ref: ref_trai,
+      type: "text",
+      placeholder: "trai"
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: () => ReactDOM.render("90%", ref_return.current)
+    }, "ty_le_\u0111\u1EBB"), /*#__PURE__*/React.createElement("div", {
+      ref: ref_return
+    }, " D\u1EEF li\u1EC7u"));
+  }
+  ;
+  function From_3() {
+    let ref_return = useRef(null);
+    let ref_year = useRef(null);
+    let ref_trai = useRef(null);
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", null, "From_3 "), /*#__PURE__*/React.createElement("input", {
+      ref: ref_year,
+      type: "text",
+      placeholder: "year"
+    }), /*#__PURE__*/React.createElement("input", {
+      ref: ref_trai,
+      type: "text",
+      placeholder: "trai"
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: () => ReactDOM.render("100%", ref_return.current)
+    }, "cai s\u1EEFa"), /*#__PURE__*/React.createElement("div", {
+      ref: ref_return
+    }, " D\u1EEF li\u1EC7u"));
+  }
+  ;
+  F.show_From_1 = function () {
+    ReactDOM.render( /*#__PURE__*/React.createElement(From_1, null), ref_return.current);
+    let url_change = "/F/From_1";
+    window.history.replaceState(null, null, url_change);
+    console.log(666666666666666666);
+  };
+  F.show_From_2 = function () {
+    ReactDOM.render( /*#__PURE__*/React.createElement(From_2, null), ref_return.current);
+    let url_change = "/F/From_2";
+    window.history.replaceState(null, null, url_change);
+  };
+  F.show_From_3 = function () {
+    ReactDOM.render( /*#__PURE__*/React.createElement(From_3, null), ref_return.current);
+    let url_change = "/F/From_3";
+    window.history.replaceState(null, null, url_change);
+  };
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    ref: ref_1,
+    onClick: F.show_From_1
+  }, " From 1"), /*#__PURE__*/React.createElement("div", {
+    ref: ref_2,
+    onClick: F.show_From_2
+  }, " From 2"), /*#__PURE__*/React.createElement("div", {
+    ref: ref_3,
+    onClick: F.show_From_3
+  }, " From 3"), /*#__PURE__*/React.createElement("div", {
+    ref: ref_return
+  }, " Data"));
 }
-;
 async function file_manager(dom) {
   function Content_mennu() {
     let css = {
@@ -918,6 +874,22 @@ async function file_manager(dom) {
     })
   }), dom);
 }
+function Footer() {
+  function css() {
+    return {
+      center_bottom: {
+        backgroundColor: "#d8dcd6",
+        textAlign: "center",
+        border: "1px ridge #ccc"
+      }
+    };
+  }
+  var css = css();
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: css.center_bottom
+  }, /*#__PURE__*/React.createElement("h3", null, "Foolish Developer"), /*#__PURE__*/React.createElement("p", null, "Foolish Developer is a blog website where you will find great tutorials on web design and development")));
+}
+;
 function path_name_test(path_name, string_test) {
   if (path_name === string_test || path_name === string_test + "/") {
     return true;
@@ -999,6 +971,53 @@ function _alert(componet_react) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function Router() {
+  console.log(path_name);
+  if (path_name.startsWith('/excel')) {
+    return ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
+  }
+  //-------------------------------------------------------------------------------
+  if (path_name_test(path_name, '/F/From_1')) {
+    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+    F.show_From_1();
+    return;
+  }
+
+  //------------------------------------------------------------------------------------------
+  if (path_name_test(path_name, '/F/From_2')) {
+    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+    F.show_From_2();
+    return;
+  }
+  //------------------------------------------------------------------------------------------------  
+
+  if (path_name_test(path_name, '/F/From_3')) {
+    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+    F.show_From_3();
+    return;
+  }
+  //------------------------------------------------------------------------------------------  
+  if (path_name.startsWith('/F')) {
+    return ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+  }
+  //------------------------------------------------------------------------------------------  
+
+  if (path_name.startsWith('/B')) {
+    return ReactDOM.render("trang B", document.getElementById('root'));
+  }
+  //------------------------------------------------------------------------------------------
+
+  if (path_name.startsWith('/File')) {
+    return file_manager(document.getElementById('root'));
+  }
+
+  //-----------------------------------------------------------------------------------------
+
+  if (path_name.startsWith('/')) {
+    return ReactDOM.render("trang home", document.getElementById('root'));
+  }
+}
 function Svg_file() {
   return /*#__PURE__*/React.createElement("svg", {
     className: 'w-[16px]',
@@ -1782,7 +1801,7 @@ function Table_hieu_2(props) {
       // nếu người dùng nhập số  vào input thì hàm + text  sẽ chuyển ký tự khác số thành số. Vd: có nhiều phím cách "  59" sẽ chuyển thành 59, "  .2" sẽ chuyển thành 2 
       if (isNaN(Number(text)) == false) {
         Data[i + i_array_2d][j + j_array_2d] = +text;
-       
+
         // nếu người dùng không nhập gì thì isNaN(Number(text))  sẽ trả về false khi đó ta gán Data[i+i_array_2d][j] = '' ;
         if (text === "") {
           Data[i + i_array_2d][j + j_array_2d] = "";
@@ -3262,6 +3281,7 @@ function Table_hieu_2(props) {
       change_input_scroll(vi_tri_o_truoc[0], vi_tri_o_truoc[1], vi_tri_o_truoc[0] - (vi_tri_cat - vi_tri_cat_truoc_do), vi_tri_o_truoc[1] - (vi_tri_cat_col - vi_tri_cat_truoc_do_col));
     } else {
       // Bước 2: nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
+      console.log('key_enter:   ', vi_tri_o_truoc[0], vi_tri_o_truoc[1], vi_tri_o_truoc[0] - vi_tri_cat + vi_tri_cat_truoc_do, vi_tri_o_truoc[1] - vi_tri_cat_col + vi_tri_cat_truoc_do_col);
       // set địa chỉ ô click  sau hành động trên
       dia_chi_o_click(vi_tri_o_truoc[0] + i_array_2d, vi_tri_o_truoc[1] + j_array_2d, vi_tri_o_truoc[0] - (vi_tri_cat - vi_tri_cat_truoc_do), vi_tri_o_truoc[1] - (vi_tri_cat_col - vi_tri_cat_truoc_do_col));
       key_enter(vi_tri_o_truoc[0], vi_tri_o_truoc[1], vi_tri_o_truoc[0] - (vi_tri_cat - vi_tri_cat_truoc_do), vi_tri_o_truoc[1] - (vi_tri_cat_col - vi_tri_cat_truoc_do_col));
@@ -3482,7 +3502,6 @@ function Table_hieu_2(props) {
         key_enter(vi_tri_click_in_Data[2], vi_tri_click_in_Data[3], vi_tri_click_in_Data[2] + 1, vi_tri_click_in_Data[3]); // tô màu và focus
 
         _onMouseEnter_not_event(vi_tri_click_in_Data[2] + 1, vi_tri_click_in_Data[3], vi_tri_click_in_Data[2] + 1, vi_tri_click_in_Data[3]);
-        
 
         // set địa chỉ ô click  sau hành động trên
         dia_chi_o_click(vi_tri_click_in_Data[0] + 1, vi_tri_click_in_Data[1], vi_tri_click_in_Data[2] + 1, vi_tri_click_in_Data[3]);
@@ -4338,5 +4357,4 @@ const {
   useRef,
   useEffect
 } = React;
-
 let path_name = window.location.pathname;
