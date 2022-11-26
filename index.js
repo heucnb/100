@@ -1,4 +1,36 @@
-﻿const express = require("express");
+﻿function get_all_path_in_folder(folder) {
+
+  let ket_qua = [] ;
+  // let ket_qua_end = [] ;
+            function get_all_path_in_folder_run(srcDir) {
+       
+            var list =  fs.readdirSync(srcDir) ;
+       
+            var src;
+            list.forEach(function(file) {
+                 src = srcDir + '/' + file;
+            
+            
+                 var stat = fs.statSync(src);
+                 if (stat && stat.isDirectory()) {
+                 // hàm đệ quy
+           
+                 get_all_path_in_folder_run(src) ;
+                 } else{
+       
+                 ket_qua.push(src);
+                 }
+            });
+       
+            return ket_qua ;
+       
+       }
+
+       return get_all_path_in_folder_run(folder)
+
+  
+ }
+const express = require("express");
 
 var fs = require("fs");
 
@@ -131,30 +163,23 @@ app.get('/hh.html',function(req,res){
       // readdirSync(Folder)  : đọc Folder sẽ được tên các file
     // tao array Url vào [] file_name
     const Folder = './backend';
-    let file_name = "";
-    fs.readdirSync(Folder).forEach(file => { 
-     if (path.extname(file) == ""){ fs.readdirSync(Folder + "/" + file ).forEach(file_con => { file_name  =   file_name + "," +"/" + file + "/" + file_con.slice(0,file_con.length - 3) ;}) };
-     if (path.extname(file) == ".js"){ file_name  =   file_name + "," +"/" + file.slice(0, file.length - 3) };
-    });
-    file_name = file_name.split(",");
-    file_name = file_name.slice(1);
+    let array_file_name = get_all_path_in_folder(Folder);
+  
 let model = [];
-
-//  model[index] là fuction khớp với file_name[index]    
+let array_url = [] ;
+//  model[index] là fuction được lấy từ path  array_file_name[index]    
 // vd: model[index]  là  function (req, res, con) { return  res.send(req.body["id"].toString()); }
 // vd: app.all(  "/decrement"  , function (req, res) {    model[index](req, res, con); }); 
 
 // vd: http://localhost:8000/Dem/increment
-for (let index = 0; index < file_name.length; index++) {
-  console.log(file_name[index]);
-
- model.push( require("./backend" + file_name[index] + ".js"));
-
- app.all(file_name[index], function (req, res ) {  model[index](req, res, con , fs, path) });
+for (let index = 0; index < array_file_name.length; index++) {
+ 
+  array_url[index] = array_file_name[index].slice(9,-3)
+ model.push( require( array_file_name[index] ));
+ console.log(array_url[index]);
+ app.all(array_url[index], function (req, res ) {  model[index](req, res, con , fs, path) });
 
 }
-
-
 
 
 app.use( function (req, res) {

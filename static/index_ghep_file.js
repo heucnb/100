@@ -974,7 +974,7 @@ function _alert(componet_react) {
 
 function Router() {
   console.log(path_name);
-  if (path_name.startsWith('/excel')) {
+  if (path_name_test(path_name, '/excel')) {
     return ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
   }
   //-------------------------------------------------------------------------------
@@ -998,18 +998,22 @@ function Router() {
     return;
   }
   //------------------------------------------------------------------------------------------  
-  if (path_name.startsWith('/F')) {
+  if (path_name_test(path_name, '/F')) {
     return ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
   }
   //------------------------------------------------------------------------------------------  
 
-  if (path_name.startsWith('/B')) {
+  if (path_name_test(path_name, '/B')) {
     return ReactDOM.render("trang B", document.getElementById('root'));
   }
   //------------------------------------------------------------------------------------------
 
-  if (path_name.startsWith('/File')) {
+  if (path_name_test(path_name, '/File')) {
     return file_manager(document.getElementById('root'));
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  if (path_name_test(path_name, '/hh')) {
+    return ReactDOM.render(React.createElement(Svg_folder, null), document.getElementById('root'));
   }
 
   //-----------------------------------------------------------------------------------------
@@ -1075,16 +1079,6 @@ function Svg_folder() {
     viewBox: "0 0 512 512",
     xmlns: "http://www.w3.org/2000/svg"
   }, /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#94E7EF"
-    },
-    d: "M423.981,115.736v371.029c0,0.695-0.563,1.259-1.259,1.259H89.278c-0.695,0-1.259-0.563-1.259-1.259\r V25.236c0-0.695,0.563-1.259,1.259-1.259h242.945V90.5c0,13.919,11.317,25.236,25.236,25.236\r C357.458,115.736,423.981,115.736,423.981,115.736z M374.074,176.002c0-6.618-5.359-11.988-11.988-11.988h-212.17\r c-6.63,0-11.988,5.371-11.988,11.988s5.359,11.988,11.988,11.988h212.17C368.715,187.99,374.074,182.619,374.074,176.002z\r M374.074,248.339c0-6.618-5.359-11.988-11.988-11.988h-212.17c-6.63,0-11.988,5.371-11.988,11.988s5.359,11.988,11.988,11.988\r h212.17C368.715,260.328,374.074,254.957,374.074,248.339z M374.074,320.677c0-6.618-5.359-11.988-11.988-11.988h-212.17\r c-6.63,0-11.988,5.371-11.988,11.988c0,6.63,5.359,11.988,11.988,11.988h212.17C368.715,332.666,374.074,327.307,374.074,320.677z\r M267.988,393.027c0-6.63-5.371-11.988-11.988-11.988H149.915c-6.63,0-11.988,5.359-11.988,11.988\r c0,6.618,5.359,11.988,11.988,11.988H256C262.618,405.016,267.988,399.645,267.988,393.027z"
-  }), /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#94E7EF"
-    },
-    d: "M407.03,91.759h-49.572c-0.695,0-1.259-0.563-1.259-1.259V40.928L407.03,91.759z"
-  })), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
     style: {
       "fill": "#1E0478"
     },

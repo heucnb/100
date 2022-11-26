@@ -1,16 +1,9 @@
 
 
 
-module.exports =  function (req, res_) {
+module.exports =  function (req, res) {
  
-     var res = res_[0];
-     var con = res_[1];
-  
-  
-     return "10";
-      
- //   
-
+    res.send('hhhhhhhhhhh999999999999999999');
 }
   
  

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: 'jit',
-  content: ["./static/fontend/*.js"],
+  purge: ['./static/fontend/**/*.js'],
   theme: {
     extend: {},
   },
