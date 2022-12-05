@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "_comment": "để restart nodemon trong win 10 wsl phải thêm --legacy-watch",
+    "//": "để restart nodemon trong win 10 wsl phải thêm --legacy-watch",
     "ghep_file": "nodemon ghep_file.js --legacy-watch --watch static/fontend  --watch ghep_file.js  ",
     "dev": "nodemon index.js index --legacy-watch --watch backend  --watch index.js --watch index.html ",
+    "//": "watch ở đây sẽ theo dõi sự thay đổi ở các file trong tailwind.config.js",
     "css": "npx tailwindcss -i ./src/tailwind.css -o ./static/fontend/style.css --watch"
   },
   "keywords": [],

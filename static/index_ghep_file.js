@@ -580,6 +580,10 @@ async function file_manager(dom) {
         }
         return false;
       };
+
+      // khi move chuột tại góc element thì xuất hiện biểu tượng thay đổi kích thước cột
+      // nếu ấn giữ chuột trái khi move thì thay đổi kích thước cột
+
       ref_0.current.children[0].onmousemove = function col_resize(event) {
         event.preventDefault();
         console.log(change_width);
@@ -702,6 +706,40 @@ async function file_manager(dom) {
       ;
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      // lựa chọn icon xuất hiện theo loại file
+      function select_icon_from_type() {
+        let icon = [];
+        let extension = [];
+        for (let index = 0, len = name_foder_and_file.length; index < len; index++) {
+          icon[index] = ref_0.current.children[index + 1].children[0].children[0];
+          let file_name = name_foder_and_file[index][0];
+          extension[index] = file_name.slice((Math.max(0, file_name.lastIndexOf(".")) || Infinity) + 1);
+          switch (extension[index]) {
+            case '':
+              icon[index].src = "/SVG/folder.svg";
+              break;
+            case 'jpg':
+              icon[index].src = "/SVG/file_image.svg";
+              break;
+            case 'png':
+              icon[index].src = "/SVG/file_image.svg";
+              break;
+            case 'git':
+              icon[index].src = "/SVG/file_image.svg";
+              break;
+            case 'js':
+              icon[index].src = "/SVG/file_js.svg";
+              break;
+            case 'json':
+              icon[index].src = "/SVG/file_json.svg";
+              break;
+            default:
+              icon[index].src = "/SVG/file_document.svg";
+          }
+        }
+      }
+      select_icon_from_type();
     }, [name_foder_and_file]);
     useEffect(() => {
       function change_width_to_undefined(event) {
@@ -709,7 +747,12 @@ async function file_manager(dom) {
         change_width = undefined;
         document.body.style.cursor = "default";
       }
+
+      // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
       document.addEventListener('mouseup', change_width_to_undefined);
+
+      // change_width === true tức là đã ấn giữ chuột trái khi di chuyển 
+      // dùng document lắng nghe để khi di chuyển ra ngoài element kích hoạt sự kiện sự kiện vẫn xảy ra
       document.addEventListener('mousemove', function (event) {
         if (change_width === true) {
           let collection = ref_0.current.children;
@@ -770,28 +813,34 @@ async function file_manager(dom) {
     }, /*#__PURE__*/React.createElement("div", {
       ref: ref_bar_1,
       style: css.flex_item
-    }, " ", /*#__PURE__*/React.createElement(Svg_file, null), "  ", /*#__PURE__*/React.createElement("div", {
+    }, "  ", /*#__PURE__*/React.createElement("img", {
+      className: 'w-[16px]',
+      src: "/SVG/folder.svg"
+    }), " ", /*#__PURE__*/React.createElement("div", {
       style: css.title
     }, " New folder   "), "    "), /*#__PURE__*/React.createElement("div", {
       ref: ref_bar_2,
       style: css.flex_item
-    }, " ", /*#__PURE__*/React.createElement(Svg_folder, null), "  ", /*#__PURE__*/React.createElement("div", {
+    }, " ", /*#__PURE__*/React.createElement("img", {
+      className: 'w-[16px]',
+      src: "/SVG/file_document.svg"
+    }), " ", /*#__PURE__*/React.createElement("div", {
       style: css.title
     }, "  New text file  "), "  "), /*#__PURE__*/React.createElement("div", {
       ref: ref_bar_3,
       style: css.flex_item
-    }, " ", /*#__PURE__*/React.createElement("div", {
-      style: css.icon,
-      className: ' far fa fa-sort '
-    }, " "), "   ", /*#__PURE__*/React.createElement("div", {
+    }, " ", /*#__PURE__*/React.createElement("img", {
+      className: 'w-[16px]',
+      src: "/SVG/file_upload.svg"
+    }), "  ", /*#__PURE__*/React.createElement("div", {
       style: css.title
     }, "  Upload file "), "  "), /*#__PURE__*/React.createElement("div", {
       ref: ref_bar_4,
       style: css.flex_item
-    }, " ", /*#__PURE__*/React.createElement("div", {
-      style: css.icon,
-      className: ' far fa fa-file '
-    }, " "), "    ", /*#__PURE__*/React.createElement("div", {
+    }, " ", /*#__PURE__*/React.createElement("img", {
+      className: 'w-[16px]',
+      src: "/SVG/folder_upload.svg"
+    }), "  ", /*#__PURE__*/React.createElement("div", {
       style: css.title
     }, "  Upload Folder "), "   "), /*#__PURE__*/React.createElement("div", {
       ref: ref_bar_5,
@@ -851,10 +900,9 @@ async function file_manager(dom) {
           display: "flex",
           boxSizing: 'border-box'
         })
-      }, "      ", /*#__PURE__*/React.createElement("div", {
-        style: css.icon,
-        className: ' far fa fa-file '
-      }, " "), "  ", /*#__PURE__*/React.createElement("div", null, i[0]), "                "), /*#__PURE__*/React.createElement("div", {
+      }, "  ", /*#__PURE__*/React.createElement("img", {
+        className: 'w-[16px] mr-[4px]'
+      }), "  ", /*#__PURE__*/React.createElement("div", null, i[0]), "                "), /*#__PURE__*/React.createElement("div", {
         style: Object.assign({}, css._row, {
           paddingLeft: 4
         })
@@ -890,11 +938,11 @@ function Footer() {
   }, /*#__PURE__*/React.createElement("h3", null, "Foolish Developer"), /*#__PURE__*/React.createElement("p", null, "Foolish Developer is a blog website where you will find great tutorials on web design and development")));
 }
 ;
-function path_name_test(path_name, string_test) {
-  if (path_name === string_test || path_name === string_test + "/") {
-    return true;
+function path_match(string) {
+  if (string.slice(-1) === '/') {
+    return string.slice(0, -1);
   } else {
-    return false;
+    return string;
   }
 }
 
@@ -973,117 +1021,48 @@ function _alert(componet_react) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function Router() {
-  console.log(path_name);
-  if (path_name_test(path_name, '/excel')) {
-    return ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
+  let path_quy_ve = path_match(path_name);
+  console.log(path_quy_ve);
+  switch (path_quy_ve) {
+    //-----------------------------------------------------------------------------------------------------------------
+    case '/excel':
+      ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/F':
+      ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/F/From_1':
+      ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+      F.show_From_1();
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/F/From_2':
+      ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+      F.show_From_2();
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/F/From_3':
+      ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+      F.show_From_3();
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/B':
+      ReactDOM.render("trang B", document.getElementById('root'));
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/File':
+      file_manager(document.getElementById('root'));
+      break;
+    //----------------------------------------------------------------------------------------------------------------
+    case '/hh':
+      ReactDOM.render(React.createElement(Svg_file, null), document.getElementById('root'));
+      break;
+    default:
+      ReactDOM.render("trang home", document.getElementById('root'));
+      break;
   }
-  //-------------------------------------------------------------------------------
-  if (path_name_test(path_name, '/F/From_1')) {
-    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
-    F.show_From_1();
-    return;
-  }
-
-  //------------------------------------------------------------------------------------------
-  if (path_name_test(path_name, '/F/From_2')) {
-    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
-    F.show_From_2();
-    return;
-  }
-  //------------------------------------------------------------------------------------------------  
-
-  if (path_name_test(path_name, '/F/From_3')) {
-    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
-    F.show_From_3();
-    return;
-  }
-  //------------------------------------------------------------------------------------------  
-  if (path_name_test(path_name, '/F')) {
-    return ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
-  }
-  //------------------------------------------------------------------------------------------  
-
-  if (path_name_test(path_name, '/B')) {
-    return ReactDOM.render("trang B", document.getElementById('root'));
-  }
-  //------------------------------------------------------------------------------------------
-
-  if (path_name_test(path_name, '/File')) {
-    return file_manager(document.getElementById('root'));
-  }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////
-  if (path_name_test(path_name, '/hh')) {
-    return ReactDOM.render(React.createElement(Svg_folder, null), document.getElementById('root'));
-  }
-
-  //-----------------------------------------------------------------------------------------
-
-  if (path_name.startsWith('/')) {
-    return ReactDOM.render("trang home", document.getElementById('root'));
-  }
-}
-function Svg_file() {
-  return /*#__PURE__*/React.createElement("svg", {
-    className: 'w-[16px]',
-    id: "Layer_1",
-    style: {
-      "enableBackground": "new 0 0 512 512"
-    },
-    version: "1.1",
-    viewBox: "0 0 512 512",
-    xmlns: "http://www.w3.org/2000/svg",
-    x: "0px",
-    y: "0px",
-    xmlSpace: "preserve"
-  }, /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#1E0478"
-    },
-    d: "M447.958,103.748v383.017c0,13.919-11.317,25.236-25.236,25.236H89.278\r c-13.919,0-25.236-11.317-25.236-25.236V25.236C64.042,11.317,75.359,0,89.278,0h254.933c3.309,0,6.294,1.331,8.464,3.501h0.012\r l91.771,91.771c2.254,2.266,3.453,5.275,3.477,8.356C447.946,103.664,447.958,103.7,447.958,103.748z M423.981,486.764V115.736\r h-66.524c-13.918,0-25.236-11.317-25.236-25.236V23.977H89.278c-0.695,0-1.259,0.563-1.259,1.259v461.529\r c0,0.695,0.563,1.259,1.259,1.259h333.445C423.418,488.023,423.981,487.46,423.981,486.764z M357.458,91.759h49.572l-50.831-50.831\r V90.5C356.199,91.196,356.762,91.759,357.458,91.759z"
-  }), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#94E7EF"
-    },
-    d: "M423.981,115.736v371.029c0,0.695-0.563,1.259-1.259,1.259H89.278c-0.695,0-1.259-0.563-1.259-1.259\r V25.236c0-0.695,0.563-1.259,1.259-1.259h242.945V90.5c0,13.919,11.317,25.236,25.236,25.236\r C357.458,115.736,423.981,115.736,423.981,115.736z M374.074,176.002c0-6.618-5.359-11.988-11.988-11.988h-212.17\r c-6.63,0-11.988,5.371-11.988,11.988s5.359,11.988,11.988,11.988h212.17C368.715,187.99,374.074,182.619,374.074,176.002z\r M374.074,248.339c0-6.618-5.359-11.988-11.988-11.988h-212.17c-6.63,0-11.988,5.371-11.988,11.988s5.359,11.988,11.988,11.988\r h212.17C368.715,260.328,374.074,254.957,374.074,248.339z M374.074,320.677c0-6.618-5.359-11.988-11.988-11.988h-212.17\r c-6.63,0-11.988,5.371-11.988,11.988c0,6.63,5.359,11.988,11.988,11.988h212.17C368.715,332.666,374.074,327.307,374.074,320.677z\r M267.988,393.027c0-6.63-5.371-11.988-11.988-11.988H149.915c-6.63,0-11.988,5.359-11.988,11.988\r c0,6.618,5.359,11.988,11.988,11.988H256C262.618,405.016,267.988,399.645,267.988,393.027z"
-  }), /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#94E7EF"
-    },
-    d: "M407.03,91.759h-49.572c-0.695,0-1.259-0.563-1.259-1.259V40.928L407.03,91.759z"
-  })), /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#1E0478"
-    },
-    d: "M362.085,164.013c6.63,0,11.988,5.371,11.988,11.988s-5.359,11.988-11.988,11.988h-212.17\r c-6.63,0-11.988-5.371-11.988-11.988s5.359-11.988,11.988-11.988H362.085z"
-  }), /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#1E0478"
-    },
-    d: "M362.085,236.351c6.63,0,11.988,5.371,11.988,11.988s-5.359,11.988-11.988,11.988h-212.17\r c-6.63,0-11.988-5.371-11.988-11.988s5.359-11.988,11.988-11.988H362.085z"
-  }), /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#1E0478"
-    },
-    d: "M362.085,308.689c6.63,0,11.988,5.371,11.988,11.988c0,6.63-5.359,11.988-11.988,11.988h-212.17\r c-6.63,0-11.988-5.359-11.988-11.988c0-6.618,5.359-11.988,11.988-11.988H362.085z"
-  }), /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#1E0478"
-    },
-    d: "M256,381.039c6.618,0,11.988,5.359,11.988,11.988c0,6.618-5.371,11.988-11.988,11.988H149.915\r c-6.63,0-11.988-5.371-11.988-11.988c0-6.63,5.359-11.988,11.988-11.988H256z"
-  })));
-}
-function Svg_folder() {
-  return /*#__PURE__*/React.createElement("svg", {
-    className: 'w-[16px] bg-[#94E7EF]',
-    version: "1.1",
-    viewBox: "0 0 512 512",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /*#__PURE__*/React.createElement("g", null, /*#__PURE__*/React.createElement("path", {
-    style: {
-      "fill": "#1E0478"
-    },
-    d: "M500.8,66.4H287.3l-17.7-55.2H63.3v109.4H11.2v380.2h437.5V391.4h52.1V66.4z M428.9,480H32V141.4h170.8l17.7,55.2h208.3   V480z M480,371.6h-31.3V175.8H235.2l-17.7-55.2H84.1V32H255l17.7,55.2H480V371.6z"
-  })));
 }
 // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 

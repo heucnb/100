@@ -487,6 +487,9 @@ async function file_manager( dom ) {
     return false ;
     
     } ;
+
+    // khi move chuột tại góc element thì xuất hiện biểu tượng thay đổi kích thước cột
+    // nếu ấn giữ chuột trái khi move thì thay đổi kích thước cột
     
     ref_0.current.children[0].onmousemove = function col_resize(event) {
     
@@ -646,12 +649,61 @@ async function file_manager( dom ) {
                                              } 
                                               
                                           }, 200);
+
+
+
+
+                  
+  
+                  
+                                           
     
           };
            
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    
+
+        // lựa chọn icon xuất hiện theo loại file
+        function select_icon_from_type() {
+        
+        let icon = [] ;
+        let extension = [];
+          for (let index = 0 , len = name_foder_and_file.length ; index < len ; index++) { 
+          icon[index] = ref_0.current.children[index + 1].children[0].children[0];
+          let file_name = name_foder_and_file[index][0] ; 
+          extension[index] =    file_name.slice((Math.max(0, file_name.lastIndexOf(".")) || Infinity) + 1);
+        
+          switch (extension[index]) {
+            case '':
+              icon[index].src = "/SVG/folder.svg" ;
+              break;
+              case 'jpg':
+                icon[index].src = "/SVG/file_image.svg" ;
+                break;  
+                case 'png':
+                  icon[index].src = "/SVG/file_image.svg" ;
+                  break;  
+                  case 'git':
+                    icon[index].src = "/SVG/file_image.svg" ;
+                    break;  
+                  case 'js':
+                  icon[index].src = "/SVG/file_js.svg" ;
+                  break;  
+                  case 'json':
+                    icon[index].src = "/SVG/file_json.svg" ;
+                    break;  
+              default:
+                icon[index].src = "/SVG/file_document.svg" ;
+          }
+            
+          }
+        
+        
+        
+      }
+
+      select_icon_from_type();
+
     
     
     
@@ -660,43 +712,46 @@ async function file_manager( dom ) {
     useEffect(() => {   
             
     
-    
-    function change_width_to_undefined(event) {
-    
-    event.preventDefault() ;
-    
-    change_width = undefined ;  document.body.style.cursor ="default" ;
-    
-    }
-    
-    
-    
-    document.addEventListener('mouseup', change_width_to_undefined);
-    
-    
-    document.addEventListener('mousemove', function (event) {
-    
-    if ( change_width === true ) {
-     
-        let collection = ref_0.current.children ;
-        let width ;
-            width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x ;
-          
-            ref_0.current.parentElement.style.overflowX = 'auto' ;
-             collection[0].style.width = '150%' ;
-             collection[0].children[vi_tri_change - 1].style.width = width + 'px' ;
-            for (let index = 1, len = collection.length; index < len; index++) {
-               collection[index].style.width = '150%' ;
-              collection[index].children[vi_tri_change - 1].style.width = width + 'px' ;
-            }
-      
-            
-          }
-      
-    
-    });
-    
-    
+                
+                function change_width_to_undefined(event) {
+                
+                event.preventDefault() ;
+                
+                change_width = undefined ;  document.body.style.cursor ="default" ;
+                
+                }
+
+
+                
+                
+                // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
+                document.addEventListener('mouseup', change_width_to_undefined);
+                
+                // change_width === true tức là đã ấn giữ chuột trái khi di chuyển 
+                // dùng document lắng nghe để khi di chuyển ra ngoài element kích hoạt sự kiện sự kiện vẫn xảy ra
+                document.addEventListener('mousemove', function (event) {
+                
+                if ( change_width === true ) {
+                
+                    let collection = ref_0.current.children ;
+                    let width ;
+                        width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x ;
+                      
+                        ref_0.current.parentElement.style.overflowX = 'auto' ;
+                        collection[0].style.width = '150%' ;
+                        collection[0].children[vi_tri_change - 1].style.width = width + 'px' ;
+                        for (let index = 1, len = collection.length; index < len; index++) {
+                          collection[index].style.width = '150%' ;
+                          collection[index].children[vi_tri_change - 1].style.width = width + 'px' ;
+                        }
+                  
+                        
+                      }
+                  
+                
+                });
+
+             
     
     
     
@@ -728,10 +783,10 @@ async function file_manager( dom ) {
     
     
     <div ref = { ref_bar } style={  Object.assign( {} , css.flex_container , { width: '75%', } ) } >
-    <div ref = { ref_bar_1 } style={css.flex_item}  > <Svg_file />  <div style={css.title}  > New folder   </div>    </div>
-    <div ref = { ref_bar_2 } style={css.flex_item}    > <Svg_folder />  <div  style={css.title}  >  New text file  </div>  </div>
-    <div ref = { ref_bar_3 } style={css.flex_item}    > <div    style={css.icon} className={' far fa fa-sort '} > </div>   <div   style={css.title}  >  Upload file </div>  </div>  
-    <div  ref = { ref_bar_4 } style={css.flex_item}    > <div    style={css.icon} className={' far fa fa-file '} > </div>    <div style={css.title}   >  Upload Folder </div>   </div>
+    <div ref = { ref_bar_1 } style={css.flex_item}  >  <img className={'w-[16px]'}  src = "/SVG/folder.svg" /> <div style={css.title}  > New folder   </div>    </div>
+    <div ref = { ref_bar_2 } style={css.flex_item}    > <img className={'w-[16px]'}  src = "/SVG/file_document.svg" /> <div  style={css.title}  >  New text file  </div>  </div>
+    <div ref = { ref_bar_3 } style={css.flex_item}    > <img className={'w-[16px]'}  src = "/SVG/file_upload.svg" />  <div   style={css.title}  >  Upload file </div>  </div>  
+    <div  ref = { ref_bar_4 } style={css.flex_item}    > <img className={'w-[16px]'}  src = "/SVG/folder_upload.svg" />  <div style={css.title}   >  Upload Folder </div>   </div>
     <div ref = { ref_bar_5 }  style={Object.assign({},css.flex_item,  {  flexGrow: 4})}    > <div    style={css.icon} className={' far fa-folder-open '} > </div>   <div style={css.title}   > Thông báo   </div></div>
     
     </div>
@@ -753,7 +808,7 @@ async function file_manager( dom ) {
                   return <div   style={{   backgroundColor: 'white', display: "flex",   width: '100%', boxSizing: 'border-box' , paddingLeft: 2 }}     >
                   
                             
-                              <div  style={ Object.assign({},css._row,  {  display: "flex",   boxSizing: 'border-box', })   } >      <div    style={css.icon} className={' far fa fa-file '} > </div>  <div  >{i[0]}</div>                </div>
+                              <div  style={ Object.assign({},css._row,  {  display: "flex",   boxSizing: 'border-box', })   } >  <img className={'w-[16px] mr-[4px]'}  />  <div  >{i[0]}</div>                </div>
                               <div style={ Object.assign(  {}, css._row , {    paddingLeft: 4, } ) } >  {i[1]}  </div> 
                               <div style={  Object.assign({},css._row, { width: css.max_width_size  ,  textAlign: 'right', } )   } >  {i[2]}  </div> 
                   </div>   } )
