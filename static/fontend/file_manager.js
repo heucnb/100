@@ -274,35 +274,34 @@ async function file_manager( dom ) {
     ////////////////////////////////////////////////////////////////////////////////////////////////          
             collection[0].onmouseenter = function (event) {
               clearTimeout(myTimeout);
-              ref_giai_thich_file.current.style.display = "none" ;
-    
+              ReactDOM.unmountComponentAtNode( ref_giai_thich_file.current); 
             }
     //////////////////////////////////////////////////////////////////////////////////////////////////        
             for (let index = 1, len = collection.length; index < len; index++) {
     
               
             //--------------------------------------------------------------------
+            // khi hover vào dòng thì hiện hover_show_giai_thich_file
               collection[index].onmouseenter = function (event) {
                  x_mouse.current = event.clientX ;
                 y_mouse.current = event.clientY ;
                 console.log('--',  x_mouse.current, y_mouse.current);
                 event.target.onmousemove = function (event) {
-                  event.preventDefault() ;
+                  // event.preventDefault() ;
                    x_mouse.current = event.clientX ;
                   y_mouse.current = event.clientY ;
                 }
                 // kiem_tra_Content_mennu === true thì không cho  onmouseenter xảy ra ở tất cả các dòng
                 if (kiem_tra_Content_mennu === false  ) {
             
-                        Object.assign( collection[index].style,  css.hover) ;
+                   
+                          // khi hover ra khỏi xoá giải thích file
                         collection[index].onmouseleave = function (event) {
-                    
-    
-                          Object.assign( collection[index].style,  css.leave ) ; 
+                          ReactDOM.unmountComponentAtNode( ref_giai_thich_file.current); 
                           clearTimeout(myTimeout);
-                          ref_giai_thich_file.current.style.display = "none" ;
+                    
                            };
-    
+
                      hover_show_giai_thich_file(index);
                 
                 }
@@ -333,12 +332,12 @@ async function file_manager( dom ) {
                                     set_state_1(data) ;
                                    
                                
-                                    ReactDOM.render( < List_folder   value = { ["Driver"].concat(path_cu.current.slice(1)).map(( i, index )=>{ return i = i+ " /" })  } />, ref_driver.current );
+                                    ReactDOM.render( < Path_to_folder   value = { ["Driver"].concat(path_cu.current.slice(1)).map(( i, index )=>{ return i = i+ " /" })  } />, ref_driver.current );
         
-                                    function List_folder(props) {
+                                    function Path_to_folder(props) {
         
         
-                                      function _back(event) {
+                                      function _back() {
                                         console.log(path_cu.current);
         
                                         if (path_cu.current.length === 1 && path_cu.current[0] === "" ) {
@@ -351,7 +350,7 @@ async function file_manager( dom ) {
                                         
                                             set_state_1(response.data) ;
                                            
-                                            ReactDOM.render( < List_folder   value = {  ["Driver"].concat(path_cu.current.slice(1)).map(( i, index )=>{ return i = i+ " /" })   } />, ref_driver.current );
+                                            ReactDOM.render( < Path_to_folder   value = {  ["Driver"].concat(path_cu.current.slice(1)).map(( i, index )=>{ return i = i+ " /" })   } />, ref_driver.current );
                                           })
         
                                           
@@ -361,9 +360,9 @@ async function file_manager( dom ) {
         
         
         
-                                      return ( <div style={{  display: "flex", }}   >  
-        
-                                        <div className="fa fa-arrow-left"  style={  { display: "flex", alignItems: 'center',  paddingLeft: 5, paddingRight: 10, }  }   onMouseEnter = { ( event)=>{ hover(event,css.hover, css.leave , ref_driver.current.children[0].children[0]   )  }}     onClick={(event)=>{ _back(event) }} ></div> 
+                                      return ( <div style={{  display: "flex", alignItems: 'center',  }}   >  
+                                        <img className={'w-4 h-[13px] ml-1 mr-1'}  src = "/SVG/back.svg"  onClick={(event)=>{ _back() }} />
+                                       
                                         {
         
                                           props.value.map(( i, index )=>{  return <div  style={  { padding: 2,  }} onMouseEnter = { ( event)=>{ hover(event,css.hover, css.leave , ref_driver.current.children[0].children[index + 1]   )  }} >  {i} </div> })
@@ -387,8 +386,14 @@ async function file_manager( dom ) {
                             if ( name_foder_and_file[index-1][2] !=="") {
     
                                   console.log(  path_cu.current );
-                                    ReactDOM.render( <div  style={  { display: 'block', position: 'fixed', width: '100%', height: '100%', top: 0, left: 0, right: 0, bottom: 0,  background: ' rgba(		0, 0, 0, 0.8)', zIndex: 2, }}  >
-                                          <i className="fa fa-arrow-left" style={  {  color: 'white',  fontSize: 20,   margin: 5, padding: 5,  }} onMouseEnter = { ( event)=>{ hover(event,{ background: ' rgba(		255, 255, 255, 0.5)' }, { background: '' },ref_show_file.current.children[0].children[0])  }}   onClick={(event)=>{ path_cu.current.splice(-1,1) ;  ReactDOM.unmountComponentAtNode( ref_show_file.current );   }}   aria-hidden="true"></i> <div   style={  {display: 'inline-flex', color: 'white',  margin: 5, padding: 5,   }  } > { name_foder_and_file[index-1][0] }  </div>
+                                    ReactDOM.render( <div  style={  {  position: 'fixed', width: '100%', height: '100%', top: 0, left: 0, right: 0, bottom: 0,  background: ' rgba(		0, 0, 0, 0.8)', zIndex: 2, }}  >
+                                          <div className={'flex  items-center'}  >  
+                                          <img className={'w-4 h-[13px] ml-2 mr-1 mt-1 '}  src = "/SVG/back_path_white.svg"  onClick={(event)=>{ path_cu.current.splice(-1,1) ;  ReactDOM.unmountComponentAtNode( ref_show_file.current );   }} />
+                                    
+                                          <img className={'w-4 mr-[4px]'} src = {select_icon_from_file_name(name_foder_and_file[index-1][0])} />
+                                          <div className={'text-white  mt-1 '} > { name_foder_and_file[index-1][0] }  </div>
+                                          </div>
+                                          
                                           <div  ref = {  ref_embed } >   </div>
                                          
                                           </div>, ref_show_file.current );
@@ -504,6 +509,7 @@ async function file_manager( dom ) {
     ref_0.current.children[0].onmousedown = function (event) {
     
       if (event.buttons === 1) { 
+        // change_width = true sau đó dùng  document.addEventListener('mousemove' lắng nghe sự kiện onmousemove để thực thi fucntion col_resize
         change_width = true ;
       }
       
@@ -528,9 +534,7 @@ async function file_manager( dom ) {
     }
     
     /////////////////////////////////////////////////////////////////////////
-    ref_bar_1.current.onmouseenter = function (event) {
-    hover(event, css.hover, css.leave , ref_bar_1.current) ;
-    }
+    
     
     ref_bar_1.current.onclick = function create_folder(event) {
     
@@ -572,29 +576,7 @@ async function file_manager( dom ) {
     
     }
     
-    ////////////////////////////////////////////////////////////////////////
-    ref_bar_2.current.onmouseenter = function (event) {
-    hover(event, css.hover, css.leave , ref_bar_2.current) ;
-    }
-    
-    ////////////////////////////////////////////////////////////////////////
-    
-    ////////////////////////////////////////////////////////////////////////
-    ref_bar_3.current.onmouseenter = function (event) {
-    hover(event, css.hover, css.leave , ref_bar_3.current) ;
-    }
-    
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ref_bar_4.current.onmouseenter = function (event) {
-    hover(event, css.hover, css.leave , ref_bar_4.current) ;
-    }
-    
-    ////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////
-    ref_bar_5.current.onmouseenter = function (event) {
-    hover(event, css.hover, css.leave , ref_bar_5.current) ;
-    }
+ 
     ////////////////////////////////////////////////////////////////////////
     function hover_show_giai_thich_file(i ){
           // chú ý lỗi trong react 16
@@ -612,7 +594,7 @@ async function file_manager( dom ) {
     
                                                                       
     
-                                  return  (<div style={ {  padding: '2px 10px 2px 10px',  boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',}  } > 
+                                  return  (<div className={`  absolute bg-white top-[${_top}] left-[${_left}] px-0.5 py-2.5 shadow-2xl `} > 
                                   
                                   <div  > { name_foder_and_file[index-1][0]}  </div>
                                   <div  > {name_foder_and_file[index-1][1] } </div> 
@@ -623,30 +605,21 @@ async function file_manager( dom ) {
                                   }  ; 
     
                                   let index = i ; 
-                                      clearTimeout(myTimeout);
-                                  ref_giai_thich_file.current.style.display = "none" ;
-                            
-                                     
-                                   
-                                      
-                                
-                                      let _top  = ref_0.current.children[ index  ].getBoundingClientRect().y + 25 + 'px' ;
-                                          css.giai_thich_file =   Object.assign({}, css.giai_thich_file ,{top: _top},) ;
-                                    
-                              
-                                      css.giai_thich_file.left =  x_mouse.current - 20 + 'px';
-                              
-                                   
-                                         myTimeout =   setTimeout(() => {
+                                  let _left =  x_mouse.current - 20 + 'px';
+                                  let _top  = ref_0.current.children[ index  ].getBoundingClientRect().y + 25 + 'px' ;
+                                  
+                                  myTimeout = setTimeout(() => {
                                               
-                                           let  max_x_mouse =  ref_0.current.children[ index  ].children[ 1].getBoundingClientRect().x  ; 
+                                    let  max_x_mouse =  ref_0.current.children[ index  ].children[ 1].getBoundingClientRect().x  ; 
                                       
-                                              let width_col_name = ref_0.current.children[  index  ].children[ 0].getBoundingClientRect().width ; 
-                                              let width_icon = ref_0.current.children[  index  ].children[ 0].children[ 0].getBoundingClientRect().width ;
-                                             if ( x_mouse.current < max_x_mouse &&( convert_text_to_pixcel(name_foder_and_file[index-1][0],16) + width_icon)  >= width_col_name ) {
-                                              Object.assign(ref_giai_thich_file.current.style , css.giai_thich_file) ;
-                                                ReactDOM.render( <Giai_thich_file />  ,  ref_giai_thich_file.current) ;
-                                             } 
+                                    let width_col_name = ref_0.current.children[  index  ].children[ 0].getBoundingClientRect().width ; 
+                                    let width_icon = ref_0.current.children[  index  ].children[ 0].children[ 0].getBoundingClientRect().width ;
+                                   if ( x_mouse.current < max_x_mouse &&( convert_text_to_pixcel(name_foder_and_file[index-1][0],font_size) + width_icon)  >= width_col_name ) {
+    
+                                      ReactDOM.render( <Giai_thich_file />  ,  ref_giai_thich_file.current) ;
+
+                                   } 
+                            
                                               
                                           }, 200);
 
@@ -663,49 +636,6 @@ async function file_manager( dom ) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
-        // lựa chọn icon xuất hiện theo loại file
-        function select_icon_from_type() {
-        
-        let icon = [] ;
-        let extension = [];
-          for (let index = 0 , len = name_foder_and_file.length ; index < len ; index++) { 
-          icon[index] = ref_0.current.children[index + 1].children[0].children[0];
-          let file_name = name_foder_and_file[index][0] ; 
-          extension[index] =    file_name.slice((Math.max(0, file_name.lastIndexOf(".")) || Infinity) + 1);
-        
-          switch (extension[index]) {
-            case '':
-              icon[index].src = "/SVG/folder.svg" ;
-              break;
-              case 'jpg':
-                icon[index].src = "/SVG/file_image.svg" ;
-                break;  
-                case 'png':
-                  icon[index].src = "/SVG/file_image.svg" ;
-                  break;  
-                  case 'git':
-                    icon[index].src = "/SVG/file_image.svg" ;
-                    break;  
-                  case 'js':
-                  icon[index].src = "/SVG/file_js.svg" ;
-                  break;  
-                  case 'json':
-                    icon[index].src = "/SVG/file_json.svg" ;
-                    break;  
-              default:
-                icon[index].src = "/SVG/file_document.svg" ;
-          }
-            
-          }
-        
-        
-        
-      }
-
-      select_icon_from_type();
-
-    
-    
     
           }, [name_foder_and_file]);
     
@@ -738,12 +668,20 @@ async function file_manager( dom ) {
                         width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x ;
                       
                         ref_0.current.parentElement.style.overflowX = 'auto' ;
-                        collection[0].style.width = '150%' ;
-                        collection[0].children[vi_tri_change - 1].style.width = width + 'px' ;
-                        for (let index = 1, len = collection.length; index < len; index++) {
-                          collection[index].style.width = '150%' ;
-                          collection[index].children[vi_tri_change - 1].style.width = width + 'px' ;
-                        }
+                        // collection[0].style.width = '150%' ;
+                        // collection[0].children[vi_tri_change - 1].classList.remove("grid-cols-3");
+                        // collection[0].className  = `grid-cols-[${width}px_300px_300px] grid box-border  bg-slate-200 `;
+                        // collection[0].children[vi_tri_change - 1].style.width = width + 'px' ;
+                        // for (let index = 1, len = collection.length; index < len; index++) {
+                        //   collection[index].style.width = '150%' ;
+                        //   collection[index].children[vi_tri_change - 1].style.width = width + 'px' ;
+                        // }
+
+
+                        collection[0].style.gridTemplateColumns = `${width}px 300px 300px`;
+
+
+
                   
                         
                       }
@@ -751,73 +689,109 @@ async function file_manager( dom ) {
                 
                 });
 
-             
+
+
+
+
+            
+
     
+               
+     
     
     
           }, []);
     
     
-     return (<div   >
+     return (<div className={'pl-1 pt-1'}  >
     <div ref = { ref_giai_thich_file }   >   </div>
     <div ref = { ref_content_menu } >   </div>
     <div ref = { ref_show_file } >   </div>
     
-    
-    <div style={ Object.assign( {} , css.flex_container , { width: '75%', } )} >  
-    <div   style={{width: '100%',  alignItems: 'center',  display: "flex",  boxSizing: 'border-box' ,   backgroundColor: '#e9e9e9',  justifyContent: 'space-between',}} >
+      {/* -------------------------------------------------------------------------------------------------------------------- */}
+    <div className={'flex w-3/4 border border-solid border-yellow-900 justify-between'} >  
+     
         <div ref = { ref_driver } > 
-          <div style={{padding: 5, }} >  Driver  </div> 
-    
+          <div className={'pl-[0.12rem]'} >  Driver  </div> 
         </div>
      
         
-        <div style={{ paddingRight: 5, }} > 
-        <input type="text" placeholder="Search.." name="search" /> 
-        <button type="submit"><i className="fa fa-search"></i></button>
-       </div>
-        
-    </div>
-    </div>
-    
-    
-    
-    <div ref = { ref_bar } style={  Object.assign( {} , css.flex_container , { width: '75%', } ) } >
-    <div ref = { ref_bar_1 } style={css.flex_item}  >  <img className={'w-[16px]'}  src = "/SVG/folder.svg" /> <div style={css.title}  > New folder   </div>    </div>
-    <div ref = { ref_bar_2 } style={css.flex_item}    > <img className={'w-[16px]'}  src = "/SVG/file_document.svg" /> <div  style={css.title}  >  New text file  </div>  </div>
-    <div ref = { ref_bar_3 } style={css.flex_item}    > <img className={'w-[16px]'}  src = "/SVG/file_upload.svg" />  <div   style={css.title}  >  Upload file </div>  </div>  
-    <div  ref = { ref_bar_4 } style={css.flex_item}    > <img className={'w-[16px]'}  src = "/SVG/folder_upload.svg" />  <div style={css.title}   >  Upload Folder </div>   </div>
-    <div ref = { ref_bar_5 }  style={Object.assign({},css.flex_item,  {  flexGrow: 4})}    > <div    style={css.icon} className={' far fa-folder-open '} > </div>   <div style={css.title}   > Thông báo   </div></div>
+        <div  > 
+          <input className={'focus:bg-red-100 m-0 hover:bg-sky-700 outline-0 placeholder-slate-400 placeholder-shown:italic'} type="text" placeholder="Search..."  /> 
+        </div>
+       
+       
     
     </div>
     
+    
+      {/* -------------------------------------------------------------------------------------------------------------------- */}
 
-    <div  style={{  width: '75%',  overflow: 'hidden', border: '1px solid #633517 ' , boxSizing: 'border-box' , }}   >  
+
+
+    <div ref = { ref_bar }  className={'w-3/4 flex box-border bg-white border-l border-r border-solid border-yellow-900'} >
+      <div ref = { ref_bar_1 } className={'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'}    >
+          <img className={'w-4 mr-1'}  src = "/SVG/folder.svg" />
+      <div   > New folder   </div>  
+      </div>
+    <div ref = { ref_bar_2 } className={'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'}   > 
+    <img className={'w-4 mr-1'}  src = "/SVG/file_document.svg" />
+     <div    >  New text file  </div>
+    </div>
+    <div ref = { ref_bar_3 } className={'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'}    >
+       <img className={'w-4 mr-1'}  src = "/SVG/file_upload.svg" /> 
+        <div     >  Upload file </div> 
+         </div>  
+    <div  ref = { ref_bar_4 } className={'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'}    >
+       <img className={'w-4 mr-1'}  src = "/SVG/folder_upload.svg" /> 
+        <div    >  Upload Folder </div> 
+     </div>
+    <div ref = { ref_bar_5 } className={'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'}    > 
+    <img className={'w-4 mr-1'}  src = "/SVG/folder_upload.svg" /> 
+     <div   > Thông báo   </div>
+    </div>
     
-            <div ref = { ref_0 } style={  Object.assign(  {}, css.flex_container , {flexWrap: 'wrap', height: '75vh',   alignContent: 'flex-start',  overflow: 'auto',}  )  } >  
-              <div style={{ display: "flex",    width: '100%' }}      >
-                
-                  <div style={  css._row  } > Name </div> 
-                  <div style={ Object.assign(  {}, css._row , {  borderLeft: '1px ridge darkgray ',  paddingLeft: 4, } ) } >  Date modified  </div> 
-              
-                  <div style={ Object.assign({},css._row, { width: css.max_width_size  , borderLeft: '1px ridge darkgray ',  paddingLeft: 4, textAlign: 'start', } )  } >  Size  </div> 
-              </div>
+    </div>
+
+
+
+     {/* -------------------------------------------------------------------------------------------------------------------- */}
+
+
+    <div  className={'w-3/4 grid box-border bg-white border border-solid border-yellow-900 overflow-hidden'}   >  
+
+
+                {/* -------------------------------------------------------------------------------------------------------------------- */}
     
-            {
-              name_foder_and_file.map( ( i, index )=>{ 
-                  return <div   style={{   backgroundColor: 'white', display: "flex",   width: '100%', boxSizing: 'border-box' , paddingLeft: 2 }}     >
+            <div ref = { ref_0 }    className={ 'w-full h-[75vh] overflow-auto  box-border bg-white border-0  border-solid border-yellow-900 '}  >  
+                  <div className={'grid grid-cols-3  box-border  bg-slate-200'}    >
+                    
+                      <div className={' box-border pl-1 overflow-hidden '} > Name </div> 
+                      <div  className={ ' box-border pl-1 overflow-hidden  border-l border-r border-solid border-yellow-700 '} >  Date modified  </div> 
                   
-                            
-                              <div  style={ Object.assign({},css._row,  {  display: "flex",   boxSizing: 'border-box', })   } >  <img className={'w-[16px] mr-[4px]'}  />  <div  >{i[0]}</div>                </div>
-                              <div style={ Object.assign(  {}, css._row , {    paddingLeft: 4, } ) } >  {i[1]}  </div> 
-                              <div style={  Object.assign({},css._row, { width: css.max_width_size  ,  textAlign: 'right', } )   } >  {i[2]}  </div> 
-                  </div>   } )
+                      <div  className={ ' box-border pl-1 overflow-hidden '} >  Size  </div> 
+                  </div>
+
               
-            }  
+    
+                  {
+                    name_foder_and_file.map( ( i, index )=>{ 
+                        return <div className={'grid grid-cols-3 hover:bg-sky-700 w-full   box-border '}  >
+                                    <div  className={ 'flex box-border m-1 overflow-hidden whitespace-no-wrap '} > 
+                                     <img className={'w-4 mr-[4px]'}  src = {select_icon_from_file_name(i[0])} /> 
+                                      <div  >{i[0]}</div>    
+                                    </div>
+                                   
+                                    <div  className={ ' box-border m-1 overflow-hidden  '} >  {i[1]}  </div> 
+                                    <div  className={ ' box-border m-1 overflow-hidden  '} >  {i[2]}  </div> 
+                            
+                              </div>   } )
+                    
+                  }  
               
           </div>
     
-    
+              {/* -------------------------------------------------------------------------------------------------------------------- */}
     
           <div ref = { ref_copy } >   </div>       
     </div>

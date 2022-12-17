@@ -15,6 +15,39 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function select_icon_from_file_name( file_name) {
+        
+
+    extension =    file_name.slice((Math.max(0, file_name.lastIndexOf(".")) || Infinity) + 1);
+  
+    switch (extension) {
+      case '':
+        return  "/SVG/folder.svg" ;
+        case 'jpg':
+          return  "/SVG/file_image.svg" ;
+    
+          case 'png':
+            return    "/SVG/file_image.svg" ;
+        
+            case 'git':
+              return "/SVG/file_image.svg" ;
+           
+            case 'js':
+              return  "/SVG/file_js.svg" ;
+         
+            case 'json':
+              return   "/SVG/file_json.svg" ;
+          
+        default:
+          return  "/SVG/file_document.svg" ;
+    }
+      
+    
+  
+  
+  
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function convert_text_to_pixcel(text, font_size) {
 

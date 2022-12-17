@@ -48,5 +48,7 @@ function Router() {
    
     
   
+
+    _html.style.fontSize = `${font_size}px`;
   
   }
