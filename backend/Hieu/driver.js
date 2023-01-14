@@ -1,61 +1,13 @@
-module.exports =  function(req,res ,con , fs){
-
-
+module.exports = async function(req,res ,con , fs, path, get_data_file_manager){
   
-    let  _path = req.body.folder ;
-
-fs.lstat('./static'+  _path, (err, stats) => {
-
-  if(err)
-      return console.log(err); //Handle error
-
-  // nếu path là thư mục thì chạy
-  if (stats.isDirectory() === true) {
-
-    let array_file = [];
-    let array_name_file = fs.readdirSync('./static'+  _path);
-    // dùng hàm bất đồng bộ như sau         
-  //     array_name_file.map(file => {
-  //     fs.stat('./static/'+ file ,  function(err, stats){ array_file.push([file, stats.mtime , stats.size ]); });
-  //   });
-
+  // khởi tạo folder ="" thì fs.lstat trả về stats của static
+  // => khởi tạo là post lên folder static lấy data về
+  // sau đó ở client đã quy định nếu click vào folder thì mới post lên đây lấy data về
+  // nếu click vào file thì lấy trực tiếp file về lúc trởi tạo app express bằng hàm express.static rồi
+  let  path_to_folder = req.body.folder ;
  
-
-  //   const intervalObj = setInterval(() => {
-  //   if (array_file.length === array_name_file.length) {
-  //     clearInterval(intervalObj);
-  //     return  res.send( array_file); 
-  //   }
-  // }, 0);
-  
-// ta có thể  dùng hàm đồng bộ như sau
-    array_name_file.map(file => {
-
-      let stats = fs.statSync('./static'+  _path + '/' + file);
-            if (stats.isDirectory() !== true) {
-              let size = stats.size ;
-              let date =    Intl.DateTimeFormat('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric',  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( stats.mtime) ;
-            array_file.push([file, date,   new Intl.NumberFormat('en-IN').format( size ) + ' KB']); 
-
-            }
-            if (stats.isDirectory() === true) {
-              let size = stats.size ;
-              let date =    Intl.DateTimeFormat('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric',  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( stats.mtime) ;
-            array_file.push([file, date, ""]); 
-
-            }
-      
-    });
-
-    
-      return  res.send( array_file); 
-    
-  }
+  let data = await get_data_file_manager(path_to_folder) ; 
  
-});
-
-
-  
-
+  return res.send( data )  ;
 
   }

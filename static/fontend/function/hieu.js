@@ -123,9 +123,12 @@ function hover(event, object_style,object_style_leave, dom) {
 function _alert(componet_react) {
   function Alert() {
 
-    return ( <div  style={  { position: 'absolute', padding: '1rem 1rem', top : '10%',  left : '30%', border: '1px solid transparent', borderRadius: '0.25rem',   backgroundColor: '#fff3cd', boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'}  } >
-      <div> {componet_react} </div>
-        <button  style={  {boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', borderRadius: '0.25rem',  color: 'white', backgroundColor: '#0275d8',  border: '1px solid transparent' ,   marginLeft: '70%',  marginTop: 15, padding: 5, }  } onClick ={( )=>{   ReactDOM.unmountComponentAtNode( _div);  }} >Thoát</button>
+    return ( <div className={'flex flex-wrap absolute rounded border border-solid border-slate-400 bg-amber-400  _shadow '}  style={  { top: '10%', left: '30%' }  } >
+      <div className={`mx-5 mt-2 w-full`}  > {componet_react} </div>
+      <div className={' my-2 w-full flex justify-end'} >  
+      <div  className={'mx-10  text-white rounded w-16 flex justify-center bg-sky-500 hover:bg-sky-700 _shadow'} onClick ={( )=>{   ReactDOM.unmountComponentAtNode( _div);  }} >Thoát</div>
+     </div>
+       
         </div> 
     )
     
@@ -138,4 +141,22 @@ function _alert(componet_react) {
 }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+  function Reponsive() {
+
+    if (isMobile) { return PC(); } else { return Mobile(); }
+
+
+
+    
+  }
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //****** childNodes[0] lấy text trong div chú ý remove space ********
+  // remove space trong div dom mới hoạt động đúng được
+  //sự khác nhau giữa children và childNodes. Kết quả trả về của childNodes là một NodeList, object này chứa tất cả những thứ như elements, text và comments, space trong div ở file code của ta chứ không phải web hiển thị
+  function get_selection(dom, begin, end) {
+    let range = new Range();
+    range.setStart(dom.childNodes[0], begin);
+    range.setEnd(dom.childNodes[0], end);
+    document.getSelection().removeAllRanges();
+    document.getSelection().addRange(range);
+  }

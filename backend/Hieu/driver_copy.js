@@ -1,4 +1,4 @@
-module.exports =  function(req,res ,con , fs, path){
+module.exports = async function(req,res ,con , fs, path, get_data_file_manager ){
     // viêt hàm copy thư mục theo đẹ quy
     var copy = function(srcDir, dstDir) {
      
@@ -40,7 +40,7 @@ module.exports =  function(req,res ,con , fs, path){
 
     // kiểm tra xem người dùng copy file hay thư mục
     var stat_0 = fs.statSync('./static'+ req.body.file[0]);
-
+    // lấy tên file
     let folder_name_begin = path.basename('./static' + req.body.file[0]) ;
 if (stat_0.isDirectory()) {
      // nếu trong thư đích không có folder cần copy thì tạo folder gốc cần copy
@@ -48,21 +48,92 @@ if (stat_0.isDirectory()) {
     
        // tạo folder gốc cần copy
        try {
-        fs.mkdirSync('./static' + req.body.file[1] + '/' + folder_name_begin );
+
+        // list là array  folder name and file name của thư mục ta cần paste vào
+        let path_paste = './static' + '/' + req.body.file[1] ;
+        let list =  fs.readdirSync(path_paste) ;
+        let name_folder_paste;
+
+            if (list.indexOf(folder_name_begin)===-1) {
+
+                fs.mkdirSync(path_paste + '/' + folder_name_begin );
+                copy('./static' + req.body.file[0], './static' + req.body.file[1] + '/' + folder_name_begin )   ;
+                return  res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
+                
+            } else {
+
+
+
+                        for (let index = 1  ; index < 10000 ; index++) { 
+            
+                            name_folder_paste = 'Copy-' + '(' +  index  +') ' + folder_name_begin ;
+                            if (list.indexOf(name_folder_paste)===-1) {
+                
+                                break ;
+                            }
+                
+                        }
+                
+                        fs.mkdirSync(path_paste + '/' + name_folder_paste );
+                         copy('./static' + req.body.file[0], './static' + req.body.file[1] + '/' + name_folder_paste ) 
+   
+                        return  res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
+                
+            }
+
+       
        } catch (error) {
+        console.log(error);
+
         return res.send( "error" )
        }
       
 
-    return  res.send(  copy('./static' + req.body.file[0], './static' + req.body.file[1] + '/' + folder_name_begin )  )  ;
-   
+  
 
 
     
 } else {
+// nếu copy-paste file thì chạy code dưới đây
 
-    fs.writeFileSync( './static' + req.body.file[1] + '/' + folder_name_begin  , fs.readFileSync( './static' + req.body.file[0] ));
-    res.send("ok"); 
+              // req.body.file[1] là string đến folder ta cần paste vào không chứa './static'
+              // path_paste là string đến folder ta cần paste vào
+                let path_paste = './static' + '/' + req.body.file[1] ;
+                let list =  fs.readdirSync(path_paste) ;
+                
+                let name_file_paste;
+                if (list.indexOf(folder_name_begin)===-1) {
+
+                    fs.writeFileSync( path_paste +'/' + folder_name_begin , fs.readFileSync( './static' + req.body.file[0] ));
+                    res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
+    
+
+                }
+                else{
+
+
+                                for (let index = 1  ; index < 10000 ; index++) { 
+                        
+                                    name_file_paste = 'Copy-' + '(' +  index  +') ' + folder_name_begin ;
+                                    if (list.indexOf(name_file_paste)===-1) {
+                
+                                        break ;
+                                    }
+                
+                                }
+
+
+                                fs.writeFileSync( path_paste +'/' + name_file_paste , fs.readFileSync( './static' + req.body.file[0] ));
+                                res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
+                
+
+                }
+
+               
+
+             
+    
+
 
 }
    

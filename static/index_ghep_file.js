@@ -1,3 +1,5 @@
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function App() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(F, null), /*#__PURE__*/React.createElement(Footer, null));
 }
@@ -93,48 +95,497 @@ function F() {
     ref: ref_return
   }, " Data"));
 }
-async function file_manager(dom) {
-  function Content_mennu() {
-    let css = {
-      hover: {
-        backgroundColor: '	#acac9a'
-      },
-      leave: {
-        backgroundColor: 'white'
-      },
-      _row: {
-        width: '22%',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        backgroundColor: 'inherit',
-        margin: '2px 5px 2px 2px',
-        textAlign: 'start',
-        fontSize: 16,
-        border: '0px solid #00A170 '
+function file_manager(_x) {
+  return _file_manager.apply(this, arguments);
+}
+function _file_manager() {
+  _file_manager = _asyncToGenerator(function* (dom) {
+    function File_manager(props) {
+      let change_width;
+      let vi_tri_change;
+      let [name_foder_and_file, set_state_1] = useState(props.value.data);
+      let ref = useRef({});
+      let array_radiol_checked = {};
+      let x_mouse = useRef(null);
+      let y_mouse = useRef(null);
+      let ref_giai_thich_file = useRef(null);
+      let ref_content_menu = useRef(null);
+      let ref_0 = useRef(null);
+      let ref_driver = useRef(null);
+      let ref_bar = useRef(null);
+      let ref_bar_1 = useRef(null);
+      let ref_bar_2 = useRef(null);
+      let ref_bar_3 = useRef(null);
+      let ref_bar_4 = useRef(null);
+      let ref_bar_5 = useRef(null);
+      let ref_embed = useRef(null);
+      let path_cu = useRef([""]);
+      let select_row = useRef(null);
+      let ref_show_file = useRef(null);
+      let ref_rename = useRef(null);
+      let ref_copy = useRef(null);
+      let useEffect_array_change = useRef(0);
+
+      // xoá mặc định ban đầu để điều khiển bằng javascript
+      // ta phải khởi tạo input type radio checked = {false}  để tắt addEventListener mặc định của radiol này sau đó điều khiển bằng javascript
+
+      function radio_checked(index, event) {
+        if (ref.current['radio' + index].checked === true) {
+          delete array_radiol_checked['' + index];
+          return ref.current['radio' + index].checked = false;
+        } else {
+          array_radiol_checked['' + index] = index;
+          console.log(array_radiol_checked);
+          return ref.current['radio' + index].checked = true;
+        }
       }
-    };
-    let ref_Content_mennu = useRef(null);
-    useEffect(() => {
-      let collection = ref_Content_mennu.current.children;
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////              
-      for (let index = 0, len = collection.length; index < len; index++) {
-        ref_Content_mennu.current.children[index].onmouseenter = function () {
-          hover(event, css.hover, css.leave, ref_Content_mennu.current.children[index]);
+      function Content_mennu(props) {
+        let ref = useRef({});
+        useEffect(() => {
+          console.log(array_radiol_checked);
+
+          //------------------------------------------------------------------------------------------------             
+          // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
+          // khi onblur chạy Content_mennu mất nên onclick không được thực thi
+          ref.current['rename'].onmousedown = function _rename() {
+            let index = props.value.index - 1;
+            ReactDOM.render( /*#__PURE__*/React.createElement(Re_name, null), props.value.rename);
+            function Re_name() {
+              let ref_0 = useRef(null);
+              let ref_cancel = useRef(null);
+              let ref_ok = useRef(null);
+              useEffect(() => {
+                let len = ref_0.current.textContent.length;
+                get_selection(ref_0.current, 0, len);
+                //------------------------------------------------------------------------------------
+                ref_0.current.onmousedown = function click_rename(event) {
+                  document.getSelection().removeAllRanges();
+                };
+                ref_cancel.current.onclick = function click_cancel(event) {
+                  ReactDOM.unmountComponentAtNode(props.value.rename);
+                };
+                ref_ok.current.onclick = function click_ok(event) {
+                  let copy_array_path_cu_1 = [].concat(path_cu.current);
+                  copy_array_path_cu_1.push(name_foder_and_file[index][0]);
+                  let copy_array_path_cu_2 = [].concat(path_cu.current);
+                  copy_array_path_cu_2.push(ref_0.current.textContent);
+                  axios.post("/Hieu/driver_rename", {
+                    file_cu: copy_array_path_cu_1.join("/"),
+                    file_moi: copy_array_path_cu_2.join("/")
+                  }).then(function (response) {
+                    if (response.data !== "ok") {
+                      _alert('Có lỗi');
+                    }
+                  });
+                  useEffect_array_change.current = useEffect_array_change.current + 1;
+                  set_state_1(name_foder_and_file => {
+                    name_foder_and_file[index][0] = ref_0.current.textContent;
+                    let name_foder_and_file_update = [].concat(name_foder_and_file);
+                    return name_foder_and_file_update;
+                  });
+                  ReactDOM.unmountComponentAtNode(props.value.rename);
+                };
+              }, []);
+              return /*#__PURE__*/React.createElement("div", {
+                className: 'absolute flex justify-center items-center align-middle w-full h-full top-0 left-0 bg-slate-400 bg-opacity-50'
+              }, /*#__PURE__*/React.createElement("div", {
+                className: ' _shadow rounded w-1/2 bg-white  '
+              }, /*#__PURE__*/React.createElement("div", {
+                className: 'flex flex-wrap'
+              }, /*#__PURE__*/React.createElement("div", {
+                className: `mx-5 mt-2 w-full`
+              }, "  Rename  "), /*#__PURE__*/React.createElement("div", {
+                ref: ref_0,
+                contentEditable: "true",
+                className: 'mx-5  mt-2 p-2 w-full border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0  '
+              }, props.value.data[index][0]), /*#__PURE__*/React.createElement("div", {
+                className: ' my-2 w-full flex justify-end'
+              }, /*#__PURE__*/React.createElement("div", {
+                ref: ref_cancel,
+                className: `mx-10 rounded w-16 flex justify-center bg-stone-200 hover:bg-stone-400 _shadow`
+              }, "  Cancel "), /*#__PURE__*/React.createElement("div", {
+                ref: ref_ok,
+                className: 'mx-10 rounded w-16 flex justify-center bg-sky-500 hover:bg-sky-700 _shadow'
+              }, "  OK ")))));
+            }
+          };
+
+          //---------------------------------------------------------------------------------------------------------------------    
+
+          // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
+          // khi onblur chạy Content_mennu mất nên onclick không được thực thi
+          ref.current['detele'].onmousedown = function _detele() {
+            let index = props.value.index - 1;
+            let copy_array_path_cu_1 = [].concat(path_cu.current);
+            copy_array_path_cu_1.push(name_foder_and_file[index][0]);
+            axios.post("/Hieu/driver_detele", {
+              file: copy_array_path_cu_1.join("/"),
+              name_file: name_foder_and_file[index][0]
+            }).then(function (response) {
+              console.log(response.data);
+              useEffect_array_change.current = useEffect_array_change.current + 1;
+              set_state_1(name_foder_and_file => {
+                name_foder_and_file.splice(index, 1);
+                let name_foder_and_file_update = [].concat(name_foder_and_file);
+                return name_foder_and_file_update;
+              });
+            });
+          };
+
+          //---------------------------------------------------------------------------------------------------------------------    
+
+          // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
+          // khi onblur chạy Content_mennu mất nên onclick không được thực thi
+          ref.current['copy'].onmousedown = function _copy() {
+            console.log(array_radiol_checked);
+            let index = props.value.index - 1;
+            let copy_array_path_cu_1 = [].concat(path_cu.current);
+            let name_file_copy = [name_foder_and_file[index][0], name_foder_and_file[index][1], name_foder_and_file[index][2]];
+            copy_array_path_cu_1.push(name_file_copy[0]);
+            let path_file_copy = copy_array_path_cu_1.join("/");
+            console.log('copy', path_file_copy);
+            function Copy() {
+              function paste_here() {
+                // path_cu là đường dẫn khi ta đã di chuyển dến thư mục khác.
+                let copy_array_path_cu_2 = [].concat(path_cu.current);
+                let path_file_paste = copy_array_path_cu_2.join("/");
+                console.log('paste', path_file_paste);
+                axios.post("/Hieu/driver_copy", {
+                  file: [path_file_copy, path_file_paste]
+                }).then(function (response) {
+                  if (response.data[0] === "ok") {
+                    useEffect_array_change.current = useEffect_array_change.current + 1;
+                    set_state_1(response.data[1]);
+                    // xoá hiển thị contextmenu copy-p
+                    ReactDOM.unmountComponentAtNode(ref_copy.current);
+                  } else {
+                    _alert( /*#__PURE__*/React.createElement("div", null, " Paste  ", /*#__PURE__*/React.createElement("span", {
+                      style: {
+                        color: 'crimson'
+                      }
+                    }, "  error  "), "     "));
+                  }
+                });
+              }
+              return /*#__PURE__*/React.createElement("div", {
+                style: {
+                  display: 'flex',
+                  boxSizing: 'border-box',
+                  position: 'relative',
+                  backgroundColor: 'blanchedalmond',
+                  width: '100%',
+                  borderTop: '1px solid #633517 ',
+                  justifyContent: 'space-between'
+                }
+              }, /*#__PURE__*/React.createElement("div", {
+                className: ` p-2  `
+              }, " ", name_foder_and_file[index][0], "  "), /*#__PURE__*/React.createElement("div", {
+                className: ` flex p-2  `
+              }, /*#__PURE__*/React.createElement("div", {
+                className: `flex mr-2 justify-center rounded w-14 text-white bg-yellow-600 _shadow `
+              }, " Canel  "), /*#__PURE__*/React.createElement("div", {
+                className: `flex justify-center rounded w-24 text-white bg-sky-600 _shadow `,
+                onClick: event => {
+                  paste_here();
+                }
+              }, "  Paste here ")));
+            }
+            ReactDOM.render( /*#__PURE__*/React.createElement(Copy, null), ref_copy.current);
+          };
+        }, []);
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            top: props.value.top + 'px',
+            left: props.value.left + 20 + 'px'
+          },
+          className: ` flex flex-wrap rounded w-40 absolute bg-stone-200 border border-stone-700 border-solid  _shadow `
+        }, /*#__PURE__*/React.createElement("div", {
+          ref: el => {
+            ref.current['copy'] = el;
+          },
+          className: `w-full px-5  hover:bg-sky-200`
+        }, " Copy  "), /*#__PURE__*/React.createElement("div", {
+          ref: el => {
+            ref.current['paste'] = el;
+          },
+          className: `w-full px-5  hover:bg-sky-200`
+        }, " Paste "), /*#__PURE__*/React.createElement("div", {
+          ref: el => {
+            ref.current['rename'] = el;
+          },
+          className: `w-full px-5  hover:bg-sky-200`
+        }, " Rename "), /*#__PURE__*/React.createElement("div", {
+          ref: el => {
+            ref.current['detele'] = el;
+          },
+          className: `w-full px-5  hover:bg-sky-200`
+        }, " Delete  "));
+      }
+      ;
+      useEffect(() => {
+        console.log('------------------------------------------');
+        console.log(path_cu.current);
+        File_manager.data = name_foder_and_file;
+        window.addEventListener("contextmenu", e => e.preventDefault());
+        let myTimeout;
+        let kiem_tra_Content_mennu = false;
+        if (ref.current.hasOwnProperty('radio0')) {
+          kiem_tra_Content_mennu = true;
+        }
+        let collection = ref_0.current.children;
+        ////////////////////////////////////////////////////////////////////////////////////////////////          
+        collection[0].onmouseenter = function (event) {
+          clearTimeout(myTimeout);
+          ReactDOM.unmountComponentAtNode(ref_giai_thich_file.current);
         };
-      }
-      console.log(ref_Content_mennu.current.children[2]);
+        //////////////////////////////////////////////////////////////////////////////////////////////////        
+        for (let index = 1, len = collection.length; index < len; index++) {
+          //--------------------------------------------------------------------
+          // khi hover vào dòng thì hiện hover_show_giai_thich_file
 
-      //------------------------------------------------------------------------------------------------             
-      // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
-      // khi onblur chạy Content_mennu mất nên onclick không được thực thi
-      ref_Content_mennu.current.children[2].onmousedown = function _rename() {
-        let index = File_manager.ref_0_index;
-        File_manager.ref_0.children[index].children[0].children[1].innerHTML = ` <div    style="  position:absolute;      background-color: azure; width: inherit; height: inherit ;   white-space: nowrap;    "> ${File_manager.ref_0.children[index].children[0].children[1].textContent}  </div>`;
-        let div_rename = File_manager.ref_0.children[index].children[0].children[1].children[0];
-        div_rename.setAttribute("contenteditable", true);
+          collection[index].onmouseenter = function (event) {
+            if (isMobile !== true) {
+              x_mouse.current = event.clientX;
+              y_mouse.current = event.clientY;
+              console.log('------------', x_mouse.current, y_mouse.current, kiem_tra_Content_mennu);
+              event.target.onmousemove = function (event) {
+                // event.preventDefault() ;
+                x_mouse.current = event.clientX;
+                y_mouse.current = event.clientY;
+              };
+              // kiem_tra_Content_mennu === true thì không cho  onmouseenter xảy ra ở tất cả các dòng (tức là không show hover_show_giai_thich_file)
+              if (kiem_tra_Content_mennu === false) {
+                // khi hover ra khỏi xoá giải thích file
+                collection[index].onmouseleave = function (event) {
+                  console.log('-------------------------------------------------');
+                  ReactDOM.unmountComponentAtNode(ref_giai_thich_file.current);
+                  clearTimeout(myTimeout);
+                };
+                hover_show_giai_thich_file(index);
+              }
+            }
+          };
 
-        // phải setTimeout ở đây vì đợi onblur ở File_manager chạy xong đã
-        setTimeout(() => {
+          //-------------------------------------------------------------------------- 
+
+          collection[index].onmousedown = function _open(event) {
+            if (event.buttons === 1 && !ref.current.hasOwnProperty('radio' + (index - 1))) {
+              path_cu.current.push(name_foder_and_file[index - 1][0]);
+
+              // Ở backend ta đã thiết lập name_foder_and_file[index-1][2] ==="" là folder khác "" là file
+              // nếu là ấn vào folder thì chạy
+              if (name_foder_and_file[index - 1][2] === "") {
+                console.log(path_cu.current);
+                axios.post("/Hieu/driver", {
+                  folder: path_cu.current.join("/")
+                }).then(function (response) {
+                  let data = response.data;
+                  useEffect_array_change.current = useEffect_array_change.current + 1;
+                  set_state_1(data);
+                  ReactDOM.render( /*#__PURE__*/React.createElement(Path_to_folder, {
+                    value: ["Driver"].concat(path_cu.current.slice(1)).map((i, index) => {
+                      return i = i + " /";
+                    })
+                  }), ref_driver.current);
+                  function Path_to_folder(props) {
+                    function _back() {
+                      console.log(path_cu.current);
+                      if (path_cu.current.length === 1 && path_cu.current[0] === "") {
+                        return;
+                      } else {
+                        // thay đổi mảng hiện tại bằng cách cát đi 1 phần tử ở vị trí cuối cùng -1
+                        path_cu.current.splice(-1, 1);
+                        axios.post("/Hieu/driver", {
+                          folder: path_cu.current.join("/")
+                        }).then(function (response) {
+                          useEffect_array_change.current = useEffect_array_change.current + 1;
+                          set_state_1(response.data);
+                          ReactDOM.render( /*#__PURE__*/React.createElement(Path_to_folder, {
+                            value: ["Driver"].concat(path_cu.current.slice(1)).map((i, index) => {
+                              return i = i + " /";
+                            })
+                          }), ref_driver.current);
+                        });
+                      }
+                    }
+                    return /*#__PURE__*/React.createElement("div", {
+                      style: {
+                        display: "flex",
+                        alignItems: 'center'
+                      }
+                    }, /*#__PURE__*/React.createElement("img", {
+                      className: 'w-4  ml-1 mr-1',
+                      src: "/SVG/back.svg",
+                      onClick: event => {
+                        _back();
+                      }
+                    }), props.value.map((i, index) => {
+                      return /*#__PURE__*/React.createElement("div", {
+                        className: `hover:bg-sky-700`
+                      }, "  ", i, " ");
+                    }));
+                  }
+                });
+              }
+
+              //   // nếu là file   thì chạy
+              if (name_foder_and_file[index - 1][2] !== "") {
+                console.log(path_cu.current);
+                ReactDOM.render( /*#__PURE__*/React.createElement("div", {
+                  style: {
+                    position: 'fixed',
+                    width: '100%',
+                    height: '100%',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: ' rgba(		0, 0, 0, 0.8)',
+                    zIndex: 2
+                  }
+                }, /*#__PURE__*/React.createElement("div", {
+                  className: 'flex  items-center'
+                }, /*#__PURE__*/React.createElement("img", {
+                  className: 'w-4 h-[13px] ml-2 mr-1 mt-1 ',
+                  src: "/SVG/back_path_white.svg",
+                  onClick: event => {
+                    path_cu.current.splice(-1, 1);
+                    ReactDOM.unmountComponentAtNode(ref_show_file.current);
+                  }
+                }), /*#__PURE__*/React.createElement("img", {
+                  className: 'w-4 mr-[4px]',
+                  src: select_icon_from_file_name(name_foder_and_file[index - 1][0])
+                }), /*#__PURE__*/React.createElement("div", {
+                  className: 'text-white  mt-1 '
+                }, " ", name_foder_and_file[index - 1][0], "  ")), /*#__PURE__*/React.createElement("div", {
+                  ref: ref_embed
+                }, "   ")), ref_show_file.current);
+                ref_embed.current.innerHTML = ` <embed type= ${convert_file_name_to_type(name_foder_and_file[index - 1][0])} src= ${encodeURI(path_cu.current.join("/"))}   style= '  width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; position: fixed; z-index: 3;'  >`;
+              }
+            }
+            if (event.buttons === 2) {
+              // ReactDOM.render tại một Dom khi gọi nhiều lần cũng chỉ chạy một lần. do đó ta phải ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
+              // để ReactDOM.render chạy mỗi lần khi được gọi
+              // dùng trong trường hợp: khi click chuột phải vào dòng sau mà chưa onblur
+              ReactDOM.unmountComponentAtNode(ref_content_menu.current);
+              console.log(index, ' collection[index] lắng nghe  mouse right down   ');
+
+              // remove hover và tabindex ở tất cả các dòng
+              for (let index = 1, len = collection.length; index < len; index++) {
+                collection[index].removeAttribute('tabindex');
+                collection[index].classList.remove("hover:bg-sky-100");
+                collection[index].classList.remove("bg-sky-100");
+              }
+              ;
+              // Hiển thị Content_mennu
+              // set tabIndex để sự kiện onblur được lắng nghe
+              collection[index].classList.add("bg-sky-100");
+              collection[index].setAttribute("tabIndex", "-1");
+              select_row.current = 1;
+              useEffect_array_change.current = useEffect_array_change.current + 1;
+              set_state_1(() => {
+                return [].concat(name_foder_and_file);
+              });
+              ReactDOM.render( /*#__PURE__*/React.createElement(Content_mennu, {
+                value: {
+                  data: name_foder_and_file,
+                  rename: ref_rename.current,
+                  dom: ref_0.current,
+                  index: index,
+                  top: y_mouse.current,
+                  left: x_mouse.current
+                }
+              }), ref_content_menu.current);
+              console.log(ref.current['radio' + (index - 1)]);
+              array_radiol_checked['' + (index - 1)] = index - 1;
+              ref.current['radio' + (index - 1)].checked = true;
+              select_row.current = null;
+              kiem_tra_Content_mennu = true;
+            }
+          };
+
+          //---------------------------------------------------------------------
+          // sự kiện onblur sẽ kích hoạt sau onmousedown
+          collection[index].onblur = function (event) {
+            // nếu collection[index] có tabindex mới  kích hoạt onblur
+            // tránh trường hợp khi click mouse right liên tiếp vào các dòng khác nhau cũng click hoạt onblur
+            if (collection[index].hasAttribute("tabindex") && !ref.current.hasOwnProperty('radio' + (index - 1))) {
+              console.log(index, ' collection[index] lắng nghe  onblur  ');
+              console.log('onblur');
+              for (let index = 1, len = collection.length; index < len; index++) {
+                collection[index].classList.add("hover:bg-sky-700");
+              }
+              ;
+              collection[index].classList.remove("bg-sky-700");
+              ReactDOM.unmountComponentAtNode(ref_content_menu.current);
+              kiem_tra_Content_mennu = false;
+            }
+          };
+
+          //--------------------------------------------------------------------------   
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        // hàm này trả về toạ đọ trục hoành của element con của ref_0.current.children[0]
+        let x_at_element = i => {
+          return ref_0.current.children[0].children[i].getBoundingClientRect().x;
+        };
+        // x là toạ đọ trục hoành của mouse
+        let xac_dinh_co_change_width_khong_and_vi_tri_change = x => {
+          let array = [];
+          for (let index = 1; index < 3; index++) {
+            array[index] = x >= x_at_element(index) - 5 && x <= x_at_element(index) + 5;
+            if (array[index] === true) {
+              vi_tri_change = index;
+              return true;
+            }
+          }
+          return false;
+        };
+
+        // khi move chuột tại góc element thì xuất hiện biểu tượng thay đổi kích thước cột
+        // nếu ấn giữ chuột trái khi move thì thay đổi kích thước cột
+
+        ref_0.current.children[0].onmousemove = function col_resize(event) {
+          event.preventDefault();
+          console.log(change_width);
+          let x = event.clientX;
+          if (xac_dinh_co_change_width_khong_and_vi_tri_change(x) || change_width === true) {
+            document.body.style.cursor = "col-resize";
+            console.log(change_width);
+            ref_0.current.children[0].onmousedown = function (event) {
+              if (event.buttons === 1) {
+                // change_width = true sau đó dùng  document.addEventListener('mousemove' lắng nghe sự kiện onmousemove để thực thi fucntion col_resize
+                change_width = true;
+              }
+            };
+          } else {
+            change_width = undefined;
+            document.body.style.cursor = "default";
+          }
+        };
+
+        //-------------------------------------------------------------------------------
+
+        ref_0.current.children[0].onmouseleave = function (event) {
+          if (change_width !== true) {
+            console.log('onmouseleave');
+            change_width = undefined;
+            document.body.style.cursor = "default";
+          }
+        };
+
+        /////////////////////////////////////////////////////////////////////////
+
+        ref_bar_1.current.onclick = function create_folder(event) {
+          useEffect_array_change.current = useEffect_array_change.current + 1;
+          set_state_1(name_foder_and_file => {
+            let name_foder_and_file_update = [["foder_new", "date_115/10/2022", "type_1", "size"]].concat(name_foder_and_file);
+            return name_foder_and_file_update;
+          });
+          ref_0.current.children[1].children[0].children[1].innerHTML = ` <div    style="  position:absolute;      background-color: azure; width: inherit; height: inherit ;   white-space: nowrap;    "> ${name_foder_and_file[0][0]}  </div>`;
+          let div_rename = ref_0.current.children[1].children[0].children[1].children[0];
+          div_rename.setAttribute("contenteditable", true);
           let range = new Range();
           // childNodes[0] lấy text trong div chú ý remove space
           // ta có thể dùng textContent 
@@ -143,633 +594,234 @@ async function file_manager(dom) {
           range.setEnd(div_rename.childNodes[0], len);
           document.getSelection().removeAllRanges();
           document.getSelection().addRange(range);
+          //--------------------------------------------------
           div_rename.onblur = function () {
             let text = div_rename.textContent;
-            let parent = div_rename.parentElement;
-            parent.innerHTML = text;
-            File_manager.data[index - 1][0] = text;
-            console.log(File_manager.data);
-            // sau đó post lên server xử lý tiếp
-          };
-        }, 0);
-      };
-
-      //---------------------------------------------------------------------------------------------------------------------    
-
-      // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
-      // khi onblur chạy Content_mennu mất nên onclick không được thực thi
-      ref_Content_mennu.current.children[3].onmousedown = function _detele() {
-        let index = File_manager.ref_0_index;
-        File_manager._detele(index - 1);
-      };
-
-      //---------------------------------------------------------------------------------------------------------------------    
-
-      // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
-      // khi onblur chạy Content_mennu mất nên onclick không được thực thi
-      ref_Content_mennu.current.children[0].onmousedown = function _copy() {
-        let index = File_manager.ref_0_index;
-        File_manager._copy(index - 1);
-      };
-    }, []);
-    return /*#__PURE__*/React.createElement("div", {
-      ref: ref_Content_mennu,
-      style: {
-        padding: '2px 10px 2px 10px',
-        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
-      }
-    }, /*#__PURE__*/React.createElement("div", null, " Copy  "), /*#__PURE__*/React.createElement("div", null, " Paste "), /*#__PURE__*/React.createElement("div", null, " Rename "), /*#__PURE__*/React.createElement("div", null, " Delete  "));
-  }
-  ;
-  function File_manager(props) {
-    let change_width;
-    let vi_tri_change;
-    let [name_foder_and_file, set_state_1] = useState(props.value.data);
-    let [css, set_css] = useState(() => {
-      return {
-        flex_container: {
-          width: '100%',
-          display: "flex",
-          boxSizing: 'border-box',
-          backgroundColor: 'white',
-          border: '1px solid #633517 '
-        },
-        flex_item: {
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          margin: '2px 5px 2px 2px',
-          textAlign: 'center',
-          fontSize: 16,
-          border: '0px solid #00A170 ',
-          padding: 2,
-          display: "flex",
-          alignItems: 'center'
-        },
-        title: {
-          alignContent: 'flex-start',
-          alignItems: 'flex-start',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textAlign: 'start',
-          border: '0px solid #00A170 ',
-          padding: 2,
-          display: "flex"
-        },
-        icon: {
-          display: "flex",
-          marginRight: 2,
-          alignItems: 'center'
-        },
-        select_file: {
-          width: '100%'
-        },
-        _row: {
-          width: '15%',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          backgroundColor: 'inherit',
-          margin: '2px 5px 2px 2px',
-          textAlign: 'start',
-          fontSize: 16,
-          border: '0px solid #00A170 '
-        },
-        giai_thich_file: {
-          position: 'absolute',
-          top: 200,
-          left: 300,
-          display: "flex",
-          backgroundColor: 'white'
-        },
-        content_menu: {
-          position: 'absolute',
-          top: 200,
-          left: 300,
-          display: "flex",
-          backgroundColor: 'white'
-        },
-        hover: {
-          backgroundColor: '	#acac9a'
-        },
-        leave: {
-          backgroundColor: 'white',
-          border: '0px solid white '
-        },
-        max_width_size: function () {
-          let array_size = name_foder_and_file.map((i, index) => {
-            return i = i[2].length;
-          });
-          return Math.max(...array_size) * 8 + 'px';
-        }()
-      };
-    });
-    let x_mouse = useRef(null);
-    let y_mouse = useRef(null);
-    let ref_giai_thich_file = useRef(null);
-    let ref_content_menu = useRef(null);
-    let ref_0 = useRef(null);
-    let ref_driver = useRef(null);
-    let ref_bar = useRef(null);
-    let ref_bar_1 = useRef(null);
-    let ref_bar_2 = useRef(null);
-    let ref_bar_3 = useRef(null);
-    let ref_bar_4 = useRef(null);
-    let ref_bar_5 = useRef(null);
-    let ref_embed = useRef(null);
-    let path_cu = useRef([""]);
-    let ref_show_file = useRef(null);
-    let ref_copy = useRef(null);
-    File_manager._detele = function (i) {
-      path_cu.current.push(name_foder_and_file[i][0]);
-      axios.post("/Hieu/driver_detele", {
-        file: path_cu.current.join("/")
-      }).then(function (response) {
-        console.log(response.data);
-        path_cu.current.splice(-1, 1);
-        console.log(path_cu.current);
-        set_state_1(name_foder_and_file => {
-          File_manager.data.splice(i, 1);
-          let name_foder_and_file_update = [].concat(File_manager.data);
-          return name_foder_and_file_update;
-        });
-      });
-    };
-    File_manager._copy = function (i) {
-      let name_file_copy = [name_foder_and_file[i][0], name_foder_and_file[i][1], name_foder_and_file[i][2]];
-      path_cu.current.push(name_file_copy[0]);
-      let path_file_copy = path_cu.current.join("/");
-      console.log(path_file_copy);
-      path_cu.current.splice(-1, 1);
-      function Copy() {
-        function paste_here() {
-          let path_file_paste = path_cu.current.join("/");
-          console.log(path_file_paste);
-          axios.post("/Hieu/driver_copy", {
-            file: [path_file_copy, path_file_paste]
-          }).then(function (response) {
-            if (response.data === "ok") {
-              set_state_1(name_foder_and_file => {
-                File_manager.data.push(name_file_copy);
-                let name_foder_and_file_update = [].concat(File_manager.data);
-                return name_foder_and_file_update;
-              });
-              ReactDOM.unmountComponentAtNode(ref_copy.current);
-            } else {
-              _alert( /*#__PURE__*/React.createElement("div", null, " Th\u01B0 m\u1EE5c ", path_file_paste, " \u0111\xE3 c\xF3 folder tr\xF9ng t\xEAn l\xE0:   ", /*#__PURE__*/React.createElement("span", {
-                style: {
-                  color: 'crimson'
-                }
-              }, "  ", name_foder_and_file[i][0], " "), "   r\u1ED3i  "));
-            }
-          });
-        }
-        return /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: 'flex',
-            boxSizing: 'border-box',
-            position: 'relative',
-            backgroundColor: 'blanchedalmond',
-            width: '100%',
-            border: '1px solid #633517 ',
-            justifyContent: 'space-between'
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            margin: 6
-          }
-        }, " ", name_foder_and_file[i][0], "  "), /*#__PURE__*/React.createElement("div", {
-          style: {
-            margin: 6,
-            display: 'flex'
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            marginRight: 6
-          }
-        }, " Canel  "), /*#__PURE__*/React.createElement("div", {
-          onClick: event => {
-            paste_here();
-          }
-        }, "  Paste here ")));
-      }
-      ReactDOM.render( /*#__PURE__*/React.createElement(Copy, null), ref_copy.current);
-    };
-    useEffect(() => {
-      console.log(path_cu.current);
-      File_manager.data = name_foder_and_file;
-      window.addEventListener("contextmenu", e => e.preventDefault());
-      let myTimeout;
-      let kiem_tra_Content_mennu = false;
-      let index_truoc_do;
-      let collection = ref_0.current.children;
-      ////////////////////////////////////////////////////////////////////////////////////////////////          
-      collection[0].onmouseenter = function (event) {
-        clearTimeout(myTimeout);
-        ReactDOM.unmountComponentAtNode(ref_giai_thich_file.current);
-      };
-      //////////////////////////////////////////////////////////////////////////////////////////////////        
-      for (let index = 1, len = collection.length; index < len; index++) {
-        //--------------------------------------------------------------------
-        // khi hover vào dòng thì hiện hover_show_giai_thich_file
-        collection[index].onmouseenter = function (event) {
-          x_mouse.current = event.clientX;
-          y_mouse.current = event.clientY;
-          console.log('--', x_mouse.current, y_mouse.current);
-          event.target.onmousemove = function (event) {
-            // event.preventDefault() ;
-            x_mouse.current = event.clientX;
-            y_mouse.current = event.clientY;
-          };
-          // kiem_tra_Content_mennu === true thì không cho  onmouseenter xảy ra ở tất cả các dòng
-          if (kiem_tra_Content_mennu === false) {
-            // khi hover ra khỏi xoá giải thích file
-            collection[index].onmouseleave = function (event) {
-              ReactDOM.unmountComponentAtNode(ref_giai_thich_file.current);
-              clearTimeout(myTimeout);
-            };
-            hover_show_giai_thich_file(index);
-          }
-        };
-
-        //-------------------------------------------------------------------------- 
-
-        collection[index].onmousedown = function (event) {
-          if (event.buttons === 1) {
-            path_cu.current.push(name_foder_and_file[index - 1][0]);
-
-            // Ở backend ta đã thiết lập name_foder_and_file[index-1][2] ==="" là folder khác "" là file
-            // nếu là ấn vào folder thì chạy
-            if (name_foder_and_file[index - 1][2] === "") {
-              console.log(path_cu.current);
-              axios.post("/Hieu/driver", {
-                folder: path_cu.current.join("/")
-              }).then(function (response) {
-                let data = response.data;
-                set_state_1(data);
-                ReactDOM.render( /*#__PURE__*/React.createElement(Path_to_folder, {
-                  value: ["Driver"].concat(path_cu.current.slice(1)).map((i, index) => {
-                    return i = i + " /";
-                  })
-                }), ref_driver.current);
-                function Path_to_folder(props) {
-                  function _back() {
-                    console.log(path_cu.current);
-                    if (path_cu.current.length === 1 && path_cu.current[0] === "") {
-                      return;
-                    } else {
-                      // thay đổi mảng hiện tại bằng cách cát đi 1 phần tử ở vị trí cuối cùng -1
-                      path_cu.current.splice(-1, 1);
-                      axios.post("/Hieu/driver", {
-                        folder: path_cu.current.join("/")
-                      }).then(function (response) {
-                        set_state_1(response.data);
-                        ReactDOM.render( /*#__PURE__*/React.createElement(Path_to_folder, {
-                          value: ["Driver"].concat(path_cu.current.slice(1)).map((i, index) => {
-                            return i = i + " /";
-                          })
-                        }), ref_driver.current);
-                      });
-                    }
-                  }
-                  return /*#__PURE__*/React.createElement("div", {
-                    style: {
-                      display: "flex",
-                      alignItems: 'center'
-                    }
-                  }, /*#__PURE__*/React.createElement("img", {
-                    className: 'w-4 h-[13px] ml-1 mr-1',
-                    src: "/SVG/back.svg",
-                    onClick: event => {
-                      _back();
-                    }
-                  }), props.value.map((i, index) => {
-                    return /*#__PURE__*/React.createElement("div", {
-                      style: {
-                        padding: 2
-                      },
-                      onMouseEnter: event => {
-                        hover(event, css.hover, css.leave, ref_driver.current.children[0].children[index + 1]);
-                      }
-                    }, "  ", i, " ");
-                  }));
-                }
-              });
-            }
-
-            //   // nếu là file   thì chạy
-            if (name_foder_and_file[index - 1][2] !== "") {
-              console.log(path_cu.current);
-              ReactDOM.render( /*#__PURE__*/React.createElement("div", {
-                style: {
-                  position: 'fixed',
-                  width: '100%',
-                  height: '100%',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: ' rgba(		0, 0, 0, 0.8)',
-                  zIndex: 2
-                }
-              }, /*#__PURE__*/React.createElement("div", {
-                className: 'flex  items-center'
-              }, /*#__PURE__*/React.createElement("img", {
-                className: 'w-4 h-[13px] ml-2 mr-1 mt-1 ',
-                src: "/SVG/back_path_white.svg",
-                onClick: event => {
-                  path_cu.current.splice(-1, 1);
-                  ReactDOM.unmountComponentAtNode(ref_show_file.current);
-                }
-              }), /*#__PURE__*/React.createElement("img", {
-                className: 'w-4 mr-[4px]',
-                src: select_icon_from_file_name(name_foder_and_file[index - 1][0])
-              }), /*#__PURE__*/React.createElement("div", {
-                className: 'text-white  mt-1 '
-              }, " ", name_foder_and_file[index - 1][0], "  ")), /*#__PURE__*/React.createElement("div", {
-                ref: ref_embed
-              }, "   ")), ref_show_file.current);
-              ref_embed.current.innerHTML = ` <embed type= ${convert_file_name_to_type(name_foder_and_file[index - 1][0])} src= ${encodeURI(path_cu.current.join("/"))}   style= '  width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; position: fixed; z-index: 3;'  >`;
-            }
-          }
-          if (event.buttons === 2) {
-            collection[index].style.backgroundColor = css.hover.backgroundColor;
-            // xoá bỏ tô màu dòng trước đó
-            if (index_truoc_do !== undefined) {
-              Object.assign(collection[index_truoc_do].style, css.leave);
-            }
-
-            // xoá bỏ sự kiện onmouseleave ở dòng này
-            if (typeof collection[index].onmouseleave === "function") {
-              collection[index].onmouseleave = null;
-            }
-            // tô màu dòng này
-            Object.assign(collection[index].style, {
-              backgroundColor: 'red'
-            }, {
-              border: '1px solid #00A170 '
+            useEffect_array_change.current = useEffect_array_change.current + 1;
+            set_state_1(name_foder_and_file => {
+              let name_foder_and_file_update = [].concat(name_foder_and_file);
+              name_foder_and_file_update[0][0] = text;
+              return name_foder_and_file_update;
             });
-            ref_giai_thich_file.current.style.display = "none";
-
-            // Hiển thị Content_mennu
-            // set tabIndex để sự kiện onblur được lắng nghe
-            collection[index].setAttribute("tabIndex", "-1");
-            let _top = y_mouse.current + 'px';
-            let left = x_mouse.current + 'px';
-            setTimeout(() => {
-              File_manager.ref_0 = ref_0.current;
-              File_manager.ref_0_index = index;
-              Object.assign(ref_content_menu.current.style, css.content_menu, {
-                top: _top,
-                left: left
-              });
-              ReactDOM.render( /*#__PURE__*/React.createElement(Content_mennu, null), ref_content_menu.current);
-              kiem_tra_Content_mennu = true;
-              // điều kiện để dòng này kích hoạt
-
-              index_truoc_do = index;
-            }, 0);
-          }
-        };
-
-        //---------------------------------------------------------------------
-
-        collection[index].onblur = function (event) {
-          console.log('onblur');
-          Object.assign(collection[index].style, css.leave);
-          ref_content_menu.current.style.display = 'none';
-          kiem_tra_Content_mennu = false;
-          index_truoc_do = undefined;
-        };
-
-        //--------------------------------------------------------------------------   
-      }
-
-      /////////////////////////////////////////////////////////////////////////////////////////////
-
-      let width_at_element = i => {
-        return ref_0.current.children[0].children[i].getBoundingClientRect().x;
-      };
-      let xac_dinh_co_change_width_khong_and_vi_tri_change = x => {
-        let array = [];
-        for (let index = 1; index < 3; index++) {
-          array[index] = x >= width_at_element(index) - 5 && x <= width_at_element(index) + 5;
-          if (array[index] === true) {
-            vi_tri_change = index;
-            return true;
-          }
-        }
-        return false;
-      };
-
-      // khi move chuột tại góc element thì xuất hiện biểu tượng thay đổi kích thước cột
-      // nếu ấn giữ chuột trái khi move thì thay đổi kích thước cột
-
-      ref_0.current.children[0].onmousemove = function col_resize(event) {
-        event.preventDefault();
-        console.log(change_width);
-        let x = event.clientX;
-        if (xac_dinh_co_change_width_khong_and_vi_tri_change(x) || change_width === true) {
-          document.body.style.cursor = "col-resize";
-          console.log(change_width);
-          ref_0.current.children[0].onmousedown = function (event) {
-            if (event.buttons === 1) {
-              // change_width = true sau đó dùng  document.addEventListener('mousemove' lắng nghe sự kiện onmousemove để thực thi fucntion col_resize
-              change_width = true;
-            }
           };
-        } else {
-          change_width = undefined;
-          document.body.style.cursor = "default";
-        }
-      };
-
-      //-------------------------------------------------------------------------------
-
-      ref_0.current.children[0].onmouseleave = function (event) {
-        if (change_width !== true) {
-          console.log('onmouseleave');
-          change_width = undefined;
-          document.body.style.cursor = "default";
-        }
-      };
-
-      /////////////////////////////////////////////////////////////////////////
-
-      ref_bar_1.current.onclick = function create_folder(event) {
-        set_state_1(name_foder_and_file => {
-          let name_foder_and_file_update = [["foder_new", "date_115/10/2022", "type_1", "size"]].concat(name_foder_and_file);
-          return name_foder_and_file_update;
-        });
-        ref_0.current.children[1].children[0].children[1].innerHTML = ` <div    style="  position:absolute;      background-color: azure; width: inherit; height: inherit ;   white-space: nowrap;    "> ${name_foder_and_file[0][0]}  </div>`;
-        let div_rename = ref_0.current.children[1].children[0].children[1].children[0];
-        div_rename.setAttribute("contenteditable", true);
-        let range = new Range();
-        // childNodes[0] lấy text trong div chú ý remove space
-        // ta có thể dùng textContent 
-        let len = div_rename.childNodes[0].length;
-        range.setStart(div_rename.childNodes[0], 0);
-        range.setEnd(div_rename.childNodes[0], len);
-        document.getSelection().removeAllRanges();
-        document.getSelection().addRange(range);
-        //--------------------------------------------------
-        div_rename.onblur = function () {
-          let text = div_rename.textContent;
-          set_state_1(name_foder_and_file => {
-            let name_foder_and_file_update = [].concat(File_manager.data);
-            name_foder_and_file_update[0][0] = text;
-            return name_foder_and_file_update;
-          });
         };
-      };
 
-      ////////////////////////////////////////////////////////////////////////
-      function hover_show_giai_thich_file(i) {
-        // chú ý lỗi trong react 16
-        //Method Object.freeze() giúp chúng ta chuyển một object thông thường sang trạng thái không thể modified(sửa đổi).
-        // trong react Object cấp 2 sẽ bị Object.freeze()
-        // có thể dùng hàm Object.isFrozen(css.giai_thich_file) để kiểm tra nó sẽ trả về true
-        // muốn truy cập để sửa đổi được ta phải tạo một bản copy bằng cách dùng hàm Object.assign()
-        // vd  Object.assign({}, css.giai_thich_file ,{top: _top},) sủa đổi luôn
-        // hoặc sau khi tạo bản copy rồi ta có thể sửa css.giai_thich_file.left = x_mouse - 20 + 'px'; được nhưng trước đó ta phải tạo bản copy
+        ////////////////////////////////////////////////////////////////////////
+        function hover_show_giai_thich_file(i) {
+          // chú ý lỗi trong react 16
+          //Method Object.freeze() giúp chúng ta chuyển một object thông thường sang trạng thái không thể modified(sửa đổi).
+          // trong react Object cấp 2 sẽ bị Object.freeze()
+          // có thể dùng hàm Object.isFrozen(css.giai_thich_file) để kiểm tra nó sẽ trả về true
+          // muốn truy cập để sửa đổi được ta phải tạo một bản copy bằng cách dùng hàm Object.assign()
+          // vd  Object.assign({}, css.giai_thich_file ,{top: _top},) sủa đổi luôn
+          // hoặc sau khi tạo bản copy rồi ta có thể sửa css.giai_thich_file.left = x_mouse - 20 + 'px'; được nhưng trước đó ta phải tạo bản copy
 
-        function Giai_thich_file() {
-          return /*#__PURE__*/React.createElement("div", {
-            className: `  absolute bg-white top-[${_top}] left-[${_left}] px-0.5 py-2.5 shadow-2xl `
-          }, /*#__PURE__*/React.createElement("div", null, " ", name_foder_and_file[index - 1][0], "  "), /*#__PURE__*/React.createElement("div", null, " ", name_foder_and_file[index - 1][1], " "), /*#__PURE__*/React.createElement("div", null, " ", name_foder_and_file[index - 1][2], "  "));
-        }
-        ;
-        let index = i;
-        let _left = x_mouse.current - 20 + 'px';
-        let _top = ref_0.current.children[index].getBoundingClientRect().y + 25 + 'px';
-        myTimeout = setTimeout(() => {
+          let index = i;
+          let _left = x_mouse.current - 20 + 'px';
+          let _top = ref_0.current.children[index].getBoundingClientRect().y + 25 + 'px';
           let max_x_mouse = ref_0.current.children[index].children[1].getBoundingClientRect().x;
           let width_col_name = ref_0.current.children[index].children[0].getBoundingClientRect().width;
           let width_icon = ref_0.current.children[index].children[0].children[0].getBoundingClientRect().width;
-          if (x_mouse.current < max_x_mouse && convert_text_to_pixcel(name_foder_and_file[index - 1][0], font_size) + width_icon >= width_col_name) {
-            ReactDOM.render( /*#__PURE__*/React.createElement(Giai_thich_file, null), ref_giai_thich_file.current);
+          myTimeout = setTimeout(() => {
+            if (x_mouse.current < max_x_mouse && convert_text_to_pixcel(name_foder_and_file[index - 1][0], font_size) + width_icon >= width_col_name) {
+              ReactDOM.render( /*#__PURE__*/React.createElement(Giai_thich_file, null), ref_giai_thich_file.current);
+            }
+          }, 200);
+          function Giai_thich_file() {
+            let ref_0 = useRef(null);
+            return /*#__PURE__*/React.createElement("div", {
+              ref: ref_0,
+              style: {
+                top: _top,
+                left: _left
+              },
+              className: ` border border-stone-700 border-solid absolute text-stone-700 bg-stone-100 px-0.5 py-1 _shadow `
+            }, /*#__PURE__*/React.createElement("div", null, " ", name_foder_and_file[index - 1][0], "  "), /*#__PURE__*/React.createElement("div", null, " ", name_foder_and_file[index - 1][1], " "), /*#__PURE__*/React.createElement("div", null, " ", name_foder_and_file[index - 1][2], "  "));
           }
-        }, 200);
-      }
-      ;
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    }, [name_foder_and_file]);
-    useEffect(() => {
-      function change_width_to_undefined(event) {
-        event.preventDefault();
-        change_width = undefined;
-        document.body.style.cursor = "default";
-      }
-
-      // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
-      document.addEventListener('mouseup', change_width_to_undefined);
-
-      // change_width === true tức là đã ấn giữ chuột trái khi di chuyển 
-      // dùng document lắng nghe để khi di chuyển ra ngoài element kích hoạt sự kiện sự kiện vẫn xảy ra
-      document.addEventListener('mousemove', function (event) {
-        if (change_width === true) {
-          let collection = ref_0.current.children;
-          let width;
-          width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x;
-          ref_0.current.parentElement.style.overflowX = 'auto';
-          // collection[0].style.width = '150%' ;
-          // collection[0].children[vi_tri_change - 1].classList.remove("grid-cols-3");
-          // collection[0].className  = `grid-cols-[${width}px_300px_300px] grid box-border  bg-slate-200 `;
-          // collection[0].children[vi_tri_change - 1].style.width = width + 'px' ;
-          // for (let index = 1, len = collection.length; index < len; index++) {
-          //   collection[index].style.width = '150%' ;
-          //   collection[index].children[vi_tri_change - 1].style.width = width + 'px' ;
-          // }
-
-          collection[0].style.gridTemplateColumns = `${width}px 300px 300px`;
+          ;
         }
-      });
-    }, []);
-    return /*#__PURE__*/React.createElement("div", {
-      className: 'pl-1 pt-1'
-    }, /*#__PURE__*/React.createElement("div", {
-      ref: ref_giai_thich_file
-    }, "   "), /*#__PURE__*/React.createElement("div", {
-      ref: ref_content_menu
-    }, "   "), /*#__PURE__*/React.createElement("div", {
-      ref: ref_show_file
-    }, "   "), /*#__PURE__*/React.createElement("div", {
-      className: 'flex w-3/4 border border-solid border-yellow-900 justify-between'
-    }, /*#__PURE__*/React.createElement("div", {
-      ref: ref_driver
-    }, /*#__PURE__*/React.createElement("div", {
-      className: 'pl-[0.12rem]'
-    }, "  Driver  ")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
-      className: 'focus:bg-red-100 m-0 hover:bg-sky-700 outline-0 placeholder-slate-400 placeholder-shown:italic',
-      type: "text",
-      placeholder: "Search..."
-    }))), /*#__PURE__*/React.createElement("div", {
-      ref: ref_bar,
-      className: 'w-3/4 flex box-border bg-white border-l border-r border-solid border-yellow-900'
-    }, /*#__PURE__*/React.createElement("div", {
-      ref: ref_bar_1,
-      className: 'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'
-    }, /*#__PURE__*/React.createElement("img", {
-      className: 'w-4 mr-1',
-      src: "/SVG/folder.svg"
-    }), /*#__PURE__*/React.createElement("div", null, " New folder   ")), /*#__PURE__*/React.createElement("div", {
-      ref: ref_bar_2,
-      className: 'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'
-    }, /*#__PURE__*/React.createElement("img", {
-      className: 'w-4 mr-1',
-      src: "/SVG/file_document.svg"
-    }), /*#__PURE__*/React.createElement("div", null, "  New text file  ")), /*#__PURE__*/React.createElement("div", {
-      ref: ref_bar_3,
-      className: 'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'
-    }, /*#__PURE__*/React.createElement("img", {
-      className: 'w-4 mr-1',
-      src: "/SVG/file_upload.svg"
-    }), /*#__PURE__*/React.createElement("div", null, "  Upload file ")), /*#__PURE__*/React.createElement("div", {
-      ref: ref_bar_4,
-      className: 'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'
-    }, /*#__PURE__*/React.createElement("img", {
-      className: 'w-4 mr-1',
-      src: "/SVG/folder_upload.svg"
-    }), /*#__PURE__*/React.createElement("div", null, "  Upload Folder ")), /*#__PURE__*/React.createElement("div", {
-      ref: ref_bar_5,
-      className: 'hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex items-center border-yellow-900'
-    }, /*#__PURE__*/React.createElement("img", {
-      className: 'w-4 mr-1',
-      src: "/SVG/folder_upload.svg"
-    }), /*#__PURE__*/React.createElement("div", null, " Th\xF4ng b\xE1o   "))), /*#__PURE__*/React.createElement("div", {
-      className: 'w-3/4 grid box-border bg-white border border-solid border-yellow-900 overflow-hidden'
-    }, /*#__PURE__*/React.createElement("div", {
-      ref: ref_0,
-      className: 'w-full h-[75vh] overflow-auto  box-border bg-white border-0  border-solid border-yellow-900 '
-    }, /*#__PURE__*/React.createElement("div", {
-      className: 'grid grid-cols-3  box-border  bg-slate-200'
-    }, /*#__PURE__*/React.createElement("div", {
-      className: ' box-border pl-1 overflow-hidden '
-    }, " Name "), /*#__PURE__*/React.createElement("div", {
-      className: ' box-border pl-1 overflow-hidden  border-l border-r border-solid border-yellow-700 '
-    }, "  Date modified  "), /*#__PURE__*/React.createElement("div", {
-      className: ' box-border pl-1 overflow-hidden '
-    }, "  Size  ")), name_foder_and_file.map((i, index) => {
+        ;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      }, [useEffect_array_change.current]);
+      useEffect(() => {
+        function change_width_to_undefined(event) {
+          event.preventDefault();
+          change_width = undefined;
+          document.body.style.cursor = "default";
+        }
+
+        // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
+        document.addEventListener('mouseup', change_width_to_undefined);
+
+        // change_width === true tức là đã ấn giữ chuột trái khi di chuyển 
+        // dùng document lắng nghe để khi di chuyển ra ngoài element kích hoạt sự kiện sự kiện vẫn xảy ra
+
+        document.addEventListener('mousemove', function (event) {
+          if (change_width === true) {
+            let collection = ref_0.current.children;
+            let width;
+            width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x;
+            // xác định min của cột
+            if (width <= font_size * 10 && vi_tri_change === 2) {
+              width = font_size * 10;
+              document.body.style.cursor = "not-allowed";
+            } else if (width <= font_size * 3 && vi_tri_change === 1) {
+              width = font_size * 3;
+              document.body.style.cursor = "not-allowed";
+            } else {
+              document.body.style.cursor = "col-resize";
+            }
+
+            // col_initialization là mảng cột sau đó ta cắt cột thay đổi kích thước được cột không thay đổi kích thước
+            let col_initialization = [0, 1, 2];
+            col_initialization.splice(vi_tri_change - 1, 1);
+            let width_col_initialization = ref_0.current.children[0].children[col_initialization[0]].getBoundingClientRect().width + 'px';
+            let array_gridTemplateColumns = [width_col_initialization, width_col_initialization, width_col_initialization];
+            array_gridTemplateColumns.map((i, index) => {
+              if (index === vi_tri_change - 1) {
+                array_gridTemplateColumns[index] = width + 'px';
+              }
+            });
+            let string_gridTemplateColumns = array_gridTemplateColumns.join(' ');
+            console.log(string_gridTemplateColumns, "---", col_initialization);
+            ref_0.current.parentElement.style.overflowX = 'auto';
+            collection[0].style.gridTemplateColumns = string_gridTemplateColumns;
+            for (let index = 1, len = collection.length; index < len; index++) {
+              collection[index].style.gridTemplateColumns = string_gridTemplateColumns;
+            }
+          }
+        });
+
+        //----------------------------------------------------------------------
+      }, []);
+
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       return /*#__PURE__*/React.createElement("div", {
-        className: 'grid grid-cols-3 hover:bg-sky-700 w-full   box-border '
+        className: `${tb('pl-1 pt-1', '')}  `
       }, /*#__PURE__*/React.createElement("div", {
-        className: 'flex box-border m-1 overflow-hidden whitespace-no-wrap '
+        ref: ref_giai_thich_file
+      }, "   "), /*#__PURE__*/React.createElement("div", {
+        ref: ref_content_menu
+      }, "   "), /*#__PURE__*/React.createElement("div", {
+        ref: ref_show_file
+      }, "   "), /*#__PURE__*/React.createElement("div", {
+        ref: ref_rename
+      }, "   "), /*#__PURE__*/React.createElement("div", {
+        className: ` flex ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')}    justify-between `
+      }, /*#__PURE__*/React.createElement("div", {
+        ref: ref_driver
+      }, /*#__PURE__*/React.createElement("div", {
+        className: 'pl-[0.12rem]'
+      }, "  Driver  ")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
+        className: 'focus:bg-red-100 m-0 hover:bg-sky-700 outline-0 placeholder-slate-400 placeholder-shown:italic',
+        type: "text",
+        placeholder: "Search..."
+      }))), /*#__PURE__*/React.createElement("div", {
+        ref: ref_bar,
+        className: `${tb('w-3/4 border-l border-r border-solid border-yellow-900', 'w-full')}  flex box-border bg-yellow-800  `
+      }, /*#__PURE__*/React.createElement("div", {
+        ref: ref_bar_1,
+        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ` flex justify-center items-center w-full`
+      }, "  ", /*#__PURE__*/React.createElement("img", {
+        className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
+        src: "/SVG/folder.svg"
+      }), "  "), /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('', 'w-full')}  text-white `
+      }, " New folder   ")), /*#__PURE__*/React.createElement("div", {
+        ref: ref_bar_2,
+        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ` flex justify-center items-center w-full`
+      }, "  ", /*#__PURE__*/React.createElement("img", {
+        className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
+        src: "/SVG/file_document.svg"
+      }), "  "), /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('', 'w-full')}   text-white `
+      }, "  New text file  ")), /*#__PURE__*/React.createElement("div", {
+        ref: ref_bar_3,
+        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ` flex justify-center items-center w-full`
+      }, "  ", /*#__PURE__*/React.createElement("img", {
+        className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
+        src: "/SVG/file_upload.svg"
+      }), "  "), /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('', 'w-full')}   text-white `
+      }, "  Upload file ")), /*#__PURE__*/React.createElement("div", {
+        ref: ref_bar_4,
+        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ` flex justify-center items-center w-full`
+      }, "  ", /*#__PURE__*/React.createElement("img", {
+        className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
+        src: "/SVG/folder_upload.svg"
+      }), "  "), /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('', 'w-full')}  text-white `
+      }, "  Upload Folder ")), tb( /*#__PURE__*/React.createElement("div", {
+        ref: ref_bar_5,
+        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
       }, /*#__PURE__*/React.createElement("img", {
-        className: 'w-4 mr-[4px]',
-        src: select_icon_from_file_name(i[0])
-      }), /*#__PURE__*/React.createElement("div", null, i[0])), /*#__PURE__*/React.createElement("div", {
-        className: ' box-border m-1 overflow-hidden  '
-      }, "  ", i[1], "  "), /*#__PURE__*/React.createElement("div", {
-        className: ' box-border m-1 overflow-hidden  '
-      }, "  ", i[2], "  "));
-    })), /*#__PURE__*/React.createElement("div", {
-      ref: ref_copy
-    }, "   ")));
-  }
-  return ReactDOM.render( /*#__PURE__*/React.createElement(File_manager, {
-    value: await axios.post("/Hieu/driver", {
-      folder: ""
-    })
-  }), dom);
+        className: 'w-5 h-5 pr-1',
+        src: "/SVG/folder_upload.svg"
+      }), /*#__PURE__*/React.createElement("div", null, " Th\xF4ng b\xE1o   ")))), /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')} grid box-border bg-white   overflow-hidden `
+      }, /*#__PURE__*/React.createElement("div", {
+        ref: ref_0,
+        className: `w-full ${tb('h-[75vh]', '')} overflow-auto  box-border bg-white `
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('grid grid-cols-3  box-border  bg-slate-200', 'h-0 overflow-hidden')}  `
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ' box-border pl-1 overflow-hidden text-ellipsis '
+      }, " Name "), /*#__PURE__*/React.createElement("div", {
+        className: ` box-border pl-1 overflow-hidden whitespace-nowrap  border-l border-r border-solid border-yellow-700  `
+      }, "  Date modified  "), /*#__PURE__*/React.createElement("div", {
+        className: ' box-border pl-1 overflow-hidden '
+      }, "  Size  ")), name_foder_and_file.map((i, index) => {
+        return /*#__PURE__*/React.createElement("div", {
+          className: ` grid ${tb('grid-cols-3  hover:bg-sky-100 ', 'grid-cols-1  relative  overflow-hidden border-b border-solid border-stone-200 ')}w-full   box-border `
+        }, /*#__PURE__*/React.createElement("div", {
+          className: '  flex   box-border pl-1 overflow-hidden whitespace-no-wrap  '
+        }, function () {
+          if (select_row.current !== null) {
+            return /*#__PURE__*/React.createElement("input", {
+              checked: false,
+              ref: el => {
+                ref.current['radio' + index] = el;
+              },
+              type: "radio",
+              onMouseDown: event => {
+                radio_checked(index, event);
+              },
+              className: ` w-4 h-4 text-blue-600 bg-red-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600   `
+            });
+          } else {
+            return '';
+          }
+        }(), /*#__PURE__*/React.createElement("img", {
+          className: ` ${tb('w-5 h-5', ' absolute top-1/2  transform -translate-y-1/2  w-10 h-10')}  pr-1`,
+          src: select_icon_from_file_name(i[0])
+        }), /*#__PURE__*/React.createElement("div", {
+          className: ` ${tb('overflow-hidden whitespace-nowrap text-ellipsis', ' transform translate-x-10 break-all')} `
+        }, i[0])), /*#__PURE__*/React.createElement("div", {
+          className: ` ${tb('overflow-hidden whitespace-nowrap text-ellipsis', 'transform translate-x-11  text-sm italic ')}  box-border text-stone-500   `
+        }, "  ", i[1], "  "), /*#__PURE__*/React.createElement("div", {
+          className: ` ${tb('overflow-hidden whitespace-nowrap text-ellipsis', 'absolute top-full  transform -translate-y-full right-4 text-sm italic ')}   box-border text-stone-500  `
+        }, "  ", i[2], "  "));
+      })), /*#__PURE__*/React.createElement("div", {
+        ref: ref_copy
+      }, "   ")));
+    }
+    return ReactDOM.render( /*#__PURE__*/React.createElement(File_manager, {
+      value: yield axios.post("/Hieu/driver", {
+        folder: ""
+      })
+    }), dom);
+  });
+  return _file_manager.apply(this, arguments);
 }
 function Footer() {
   function css() {
@@ -856,31 +908,21 @@ function hover(event, object_style, object_style_leave, dom) {
 function _alert(componet_react) {
   function Alert() {
     return /*#__PURE__*/React.createElement("div", {
+      className: 'flex flex-wrap absolute rounded border border-solid border-slate-400 bg-amber-400  _shadow ',
       style: {
-        position: 'absolute',
-        padding: '1rem 1rem',
         top: '10%',
-        left: '30%',
-        border: '1px solid transparent',
-        borderRadius: '0.25rem',
-        backgroundColor: '#fff3cd',
-        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+        left: '30%'
       }
-    }, /*#__PURE__*/React.createElement("div", null, " ", componet_react, " "), /*#__PURE__*/React.createElement("button", {
-      style: {
-        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
-        borderRadius: '0.25rem',
-        color: 'white',
-        backgroundColor: '#0275d8',
-        border: '1px solid transparent',
-        marginLeft: '70%',
-        marginTop: 15,
-        padding: 5
-      },
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `mx-5 mt-2 w-full`
+    }, " ", componet_react, " "), /*#__PURE__*/React.createElement("div", {
+      className: ' my-2 w-full flex justify-end'
+    }, /*#__PURE__*/React.createElement("div", {
+      className: 'mx-10  text-white rounded w-16 flex justify-center bg-sky-500 hover:bg-sky-700 _shadow',
       onClick: () => {
         ReactDOM.unmountComponentAtNode(_div);
       }
-    }, "Tho\xE1t"));
+    }, "Tho\xE1t")));
   }
   let _div = document.createElement("_div");
   document.getElementById("root").appendChild(_div);
@@ -888,7 +930,24 @@ function _alert(componet_react) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+function Reponsive() {
+  if (isMobile) {
+    return PC();
+  } else {
+    return Mobile();
+  }
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//****** childNodes[0] lấy text trong div chú ý remove space ********
+// remove space trong div dom mới hoạt động đúng được
+//sự khác nhau giữa children và childNodes. Kết quả trả về của childNodes là một NodeList, object này chứa tất cả những thứ như elements, text và comments, space trong div ở file code của ta chứ không phải web hiển thị
+function get_selection(dom, begin, end) {
+  let range = new Range();
+  range.setStart(dom.childNodes[0], begin);
+  range.setEnd(dom.childNodes[0], end);
+  document.getSelection().removeAllRanges();
+  document.getSelection().addRange(range);
+}
 function Router() {
   let path_quy_ve = path_match(path_name);
   console.log(path_quy_ve);
@@ -1060,12 +1119,9 @@ function Table_hieu_2(props) {
         });
       }
     });
-    if (path_name_test(path_name, "/excel/save")) {
-      get_excel_get_save();
-    }
-    if (path_name.startsWith("/excel/file")) {
-      get_excel_get_file();
-    }
+
+    // if ( path_name_test(path_name,"/excel/save" )  ) { get_excel_get_save() ; }
+    // if ( path_name.startsWith("/excel/file")  ) { get_excel_get_file() ; }
   }, []);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1736,106 +1792,109 @@ function Table_hieu_2(props) {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // lắng nghe các sự khiện khi thao tác với bàn phím (dùng bàn phím)
-  async function _onKeyDown(event, i, j) {
-    console.log('_onKeyDown------------------------------');
-    //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
-    // khi xuất hiện thẻ input thì onKeyDown_1_element === true
-    // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện _onKeyDown ở elment này
-    if (onKeyDown_1_element === false) {
-      let i_array_2d = parseInt(a.current.children[0 + 1].children[0].innerHTML);
-      let j_array_2d = parseInt(a.current.children[0].children[0 + 1].innerHTML);
+  function _onKeyDown(_x2, _x3, _x4) {
+    return _onKeyDown2.apply(this, arguments);
+  } ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function _onKeyDown2() {
+    _onKeyDown2 = _asyncToGenerator(function* (event, i, j) {
+      console.log('_onKeyDown------------------------------');
+      //  onKeyDown_1_element === false tức chưa xuất hiện thẻ input
+      // khi xuất hiện thẻ input thì onKeyDown_1_element === true
+      // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện _onKeyDown ở elment này
+      if (onKeyDown_1_element === false) {
+        let i_array_2d = parseInt(a.current.children[0 + 1].children[0].innerHTML);
+        let j_array_2d = parseInt(a.current.children[0].children[0 + 1].innerHTML);
 
-      // 1. element được kích hoạt và element không ở trạng thái tính toán mà bấm phím enter sẽ xuống dòng 
-      if (event.key == "Enter") {
-        function enter_not_scroll() {
-          console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán");
+        // 1. element được kích hoạt và element không ở trạng thái tính toán mà bấm phím enter sẽ xuống dòng 
+        if (event.key == "Enter") {
+          function enter_not_scroll() {
+            console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán");
 
-          // set địa chỉ ô click  sau hành động trên
-          dia_chi_o_click(i + 1 + i_array_2d, j + j_array_2d, i + 1, j);
-          key_enter(i, j, i + 1, j); // tô màu và focus
-          mien_select_array_2d[0] = i_array_2d + i + 1;
-          mien_select_array_2d[1] = j_array_2d + j;
-          _onMouseEnter_not_event(i + 1, j, i + 1, j);
-          xuat_hien_the_input = false;
-          onKeyDown = false;
-          onclick_tinh_toan = false;
-          onKeyDown_1_element = false;
+            // set địa chỉ ô click  sau hành động trên
+            dia_chi_o_click(i + 1 + i_array_2d, j + j_array_2d, i + 1, j);
+            key_enter(i, j, i + 1, j); // tô màu và focus
+            mien_select_array_2d[0] = i_array_2d + i + 1;
+            mien_select_array_2d[1] = j_array_2d + j;
+            _onMouseEnter_not_event(i + 1, j, i + 1, j);
+            xuat_hien_the_input = false;
+            onKeyDown = false;
+            onclick_tinh_toan = false;
+            onKeyDown_1_element = false;
+          }
+          function enter_affter_scroll() {
+            console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán");
+
+            // set địa chỉ ô click  sau hành động trên
+            dia_chi_o_click(i - 1 + 1 + i_array_2d, j + j_array_2d, i - 1 + 1, j);
+            key_enter(i - 1, j, i + 1 - 1, j); // tô màu và focus
+            mien_select_array_2d[0] = i_array_2d + i + 1 - 1;
+            mien_select_array_2d[1] = j_array_2d + j;
+            _onMouseEnter_not_event(i - 1 + 1, j, i - 1 + 1, j);
+            xuat_hien_the_input = false;
+            onKeyDown = false;
+            onclick_tinh_toan = false;
+            onKeyDown_1_element = false;
+
+            // table_excel.current.removeEventListener("scroll", enter_affter_scroll);   
+          }
+
+          if (i >= limit_view - 1) {
+            // ta không truyền table_excel.current.scrollTop = table_excel.current.scrollTop  * click_scroll_dichuyen 
+            // vì mỗi lần truyền và sự kiện onscroll nhận table_excel.current.scrollTop sẽ có sai số
+            // khi enter nhiều lần sẽ cộng các sai số lại nên khi làm tròn vị trí cát bị sai 1 đợn vị nên có lỗi.
+            window.requestAnimationFrame(enter_affter_scroll);
+            table_excel.current.scrollTop = (i_array_2d + 1) * click_scroll_dichuyen;
+            // ta có thể dùng addEventListener để các hàm bất đồng bộ chạy theo thứ tự ( chú ý ở đây   table_excel.current.addEventListener  sẽ chạy trước nhưng sau đó table_excel.current.scrollTop chạy làm phát sinh scroll nên hàm trong scroll mới chạy.  hoạt động như vậy nó sẽ nhanh hơn setTimeout)
+            // hoặc dùng
+            // window.requestAnimationFrame(enter_affter_scroll);  khi đó hàm enter_affter_scroll không cần dòng   table_excel.current.removeEventListener("scroll", enter_affter_scroll);   này nữa
+            // chú ý  requestAnimationFrame sẽ chạy sau  scrollTop nhưng chạy trước setTimeout
+            // không dùng setTimeout được vì setTimeout và scrollTop là 2 hàm bất đồng bộ nên khi ấn giữ chặt enter nó sẽ chạy không theo thứ tự mà mục đích ta muốn hàm chạy theo thứ tự
+            // table_excel.current.addEventListener("scroll", enter_affter_scroll);
+          } else {
+            enter_not_scroll();
+          }
         }
-        function enter_affter_scroll() {
-          console.log("khi bấm phím enter mà không xuất hiện thẻ input thì không phải tính toán");
+        if (event.key != "Enter") {
+          console.log("_onKeyDown--nhập dữ liệu");
+          // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
+          a.current.children[i + 1].children[j + 1].style.zIndex = 100;
+          a.current.children[i + 1].children[j + 1].innerHTML = '<div  contenteditable="true"  ></div>';
+          let input_ = a.current.children[i + 1].children[j + 1].children[0];
+          // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
 
-          // set địa chỉ ô click  sau hành động trên
-          dia_chi_o_click(i - 1 + 1 + i_array_2d, j + j_array_2d, i - 1 + 1, j);
-          key_enter(i - 1, j, i + 1 - 1, j); // tô màu và focus
-          mien_select_array_2d[0] = i_array_2d + i + 1 - 1;
-          mien_select_array_2d[1] = j_array_2d + j;
-          _onMouseEnter_not_event(i - 1 + 1, j, i - 1 + 1, j);
-          xuat_hien_the_input = false;
-          onKeyDown = false;
-          onclick_tinh_toan = false;
-          onKeyDown_1_element = false;
+          input_.focus({
+            preventScroll: true
+          });
+          console.log(input_);
+          xuat_hien_the_input = true;
+          vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1;
+          Object.assign(input_.style, css.input_focus);
 
-          // table_excel.current.removeEventListener("scroll", enter_affter_scroll);   
-        }
+          // lúc này input nhận giá trị từ bàn phím hiện lên thẻ input 
 
-        if (i >= limit_view - 1) {
-          // ta không truyền table_excel.current.scrollTop = table_excel.current.scrollTop  * click_scroll_dichuyen 
-          // vì mỗi lần truyền và sự kiện onscroll nhận table_excel.current.scrollTop sẽ có sai số
-          // khi enter nhiều lần sẽ cộng các sai số lại nên khi làm tròn vị trí cát bị sai 1 đợn vị nên có lỗi.
-          window.requestAnimationFrame(enter_affter_scroll);
-          table_excel.current.scrollTop = (i_array_2d + 1) * click_scroll_dichuyen;
-          // ta có thể dùng addEventListener để các hàm bất đồng bộ chạy theo thứ tự ( chú ý ở đây   table_excel.current.addEventListener  sẽ chạy trước nhưng sau đó table_excel.current.scrollTop chạy làm phát sinh scroll nên hàm trong scroll mới chạy.  hoạt động như vậy nó sẽ nhanh hơn setTimeout)
-          // hoặc dùng
-          // window.requestAnimationFrame(enter_affter_scroll);  khi đó hàm enter_affter_scroll không cần dòng   table_excel.current.removeEventListener("scroll", enter_affter_scroll);   này nữa
-          // chú ý  requestAnimationFrame sẽ chạy sau  scrollTop nhưng chạy trước setTimeout
-          // không dùng setTimeout được vì setTimeout và scrollTop là 2 hàm bất đồng bộ nên khi ấn giữ chặt enter nó sẽ chạy không theo thứ tự mà mục đích ta muốn hàm chạy theo thứ tự
-          // table_excel.current.addEventListener("scroll", enter_affter_scroll);
-        } else {
-          enter_not_scroll();
+          // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input xuất hiện sẽ lắng nghe sự kiện onKeyDown để gán tiếp
+          //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
+          // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
+          // sau đó gán giá trị khi nhấn lên input_formula
+          var input_formula = thanh_dia_chi_0.current;
+          setTimeout(() => {
+            text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent;
+            console.log(text_formular[i + i_array_2d][j + j_array_2d]);
+            input_formula.value = text_formular[i + i_array_2d][j + j_array_2d];
+            input_formula.vi_tri = [i + i_array_2d, j + j_array_2d];
+          }, 0);
+          onclick_tinh_toan = true;
+          vi_tri_o_truoc[0] = i;
+          vi_tri_o_truoc[1] = j;
+
+          // trước gán sự kiện keydown cho input thì ta phải tắt lắng nghe sự kiện onkedown cho 1 element table cha của input 
+          onKeyDown_1_element = true;
+          run_function_when_input_focus(input_, i, j, i_array_2d, j_array_2d);
         }
       }
-      if (event.key != "Enter") {
-        console.log("_onKeyDown--nhập dữ liệu");
-        // khi ấn phím khác enter thì viết công thức hoặc dữ liệu vào ô đó (thiết lập ô đó ở trạng thái tính toán)
-        a.current.children[i + 1].children[j + 1].style.zIndex = 100;
-        a.current.children[i + 1].children[j + 1].innerHTML = '<div  contenteditable="true"  ></div>';
-        let input_ = a.current.children[i + 1].children[j + 1].children[0];
-        // lấy tiêu điểm để input_ có thể lắng nghe được sụ kiện
-
-        input_.focus({
-          preventScroll: true
-        });
-        console.log(input_);
-        xuat_hien_the_input = true;
-        vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 1;
-        Object.assign(input_.style, css.input_focus);
-
-        // lúc này input nhận giá trị từ bàn phím hiện lên thẻ input 
-
-        // gán giá trị đầu tiên khi nhấn phím đó vào text_formular; các giá trị tiếp theo input xuất hiện sẽ lắng nghe sự kiện onKeyDown để gán tiếp
-        //**************** */ trong javscript thuần ghi giá trị từ bàn phím vào thẻ input sẽ diến ra sau việc lấy giá trị từ thẻ input vào biến.
-        // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
-        // sau đó gán giá trị khi nhấn lên input_formula
-        var input_formula = thanh_dia_chi_0.current;
-        setTimeout(() => {
-          text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent;
-          console.log(text_formular[i + i_array_2d][j + j_array_2d]);
-          input_formula.value = text_formular[i + i_array_2d][j + j_array_2d];
-          input_formula.vi_tri = [i + i_array_2d, j + j_array_2d];
-        }, 0);
-        onclick_tinh_toan = true;
-        vi_tri_o_truoc[0] = i;
-        vi_tri_o_truoc[1] = j;
-
-        // trước gán sự kiện keydown cho input thì ta phải tắt lắng nghe sự kiện onkedown cho 1 element table cha của input 
-        onKeyDown_1_element = true;
-        run_function_when_input_focus(input_, i, j, i_array_2d, j_array_2d);
-      }
-    }
+    });
+    return _onKeyDown2.apply(this, arguments);
   }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
   var mien_select = [0, 0, 0, 0];
   var mien_select_quy_ve = [0, 0, 0, 0];
   var mien_select_array_2d = [0, 0, 0, 0];
@@ -3695,11 +3754,15 @@ function Table_hieu_2(props) {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
   function get_excel_get_file(event) {
-    if (path_name_test(path_name, "/excel/file") === false && path_name_test(path_name, "/excel") === false) {
-      return axios.get(path_name).then(function (response) {
-        console.log(response.data);
-      });
-    }
+    // if ( path_name_test(path_name, "/excel/file") === false && path_name_test(path_name, "/excel") === false ) {
+
+    // return  axios.get(path_name).then(function (response) {
+
+    //     console.log(response.data);
+    //   }) ;
+
+    // }
+
     function get_excel_get_file_get_file_name(event, file_name) {
       axios.get(`/excel/file/${file_name}`).then(function (response) {
         let url_change = `/excel/file/${file_name}?` + "&home=true";
@@ -3778,102 +3841,114 @@ function Table_hieu_2(props) {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async function open_file_computer() {
-    id_0.style.cursor = 'pointer';
-    [fileHandle] = await window.showOpenFilePicker();
+  function open_file_computer() {
+    return _open_file_computer.apply(this, arguments);
+  } /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function _open_file_computer() {
+    _open_file_computer = _asyncToGenerator(function* () {
+      id_0.style.cursor = 'pointer';
+      [fileHandle] = yield window.showOpenFilePicker();
 
-    //  let fileData = await fileHandle.getFile();
-    //  let text = await fileData.text();
+      //  let fileData = await fileHandle.getFile();
+      //  let text = await fileData.text();
 
-    //  var myobj = JSON.parse(text);
-    //      // lệnh này để gỡ bỏ Dom ảo react gắn vào root
-    //      ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+      //  var myobj = JSON.parse(text);
+      //      // lệnh này để gỡ bỏ Dom ảo react gắn vào root
+      //      ReactDOM.unmountComponentAtNode(document.getElementById('root'));
 
-    //      // update root Dom react lại từ đầu
-    //  var myobj = JSON.parse(text);
-    //     ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
+      //      // update root Dom react lại từ đầu
+      //  var myobj = JSON.parse(text);
+      //     ReactDOM.render( <Table_hieu_2   value = { myobj  } file_name = { myobj.file_name }    />  , document.getElementById('root'))  ;
 
-    //  setTimeout(() => {
-    //   thanh_dia_chi_0.current.style.width = "1000px";
-    //   thanh_dia_chi_0.current.style.height = "1000px";
-    //  }, 0);
+      //  setTimeout(() => {
+      //   thanh_dia_chi_0.current.style.width = "1000px";
+      //   thanh_dia_chi_0.current.style.height = "1000px";
+      //  }, 0);
+    });
+    return _open_file_computer.apply(this, arguments);
   }
+  function save_as_file_computer() {
+    return _save_as_file_computer.apply(this, arguments);
+  } ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function _save_as_file_computer() {
+    _save_as_file_computer = _asyncToGenerator(function* () {
+      const opts = {
+        types: [{
+          description: 'json file',
+          accept: {
+            'text/plain': ['.json']
+          }
+        }]
+      };
+      fileHandle = yield window.showSaveFilePicker(opts);
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async function save_as_file_computer() {
-    const opts = {
-      types: [{
-        description: 'json file',
-        accept: {
-          'text/plain': ['.json']
-        }
-      }]
-    };
-    fileHandle = await window.showSaveFilePicker(opts);
-
-    // create a FileSystemWritableFileStream to write to
-    const writableStream = await fileHandle.createWritable();
-    let Data_save = [];
-    for (let i = 0; i < Data.length; i++) {
-      for (let j = 0; j < Data[0].length; j++) {
-        if (Data[i][j] !== null) {
-          Data_save.push([i, j, Data[i][j], text_formular[i][j], index_formular[i][j]]);
-        }
-      }
-    }
-    let file_name;
-    file_name = ref_file_name.current.textContent;
-    // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
-    // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
-    let query = {
-      Data_save: Data_save,
-      formular: [],
-      file_name: file_name
-    };
-    for (let index = 0; index < formular.length; index++) {
-      query.formular[index] = "(" + formular[index] + ")";
-    }
-    let text_save;
-    text_save = JSON.stringify(query);
-
-    // write our file
-    await writableStream.write(text_save);
-
-    // close the file and write the contents to disk.
-    await writableStream.close();
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async function save_file_computer() {
-    let stream = await fileHandle.createWritable();
-    let Data_save = [];
-    for (let i = 0; i < Data.length; i++) {
-      for (let j = 0; j < Data[0].length; j++) {
-        if (Data[i][j] !== null) {
-          Data_save.push([i, j, Data[i][j], text_formular[i][j], index_formular[i][j]]);
+      // create a FileSystemWritableFileStream to write to
+      const writableStream = yield fileHandle.createWritable();
+      let Data_save = [];
+      for (let i = 0; i < Data.length; i++) {
+        for (let j = 0; j < Data[0].length; j++) {
+          if (Data[i][j] !== null) {
+            Data_save.push([i, j, Data[i][j], text_formular[i][j], index_formular[i][j]]);
+          }
         }
       }
-    }
-    let file_name;
-    file_name = ref_file_name.current.textContent;
-    // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
-    // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
-    let query = {
-      Data_save: Data_save,
-      formular: [],
-      file_name: file_name
-    };
-    for (let index = 0; index < formular.length; index++) {
-      query.formular[index] = "(" + formular[index] + ")";
-    }
-    let text_save;
-    text_save = JSON.stringify(query);
-    await stream.write(text_save);
-    await stream.close();
-    console.log('save');
-  }
+      let file_name;
+      file_name = ref_file_name.current.textContent;
+      // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
+      // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
+      let query = {
+        Data_save: Data_save,
+        formular: [],
+        file_name: file_name
+      };
+      for (let index = 0; index < formular.length; index++) {
+        query.formular[index] = "(" + formular[index] + ")";
+      }
+      let text_save;
+      text_save = JSON.stringify(query);
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // write our file
+      yield writableStream.write(text_save);
+
+      // close the file and write the contents to disk.
+      yield writableStream.close();
+    });
+    return _save_as_file_computer.apply(this, arguments);
+  }
+  function save_file_computer() {
+    return _save_file_computer.apply(this, arguments);
+  } ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function _save_file_computer() {
+    _save_file_computer = _asyncToGenerator(function* () {
+      let stream = yield fileHandle.createWritable();
+      let Data_save = [];
+      for (let i = 0; i < Data.length; i++) {
+        for (let j = 0; j < Data[0].length; j++) {
+          if (Data[i][j] !== null) {
+            Data_save.push([i, j, Data[i][j], text_formular[i][j], index_formular[i][j]]);
+          }
+        }
+      }
+      let file_name;
+      file_name = ref_file_name.current.textContent;
+      // vd: formular[0] là (function(){return Data[0][1] = (Data[0][0])+63;})
+      // khi get hoặc post lên sever sẽ bị chuyển thành string     'function(){return Data[0][1] = (Data[0][0])+63;}'
+      let query = {
+        Data_save: Data_save,
+        formular: [],
+        file_name: file_name
+      };
+      for (let index = 0; index < formular.length; index++) {
+        query.formular[index] = "(" + formular[index] + ")";
+      }
+      let text_save;
+      text_save = JSON.stringify(query);
+      yield stream.write(text_save);
+      yield stream.close();
+      console.log('save');
+    });
+    return _save_file_computer.apply(this, arguments);
+  }
   function css() {
     return {
       //verticalAlign: "top" căn theo cạnh top khối của element cha, nếu trong cha có nhiều anh em thì căn tiếp theo top khối của anh em trước nó
@@ -4202,3 +4277,15 @@ const {
 } = React;
 let path_name = window.location.pathname;
 let font_size = 16;
+let isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
+if (isMobile) {
+  font_size = 14;
+}
+;
+function tb(string_pc, string_mobi) {
+  if (isMobile) {
+    return string_mobi;
+  } else {
+    return string_pc;
+  }
+}

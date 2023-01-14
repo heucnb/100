@@ -192,8 +192,8 @@ let ref_file =  useRef(null) ;
 
       
       
-      if ( path_name_test(path_name,"/excel/save" )  ) { get_excel_get_save() ; }
-      if ( path_name.startsWith("/excel/file")  ) { get_excel_get_file() ; }
+      // if ( path_name_test(path_name,"/excel/save" )  ) { get_excel_get_save() ; }
+      // if ( path_name.startsWith("/excel/file")  ) { get_excel_get_file() ; }
 
        
       }, []);
@@ -3896,14 +3896,14 @@ event.persist();
 
    
 
-              if ( path_name_test(path_name, "/excel/file") === false && path_name_test(path_name, "/excel") === false ) {
+              // if ( path_name_test(path_name, "/excel/file") === false && path_name_test(path_name, "/excel") === false ) {
 
-              return  axios.get(path_name).then(function (response) {
+              // return  axios.get(path_name).then(function (response) {
 
-                  console.log(response.data);
-                }) ;
+              //     console.log(response.data);
+              //   }) ;
                 
-              }
+              // }
 
 
               function  get_excel_get_file_get_file_name(event, file_name) {

@@ -1,4 +1,8 @@
-﻿function get_all_path_in_folder(folder) {
+﻿const express = require("express");
+
+var fs = require("fs");
+
+function get_all_path_in_folder(folder) {
 
   let ket_qua = [] ;
   // let ket_qua_end = [] ;
@@ -30,9 +34,85 @@
 
   
  }
-const express = require("express");
 
-var fs = require("fs");
+   function get_data_file_manager( _path) {
+
+   // chú ý nếu ta dùng hàm bất đòng bộ ở đây thì   get_data_file_manager là hàm bất đồng bộ 
+   // hàm bất đồng bộ thì giá trị trả về phải là 1 Promise thì khi dùng làm con của hàm khác mới lấy giá trị trả về được
+   // ***********************************--------- hàm bất đồng bộ này sau đó ta dùng làm con trong các hàm khác thì chỉ có thể trả về qua await được thôi.
+           return new Promise(function(resolve, reject) {
+              fs.lstat('./static'+  _path, (err, stats) => {
+
+                        
+                if(err)
+                reject(console.log("lỗi", err)) ;
+              
+              
+                // nếu path là thư mục thì chạy
+                if (stats.isDirectory() === true) {
+              
+                  let array_file = [];
+                  let array_name_file = fs.readdirSync('./static'+  _path);
+                  // dùng hàm bất đồng bộ như sau         
+                //     array_name_file.map(file => {
+                //     fs.stat('./static/'+ file ,  function(err, stats){ array_file.push([file, stats.mtime , stats.size ]); });
+                //   });
+              
+              
+              
+                //   const intervalObj = setInterval(() => {
+                //   if (array_file.length === array_name_file.length) {
+                //     clearInterval(intervalObj);
+                //     return  res.send( array_file); 
+                //   }
+                // }, 0);
+                
+              // ta có thể  dùng hàm đồng bộ như sau
+
+              console.log( 'Hieu/driver' ,  array_name_file);
+                  array_name_file.map(file => {
+              
+                    let stats = fs.statSync('./static'+  _path + '/' + file);
+                          if (stats.isDirectory() !== true) {
+                            let size = stats.size ;
+                            let date =    Intl.DateTimeFormat('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric',  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( stats.mtime) ;
+                          array_file.push([file, date,   new Intl.NumberFormat('en-IN').format( size ) + ' KB']); 
+              
+                          }
+                          if (stats.isDirectory() === true) {
+                            let size = stats.size ;
+                            let date =    Intl.DateTimeFormat('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric',  hour: '2-digit',  minute: '2-digit',  second: '2-digit' }).format( stats.mtime) ;
+                          array_file.push([file, date, ""]); 
+              
+                          }
+                    
+                  });
+
+                  console.log( 'Hieu/driver' ,  array_file);
+              
+                  // array_file trả về quy định array_file[index][2] = "" là folder. khác "" là file
+
+                  resolve(array_file);
+                
+                  
+                }
+
+
+
+
+                
+
+          });
+
+            
+            });
+   
+  
+  
+
+  
+}
+
 
 // lưu file index.html vào ram
 var index_html =  fs.readFileSync('./'+ '/' + 'index.html', 'utf8') ;
@@ -175,9 +255,15 @@ let array_url = [] ;
 for (let index = 0; index < array_file_name.length; index++) {
  
   array_url[index] = array_file_name[index].slice(9,-3)
+  //-------------***------------------------------------
+// require copy string từ đường dẫn path tới file này và chuyển nó thành fuction
+// chú ý require khi chuyển thành fuction không covert text giống biến toàn cục thành biến toàn cục để sử dụng. Mọi text không khai báo let, var , const , fuction sẽ được hiểu là parameters
+// chú ý eval khi chuyển thành fuction sẽ covert text giống biến toàn cục thành biến toàn cục để sử dụng => khác biệt
+// do đó ta phải truyển argument từ file này tới fuction mà require tạo ra
+// khi truyền argument kích thước lớn cũng không ảnh hưởng tới hiệu suất. ** đã test thử thậm chí còn thấy nhanh hơn truyền 1 giá trị cố định***  vì nó chỉ truyền tham chiếu
  model.push( require( array_file_name[index] ));
  console.log(array_url[index]);
- app.all(array_url[index], function (req, res ) {  model[index](req, res, con , fs, path) });
+ app.all(array_url[index], function (req, res ) {  model[index](req, res, con , fs, path, get_data_file_manager) });
 
 }
 

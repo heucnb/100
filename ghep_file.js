@@ -94,6 +94,8 @@ function ghep_file(){
 
 // console.log(data_convert);
 
+
+
 fs.writeFileSync("./static/index_ghep_file.js", data_convert.code, { flag: 'w+' });
 
 
