@@ -13,8 +13,8 @@ async function file_manager( dom ) {
     let vi_tri_change ;
     let [name_foder_and_file, set_state_1] =  useState( props.value.data );
     let ref = useRef({}) ;
-  
-    let array_radiol_checked = {} ;
+    
+   
 
     let  x_mouse =  useRef(null) ;
     let y_mouse =  useRef(null) ;
@@ -31,8 +31,7 @@ async function file_manager( dom ) {
       let ref_bar_4 =  useRef(null) ;
       let ref_bar_5 =  useRef(null) ;
       let ref_embed =  useRef(null) ;
-      let path_cu =  useRef([""]) ;
-      let select_row =  useRef(null) ;
+    
       let ref_show_file =  useRef(null) ;
       let ref_rename =  useRef(null) ;
       let ref_copy =  useRef(null) ;
@@ -42,16 +41,28 @@ async function file_manager( dom ) {
       // ta phải khởi tạo input type radio checked = {false}  để tắt addEventListener mặc định của radiol này sau đó điều khiển bằng javascript
 
       function radio_checked(index, event) {
-          if (ref.current['radio' + index].checked === true) {
-            delete array_radiol_checked[''+ index];
-            return ref.current['radio' + index].checked = false ;
-         
-          
+          if (ref.current['radio'][index].checked === true) {
+
+        
+            // xác định array file hoặc folder cần copy
+            delete  array_radio_checked.current[index];
+             ref.current['radio'][index].checked = false ;
+            
+            // di chuyển content_menu tới vị trí radio_checked
+             ref_content_menu.current.children[0].style.top = y_mouse.current +'px'
+             ref_content_menu.current.children[0].style.left = x_mouse.current+20 +'px'
+
+             return;
           }else{
-            array_radiol_checked[''+ index] = index ;
-            console.log(array_radiol_checked);
-            return  ref.current['radio' + index].checked = true ;
-           
+             // xác định array file hoặc folder cần copy
+            array_radio_checked.current[index] = index;
+            console.log(array_radio_checked.current);
+              ref.current['radio'][index].checked = true ;
+            // di chuyển content_menu tới vị trí radio_checked
+              ref_content_menu.current.children[0].style.top = y_mouse.current +'px'
+              ref_content_menu.current.children[0].style.left = x_mouse.current+20 +'px'
+ 
+              return;
           }
         
       }
@@ -62,7 +73,7 @@ async function file_manager( dom ) {
                    useEffect(() => { 
                            
                    
-                    console.log(array_radiol_checked);
+                    console.log(array_radio_checked.current);
 
                          //------------------------------------------------------------------------------------------------             
                           // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
@@ -179,7 +190,7 @@ async function file_manager( dom ) {
                          // không dùng được onclick ở đây vì nó sẽ chạy sau onblur
                           // khi onblur chạy Content_mennu mất nên onclick không được thực thi
                           ref.current['copy'].onmousedown = function _copy() {
-                            console.log(array_radiol_checked);
+                            console.log(array_radio_checked.current);
                                let index = props.value.index - 1 ;
                                let copy_array_path_cu_1 = [].concat(path_cu.current);   
                                           
@@ -281,12 +292,7 @@ async function file_manager( dom ) {
            
             let myTimeout ;
 
-            let kiem_tra_Content_mennu = false ;
-
-            if (ref.current.hasOwnProperty('radio0') ) {
-              kiem_tra_Content_mennu = true ;
-            }
-         
+        
            
             let collection = ref_0.current.children;
     ////////////////////////////////////////////////////////////////////////////////////////////////          
@@ -300,19 +306,19 @@ async function file_manager( dom ) {
               
             //--------------------------------------------------------------------
             // khi hover vào dòng thì hiện hover_show_giai_thich_file
-
+          
               collection[index].onmouseenter = function (event) {
                 if (isMobile !== true) {
                       x_mouse.current = event.clientX ;
                       y_mouse.current = event.clientY ;
-                      console.log('------------',  x_mouse.current, y_mouse.current, kiem_tra_Content_mennu );
+                      console.log('------------',  x_mouse.current, y_mouse.current, kiem_tra_Content_mennu.current );
                       event.target.onmousemove = function (event) {
                         // event.preventDefault() ;
                         x_mouse.current = event.clientX ;
                         y_mouse.current = event.clientY ;
                       }
-                      // kiem_tra_Content_mennu === true thì không cho  onmouseenter xảy ra ở tất cả các dòng (tức là không show hover_show_giai_thich_file)
-                      if (kiem_tra_Content_mennu === false  ) {
+                      // kiem_tra_Content_mennu.current === true thì không cho  onmouseenter xảy ra ở tất cả các dòng (tức là không show hover_show_giai_thich_file)
+                      if (kiem_tra_Content_mennu.current === false  ) {
                   
                         
                                 // khi hover ra khỏi xoá giải thích file
@@ -337,7 +343,7 @@ async function file_manager( dom ) {
              collection[index].onmousedown = function _open(event) {
   
 
-            if (event.buttons === 1 &&!ref.current.hasOwnProperty('radio'+(index-1))  ) {
+            if (event.buttons === 1 && ref.current['radio'][index-1] === undefined ) {
             
              
                         
@@ -434,7 +440,7 @@ async function file_manager( dom ) {
                            
     
               } 
-            if (event.buttons === 2) {
+            if (event.buttons === 2&&ref.current['radio'][index-1] === undefined) {
               // ReactDOM.render tại một Dom khi gọi nhiều lần cũng chỉ chạy một lần. do đó ta phải ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
               // để ReactDOM.render chạy mỗi lần khi được gọi
               // dùng trong trường hợp: khi click chuột phải vào dòng sau mà chưa onblur
@@ -455,12 +461,13 @@ async function file_manager( dom ) {
               set_state_1( (  )=>{  return [].concat(name_foder_and_file)  ;} ) ;
            
               ReactDOM.render( <Content_mennu  value = { { data : name_foder_and_file ,  rename : ref_rename.current  ,  dom : ref_0.current , index : index , top : y_mouse.current, left : x_mouse.current  } }  />  ,  ref_content_menu.current) ;
-             console.log(ref.current['radio'+(index-1)]);
-             array_radiol_checked[''+ (index-1)] = (index-1) ;
-              ref.current['radio'+(index-1)].checked = true;
+             console.log(ref.current['radio'][index-1]);
+             array_radio_checked.current[ (index-1)] = (index-1) ;
+
+              ref.current['radio'][index-1].checked = true;
              
               select_row.current = null; 
-              kiem_tra_Content_mennu = true ; 
+              kiem_tra_Content_mennu.current = true ; 
                 
             
     
@@ -474,7 +481,7 @@ async function file_manager( dom ) {
               collection[index].onblur = function (event) {
                 // nếu collection[index] có tabindex mới  kích hoạt onblur
                 // tránh trường hợp khi click mouse right liên tiếp vào các dòng khác nhau cũng click hoạt onblur
-                if ( collection[index].hasAttribute("tabindex")&&!ref.current.hasOwnProperty('radio'+(index-1))  ) {
+                if ( collection[index].hasAttribute("tabindex")&&ref.current['radio'][index-1] === undefined  ) {
 
                   console.log(   index , ' collection[index] lắng nghe  onblur  ' );
                   console.log('onblur');
@@ -483,7 +490,7 @@ async function file_manager( dom ) {
                   collection[index].classList.remove("bg-sky-700");
                   ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
                  
-                  kiem_tra_Content_mennu = false ;
+                  kiem_tra_Content_mennu.current = false ;
                   
                 }
                
@@ -747,6 +754,13 @@ async function file_manager( dom ) {
     
           }, []);
 
+//-----------------------------------------------------------------------------------------------------------------------------------------          
+
+            ref.current['radio'] = [];
+            let kiem_tra_Content_mennu = useRef(false) ;
+            let array_radio_checked =useRef([]) ;
+            let path_cu =  useRef([""]) ;
+            let select_row =  useRef(null) ;
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        
             return (<div className={`${tb('pl-1 pt-1', '')}  `}  >
@@ -828,7 +842,7 @@ async function file_manager( dom ) {
                             name_foder_and_file.map( ( i, index )=>{ 
                                 return <div className={` grid ${tb('grid-cols-3  hover:bg-sky-100 ','grid-cols-1  relative  overflow-hidden border-b border-solid border-stone-200 ' )}w-full   box-border `}  >
                                             <div  className={ '  flex   box-border pl-1 overflow-hidden whitespace-no-wrap  '} > 
-                                            {  function () {   if (select_row.current !== null) {return <input checked = {false} ref={(el)=> {  ref.current['radio'+index] = el }}   type="radio"  onMouseDown ={ ( event )=>{  radio_checked(index, event) ; } } className={` w-4 h-4 text-blue-600 bg-red-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600   `} /> }else{ return '' } }() }
+                                            {  function () {   if (select_row.current !== null) {return <input checked = {false} ref={(el)=> {  ref.current['radio'][index] = el }}   type="radio"  onMouseDown ={ ( event )=>{  radio_checked(index, event) ; } } className={`shrink-0 w-4 h-4 mr-1 text-blue-600 bg-red-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600   `} /> }     }() }
                                              <img className={` ${tb('w-5 h-5',' absolute top-1/2  transform -translate-y-1/2  w-10 h-10')}  pr-1`}  src = {select_icon_from_file_name(i[0])} /> 
                                                 {/*khi dùng transform hoặc realative di chuyển tag div với with tự động full thì nó sẽ tạo thanh scroll vì width đã dài hơn. do đó thẻ mẹ dùng overflow-hidden hoặc flex để xoá đi */}
                                               <div className={` ${tb('overflow-hidden whitespace-nowrap text-ellipsis',' transform translate-x-10 break-all')} `} >{i[0]}</div>    

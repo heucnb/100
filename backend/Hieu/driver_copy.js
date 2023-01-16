@@ -42,6 +42,8 @@ module.exports = async function(req,res ,con , fs, path, get_data_file_manager )
     var stat_0 = fs.statSync('./static'+ req.body.file[0]);
     // lấy tên file
     let folder_name_begin = path.basename('./static' + req.body.file[0]) ;
+
+    
 if (stat_0.isDirectory()) {
      // nếu trong thư đích không có folder cần copy thì tạo folder gốc cần copy
      // ngược lại tạo folder gốc cần copy với tên là tên folder gốc cần copy với thời gian tạo
