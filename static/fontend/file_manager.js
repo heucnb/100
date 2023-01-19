@@ -12,7 +12,7 @@ async function file_manager( dom ) {
     let change_width ;
     let vi_tri_change ;
     let [name_foder_and_file, set_state_1] =  useState( props.value.data );
-    let ref = useRef({}) ;
+    let ref = File_manager.ref = useRef({}) ;
     
    
 
@@ -38,9 +38,19 @@ async function file_manager( dom ) {
       let useEffect_array_change =  useRef(0) ;
       
       // xoá mặc định ban đầu để điều khiển bằng javascript
-      // ta phải khởi tạo input type radio checked = {false}  để tắt addEventListener mặc định của radiol này sau đó điều khiển bằng javascript
+      // ta phải khởi tạo input type radio checked = {false}  để tắt addEventListener mặc định của radiol này sau đó điều khiển bằng radiol javascript
 
       function radio_checked(index, event) {
+        console.log('radio_checkedradio_checkedradio_checked');
+        // khi click  kiem_tra_Content_mennu.current = false  để không chạy fuction trong onblur
+
+        kiem_tra_Content_mennu.current = false ;
+        // sau khi chạy fuction radio_checked xong thì lấy lại tiêu điểm và kiem_tra_Content_mennu.current= true  để onblur được thực thi 
+          setTimeout(() => {
+            console.log('--------------------------------------------radio');
+            ref_content_menu.current.children[0].focus();
+            kiem_tra_Content_mennu.current= true ;
+          }, 0);
           if (ref.current['radio'][index].checked === true) {
 
         
@@ -67,7 +77,7 @@ async function file_manager( dom ) {
         
       }
       function Content_mennu( props) {
-
+     
         let ref = useRef({}) ;
      
                    useEffect(() => { 
@@ -192,12 +202,15 @@ async function file_manager( dom ) {
                           ref.current['copy'].onmousedown = function _copy() {
                             console.log(array_radio_checked.current);
                                let index = props.value.index - 1 ;
-                               let copy_array_path_cu_1 = [].concat(path_cu.current);   
-                                          
-                                let name_file_copy = [name_foder_and_file[index][0] , name_foder_and_file[index][1] , name_foder_and_file[index][2] ];
-                                copy_array_path_cu_1.push(name_file_copy[0]); 
-                                let path_file_copy = copy_array_path_cu_1.join("/") ;
-                              console.log('copy' , path_file_copy);
+                               let  array_radio_checked_flat =  array_radio_checked.current.flat() ;  
+                                 console.log(array_radio_checked_flat);     
+                                let name_file_copy = array_radio_checked_flat.map(( i )=>{ return name_foder_and_file[i][0]  })   ;
+                                console.log(name_file_copy);
+                              
+                                let array_path_file_copy =  name_file_copy.map((  i_name )=>{ return (path_cu.current.concat([i_name])).join("/")  }) ;
+                              console.log('copy' , array_path_file_copy);
+                              ReactDOM.render( <Copy />  ,  ref_copy.current) ;
+                              ReactDOM.unmountComponentAtNode(ref_content_menu.current) ;
                                 function Copy() {
                             
                             
@@ -206,14 +219,22 @@ async function file_manager( dom ) {
                                       let copy_array_path_cu_2 = [].concat(path_cu.current);    
                                         let path_file_paste = copy_array_path_cu_2.join("/") ;
                                         console.log('paste',path_file_paste);
-                                        axios.post("/Hieu/driver_copy", { file : [path_file_copy,  path_file_paste ] }).then(function (response) { 
+                                        axios.post("/Hieu/driver_copy", { file : [array_path_file_copy,  path_file_paste ] }).then(function (response) { 
                             
                             
                                         if (response.data[0] === "ok") {
                                           useEffect_array_change.current = useEffect_array_change.current + 1 ;
                                           set_state_1( response.data[1] ) ;
+
+                                          select_row.current = null; 
+                                          kiem_tra_Content_mennu.current = false ;
+                                      
+                                          // xoá tất cả các phần tử trong array radio để trở về array [] emty
+                                          File_manager.ref.current['radio'].length = 0 ;
+
                                           // xoá hiển thị contextmenu copy-p
                                           ReactDOM.unmountComponentAtNode( ref_copy.current ); 
+                                          
                             
                                           
                                         } else {   
@@ -233,13 +254,13 @@ async function file_manager( dom ) {
                                         
                                       }
                             
-                                  return ( <div  style={  {display: 'flex',boxSizing: 'border-box', position: 'relative', backgroundColor: 'blanchedalmond',  width: '100%',  borderTop: '1px solid #633517 ' , justifyContent: 'space-between',  }  } >  
+                                  return ( <div className={` flex w-full  box-border  relative  bg-orange-200 justify-between border-t border-solid border-yellow-700  `}  >  
                                     
-                                    <div  className={` p-2  `} > {  name_foder_and_file[index][0] }  </div> 
+                                    <div  className={`flex break-all p-2  `} > {  name_foder_and_file[index][0] }  </div> 
                                   <div className={` flex p-2  `}>  
                             
-                                            <div className={`flex mr-2 justify-center rounded w-14 text-white bg-yellow-600 _shadow `} > Canel  </div>
-                                            <div className={`flex justify-center rounded w-24 text-white bg-sky-600 _shadow `} onClick = {( event )=>{  paste_here() }} >  Paste here </div>
+                                            <div className={`flex mr-2 justify-center items-center rounded w-14 text-white bg-yellow-600 _shadow `} > Canel  </div>
+                                            <div className={`flex justify-center items-center rounded w-24 text-white bg-sky-600 _shadow `} onClick = {( event )=>{  paste_here() }} >  Paste here </div>
                                     </div>
                                     </div>
                             
@@ -248,10 +269,36 @@ async function file_manager( dom ) {
                                   
                                 }
                             
-                              ReactDOM.render( <Copy />  ,  ref_copy.current) ;
+                            
 
 
                           }
+
+                          //----------------------------------------------------------------------------------------------------
+                          console.log(ref.current['0']);
+                          // đầu tiên phải focus sau đó mới onblur được
+                          ref.current['0'].focus();
+
+                          ref.current['0'].onblur = function (event) {
+                            console.log('onblur');
+                            if ( kiem_tra_Content_mennu.current === true && mul_select_radio.current === false ) {
+            
+                              console.log('onblur');
+                              
+                              ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
+                              select_row.current = null; 
+                              kiem_tra_Content_mennu.current = false ;
+                              useEffect_array_change.current = useEffect_array_change.current + 1 ;
+                            
+                              set_state_1( (  )=>{ return [].concat(name_foder_and_file); } ) ;
+                              // xoá tất cả các phần tử trong array radio để trở về array [] emty
+                              File_manager.ref.current['radio'].length = 0 ;
+                            }
+                           
+                         
+                
+                          }       
+
         
         
         
@@ -262,7 +309,7 @@ async function file_manager( dom ) {
                         }, []);
     
                      
-              return  (<div   style={  {  top: props.value.top + 'px', left: props.value.left+ 20 + 'px', }  } className={` flex flex-wrap rounded w-40 absolute bg-stone-200 border border-stone-700 border-solid  _shadow ` } > 
+              return  (<div ref = {(el)=> { ref.current['0'] = el } }   tabIndex={-1}  style={  {  top: props.value.top + 'px', left: props.value.left+ 20 + 'px', }  } className={` flex flex-wrap rounded w-40 absolute bg-stone-200 border border-stone-700 border-solid  _shadow ` } > 
         
               <div ref = {(el)=> { ref.current['copy'] = el } }  className={`w-full px-5  hover:bg-sky-200`} > Copy  </div>
               <div ref = {(el)=> { ref.current['paste'] = el } } className={`w-full px-5  hover:bg-sky-200`} > Paste </div> 
@@ -334,6 +381,18 @@ async function file_manager( dom ) {
                       }
                   
                 }
+
+                //----------------------------------------------------------------
+             
+                if (mul_select_radio.current === true) {
+
+                  console.log(event.clientX, event.clientX, index);
+                     // xác định array file hoặc folder cần copy
+            array_radio_checked.current[index] = index;
+            console.log(array_radio_checked.current);
+              ref.current['radio'][index-1].checked = true ;
+                  
+                }
                           
                             
               }
@@ -342,8 +401,9 @@ async function file_manager( dom ) {
           
              collection[index].onmousedown = function _open(event) {
   
-
-            if (event.buttons === 1 && ref.current['radio'][index-1] === undefined ) {
+              console.log(index, 'collection[index] onmousedown--------------');
+              //----onmousedown
+            if (event.buttons === 1 &&kiem_tra_Content_mennu.current !== true) {
             
              
                         
@@ -440,35 +500,49 @@ async function file_manager( dom ) {
                            
     
               } 
-            if (event.buttons === 2&&ref.current['radio'][index-1] === undefined) {
+            if (event.buttons === 2) {
               // ReactDOM.render tại một Dom khi gọi nhiều lần cũng chỉ chạy một lần. do đó ta phải ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
               // để ReactDOM.render chạy mỗi lần khi được gọi
-              // dùng trong trường hợp: khi click chuột phải vào dòng sau mà chưa onblur
+             // ****---------- ReactDOM.unmountComponentAtNode là asyn await nó làm việ như sau
+            //  khi có element khác đang lắng nghe sự kiện ví dụ contextmenu đang lắng nghe onblur
+            // thì giống như  setTimeout  cả đoạn code dưới sẽ bị đẩy ra chờ onblur chạy xong mới chạy
+            // ở đây ta dùng setTimeout kết quả cũng tương tự
+            console.log(  index, ' collection[index] lắng nghe  mouse right down   ' );
               ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
-              console.log(  index, ' collection[index] lắng nghe  mouse right down   ' );
-              
-              // remove hover và tabindex ở tất cả các dòng
-              for (let index = 1, len = collection.length; index < len; index++) { collection[index].removeAttribute('tabindex') ;  collection[index].classList.remove("hover:bg-sky-100")  ; collection[index].classList.remove("bg-sky-100")  } ;
-              // Hiển thị Content_mennu
-              // set tabIndex để sự kiện onblur được lắng nghe
-              collection[index].classList.add("bg-sky-100");
-              collection[index].setAttribute("tabIndex", "-1") ;
+            console.log(  index, ' collection[index] lắng nghe  mouse right down tiếp chạy sau onblur  ' );  
              
-                                 
+                // hiển thị radio                 
               select_row.current = 1;
-              
+             
               useEffect_array_change.current = useEffect_array_change.current + 1 ;
+              console.log('set_state_1--------------------------');
               set_state_1( (  )=>{  return [].concat(name_foder_and_file)  ;} ) ;
-           
+              console.log('set_state_1+++++++++++++++++++++++++++');
+            // Hiển thị Content_mennu
+            // ****---------- ReactDOM.render là asyn await nó làm việ như sau
+            //  khi có element khác đang lắng nghe sự kiện ví dụ contextmenu đang lắng nghe onblur
+            // thì giống như  setTimeout  cả đoạn code dưới sẽ bị đẩy ra chờ onblur chạy xong mới chạy
+            console.log('ReactDOM.render----------------------------');
+            ReactDOM.unmountComponentAtNode( ref_copy.current ); 
               ReactDOM.render( <Content_mennu  value = { { data : name_foder_and_file ,  rename : ref_rename.current  ,  dom : ref_0.current , index : index , top : y_mouse.current, left : x_mouse.current  } }  />  ,  ref_content_menu.current) ;
-             console.log(ref.current['radio'][index-1]);
+              console.log('ReactDOM.render+++++++++++++++++++++++++'); 
+            
+              console.log(ref.current['radio'][index-1]);
+              // xoá array_radio_checked.current cũ đi
+              array_radio_checked.current.length = 0 ;
+              // thiết lập array_radio_checked.current mới
              array_radio_checked.current[ (index-1)] = (index-1) ;
 
               ref.current['radio'][index-1].checked = true;
              
-              select_row.current = null; 
+             
               kiem_tra_Content_mennu.current = true ; 
+             
                 
+            
+
+              
+             
             
     
             }
@@ -476,27 +550,7 @@ async function file_manager( dom ) {
          
           }
     
-          //---------------------------------------------------------------------
-              // sự kiện onblur sẽ kích hoạt sau onmousedown
-              collection[index].onblur = function (event) {
-                // nếu collection[index] có tabindex mới  kích hoạt onblur
-                // tránh trường hợp khi click mouse right liên tiếp vào các dòng khác nhau cũng click hoạt onblur
-                if ( collection[index].hasAttribute("tabindex")&&ref.current['radio'][index-1] === undefined  ) {
-
-                  console.log(   index , ' collection[index] lắng nghe  onblur  ' );
-                  console.log('onblur');
-                  for (let index = 1, len = collection.length; index < len; index++) {   collection[index].classList.add("hover:bg-sky-700")   } ;
-               
-                  collection[index].classList.remove("bg-sky-700");
-                  ReactDOM.unmountComponentAtNode( ref_content_menu.current ); 
-                 
-                  kiem_tra_Content_mennu.current = false ;
-                  
-                }
-               
-             
-    
-              }
+          
     
            //--------------------------------------------------------------------------   
     
@@ -737,6 +791,15 @@ async function file_manager( dom ) {
                   
                         
                       }
+
+
+                      //---------------------------------------------------------------------------------------------
+                    
+                      if (select_row.current === 1&&event.buttons ===1) {
+                        console.log('document.addEventListener');
+                        mul_select_radio.current = true ;
+                        
+                      }
                   
                 
                 });
@@ -759,8 +822,10 @@ async function file_manager( dom ) {
             ref.current['radio'] = [];
             let kiem_tra_Content_mennu = useRef(false) ;
             let array_radio_checked =useRef([]) ;
+        
             let path_cu =  useRef([""]) ;
             let select_row =  useRef(null) ;
+            let mul_select_radio = useRef(false) ; ;
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        
             return (<div className={`${tb('pl-1 pt-1', '')}  `}  >
@@ -836,13 +901,13 @@ async function file_manager( dom ) {
                               <div  className={ ' box-border pl-1 overflow-hidden '} >  Size  </div> 
                           </div>
         
-                      
+                    
             
                           {
                             name_foder_and_file.map( ( i, index )=>{ 
-                                return <div className={` grid ${tb('grid-cols-3  hover:bg-sky-100 ','grid-cols-1  relative  overflow-hidden border-b border-solid border-stone-200 ' )}w-full   box-border `}  >
+                                return <div className={` grid ${tb(`grid-cols-3  ${select_row.current === null?'hover:bg-sky-100':''} `,'grid-cols-1  relative  overflow-hidden border-b border-solid border-stone-200 ' )}w-full   box-border `}  >
                                             <div  className={ '  flex   box-border pl-1 overflow-hidden whitespace-no-wrap  '} > 
-                                            {  function () {   if (select_row.current !== null) {return <input checked = {false} ref={(el)=> {  ref.current['radio'][index] = el }}   type="radio"  onMouseDown ={ ( event )=>{  radio_checked(index, event) ; } } className={`shrink-0 w-4 h-4 mr-1 text-blue-600 bg-red-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600   `} /> }     }() }
+                                            { ( function () {   if (select_row.current !== null) {return <input checked = {false} ref={(el)=> {  ref.current['radio'][index] = el }}   type="radio"  onMouseDown ={ ( event )=>{  radio_checked(index, event) ; } } className={`shrink-0 w-4 h-4 mr-1 text-blue-600 bg-red-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600   `} /> }     })() }
                                              <img className={` ${tb('w-5 h-5',' absolute top-1/2  transform -translate-y-1/2  w-10 h-10')}  pr-1`}  src = {select_icon_from_file_name(i[0])} /> 
                                                 {/*khi dùng transform hoặc realative di chuyển tag div với with tự động full thì nó sẽ tạo thanh scroll vì width đã dài hơn. do đó thẻ mẹ dùng overflow-hidden hoặc flex để xoá đi */}
                                               <div className={` ${tb('overflow-hidden whitespace-nowrap text-ellipsis',' transform translate-x-10 break-all')} `} >{i[0]}</div>    

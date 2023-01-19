@@ -14,11 +14,22 @@
       let ref_return =  useRef(null) ;
       let ref_year =  useRef(null) ;
       let ref_trai =  useRef(null) ;
+      let ref_button =  useRef(null) ;
+         useEffect(() => {       
+          ref_button.current.onclick = function () {
+
+            console.log(99999999999);
+            ReactDOM.render("hieuuuuuuuuu", ref_return.current)
+         
+          }
+
+
+           }, []);
       return ( <div>
           <h2>From_1 </h2>
           <input ref = {ref_year }  type="text" placeholder="year"  />
           <input ref = {ref_trai }  type="text" placeholder="trai" />
-          <button  onClick={ () => ReactDOM.render( "80%" ,  ref_return.current)}  >ty_le_phoi</button>
+          <button  ref = {ref_button }   >ty_le_phoi</button>
           <div  ref = {ref_return }> Dữ liệu</div>
         </div>
       );

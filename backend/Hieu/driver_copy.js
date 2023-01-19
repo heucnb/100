@@ -36,113 +36,127 @@ module.exports = async function(req,res ,con , fs, path, get_data_file_manager )
     }
 
 
+    let array_path_copy = req.body.file[0] ;
+    let len = array_path_copy.length ;
 
+     for (let index = 0 ; index < len ; index++) { 
 
-    // kiểm tra xem người dùng copy file hay thư mục
-    var stat_0 = fs.statSync('./static'+ req.body.file[0]);
-    // lấy tên file
-    let folder_name_begin = path.basename('./static' + req.body.file[0]) ;
+             //----- đoạn code dưới đây copy_paste 1 file hay 1 thư mục   
+                 // kiểm tra xem người dùng copy file hay thư mục
+            var stat_0 = fs.statSync('./static'+ array_path_copy[index]);
+            // lấy tên file
+            let folder_name_begin = path.basename('./static' + array_path_copy[index]) ;
 
-    
-if (stat_0.isDirectory()) {
-     // nếu trong thư đích không có folder cần copy thì tạo folder gốc cần copy
-     // ngược lại tạo folder gốc cần copy với tên là tên folder gốc cần copy với thời gian tạo
-    
-       // tạo folder gốc cần copy
-       try {
+                    
+                if (stat_0.isDirectory()) {
+                    // nếu trong thư đích không có folder cần copy thì tạo folder gốc cần copy
+                    // ngược lại tạo folder gốc cần copy với tên là tên folder gốc cần copy với thời gian tạo
+                    
+                    // tạo folder gốc cần copy
+                    try {
 
-        // list là array  folder name and file name của thư mục ta cần paste vào
-        let path_paste = './static' + '/' + req.body.file[1] ;
-        let list =  fs.readdirSync(path_paste) ;
-        let name_folder_paste;
+                        // list là array  folder name and file name của thư mục ta cần paste vào
+                        let path_paste = './static' + '/' + req.body.file[1] ;
+                        let list =  fs.readdirSync(path_paste) ;
+                        let name_folder_paste;
 
-            if (list.indexOf(folder_name_begin)===-1) {
+                            if (list.indexOf(folder_name_begin)===-1) {
+                             // nếu ở chỗ paste không trùng tên với folder ta copy thì paste luôn không cần đổi tên       
+                                fs.mkdirSync(path_paste + '/' + folder_name_begin );
+                                copy('./static' + array_path_copy[index], './static' + req.body.file[1] + '/' + folder_name_begin )   ;
+                             
+                                
+                            } else {
 
-                fs.mkdirSync(path_paste + '/' + folder_name_begin );
-                copy('./static' + req.body.file[0], './static' + req.body.file[1] + '/' + folder_name_begin )   ;
-                return  res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
+                                 // nếu ở chỗ paste  trùng tên với folder ta copy thì đổi tên sau đó paste
+
+                                        for (let index = 1  ; index < 10000 ; index++) { 
+                            
+                                            name_folder_paste = 'Copy ' +  index  +' ' + folder_name_begin ;
+                                            if (list.indexOf(name_folder_paste)===-1) {
+                                
+                                                break ;
+                                            }
+                                
+                                        }
+                                
+                                        fs.mkdirSync(path_paste + '/' + name_folder_paste );
+                                        copy('./static' + array_path_copy[index], './static' + req.body.file[1] + '/' + name_folder_paste ) 
                 
-            } else {
-
-
-
-                        for (let index = 1  ; index < 10000 ; index++) { 
-            
-                            name_folder_paste = 'Copy-' + '(' +  index  +') ' + folder_name_begin ;
-                            if (list.indexOf(name_folder_paste)===-1) {
-                
-                                break ;
+                                     
+                                
                             }
+
+                    
+                    } catch (error) {
+                        console.log(error);
+
+                        return res.send( "error" )
+                    }
+                    
+
                 
-                        }
-                
-                        fs.mkdirSync(path_paste + '/' + name_folder_paste );
-                         copy('./static' + req.body.file[0], './static' + req.body.file[1] + '/' + name_folder_paste ) 
-   
-                        return  res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
-                
-            }
-
-       
-       } catch (error) {
-        console.log(error);
-
-        return res.send( "error" )
-       }
-      
-
-  
 
 
-    
-} else {
-// nếu copy-paste file thì chạy code dưới đây
+                    
+                } else {
+                // nếu copy-paste file thì chạy code dưới đây
 
-              // req.body.file[1] là string đến folder ta cần paste vào không chứa './static'
-              // path_paste là string đến folder ta cần paste vào
-                let path_paste = './static' + '/' + req.body.file[1] ;
-                let list =  fs.readdirSync(path_paste) ;
-                
-                let name_file_paste;
-                if (list.indexOf(folder_name_begin)===-1) {
+                            // req.body.file[1] là string đến folder ta cần paste vào không chứa './static'
+                            // path_paste là string đến folder ta cần paste vào
+                                let path_paste = './static' + '/' + req.body.file[1] ;
+                                let list =  fs.readdirSync(path_paste) ;
+                                
+                                let name_file_paste;
+                                if (list.indexOf(folder_name_begin)===-1) {
 
-                    fs.writeFileSync( path_paste +'/' + folder_name_begin , fs.readFileSync( './static' + req.body.file[0] ));
-                    res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
-    
+                                    fs.writeFileSync( path_paste +'/' + folder_name_begin , fs.readFileSync( './static' + array_path_copy[index] ));
+                                  
+                    
 
-                }
-                else{
+                                }
+                                else{
 
 
-                                for (let index = 1  ; index < 10000 ; index++) { 
-                        
-                                    name_file_paste = 'Copy-' + '(' +  index  +') ' + folder_name_begin ;
-                                    if (list.indexOf(name_file_paste)===-1) {
-                
-                                        break ;
-                                    }
-                
+                                                for (let index = 1  ; index < 10000 ; index++) { 
+                                        
+                                                    name_file_paste = 'Copy ' +  index  +' ' + folder_name_begin ;
+                                                    if (list.indexOf(name_file_paste)===-1) {
+                                
+                                                        break ;
+                                                    }
+                                
+                                                }
+
+
+                                                fs.writeFileSync( path_paste +'/' + name_file_paste , fs.readFileSync( './static' + array_path_copy[index] ));
+                                            
+                                
+
                                 }
 
+                            
 
-                                fs.writeFileSync( path_paste +'/' + name_file_paste , fs.readFileSync( './static' + req.body.file[0] ));
-                                res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
-                
+                            
+                    
+
 
                 }
-
-               
-
-             
-    
-
-
-}
-   
+                
 
   
- 
+
+
+
+
+      }
+
+
    
+ 
+   // sau khi paste trên sever xong thì gửi data cho client
+
+      return  res.send(["ok", await get_data_file_manager(req.body.file[1])]); 
  
  
   }
