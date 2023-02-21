@@ -1,6 +1,7 @@
 ﻿const express = require("express");
 
 var fs = require("fs");
+const busboy = require('busboy');
 
 function get_all_path_in_folder(folder) {
 
@@ -53,22 +54,7 @@ function get_all_path_in_folder(folder) {
               
                   let array_file = [];
                   let array_name_file = fs.readdirSync('./static'+  _path);
-                  // dùng hàm bất đồng bộ như sau         
-                //     array_name_file.map(file => {
-                //     fs.stat('./static/'+ file ,  function(err, stats){ array_file.push([file, stats.mtime , stats.size ]); });
-                //   });
-              
-              
-              
-                //   const intervalObj = setInterval(() => {
-                //   if (array_file.length === array_name_file.length) {
-                //     clearInterval(intervalObj);
-                //     return  res.send( array_file); 
-                //   }
-                // }, 0);
                 
-              // ta có thể  dùng hàm đồng bộ như sau
-
               console.log( 'Hieu/driver' ,  array_name_file);
                   array_name_file.map(file => {
               
@@ -98,10 +84,6 @@ function get_all_path_in_folder(folder) {
                 }
 
 
-
-
-                
-
           });
 
             
@@ -128,10 +110,6 @@ var con = mysql.createConnection({ host: process.env.host, user: process.env.use
 const app = express();
 const port = process.env.port;
 //vd: truy cập file /static/product_index.js trên url gõ localhost/product_index.js
-
-
-
-
 
 app.use( function (req, res, next) {
 
@@ -173,13 +151,14 @@ app.use(express.static((__dirname + "/static") , options   )  );
 
 
 
-app.use(express.urlencoded({extended: true }));
+
 // nhận body post từ axios phải dùng app.use(express.json());
 //  để gửi data dữ liệu lớn lên server phải dùng post  .   
 // dùng get giới hạn dữ liệu gửi đi
-app.use(express.json());
 
 
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 
 app.get('/excel/file',function(req,res){
 
@@ -236,8 +215,80 @@ app.get('/hh.html',function(req,res){
   return res.end();
   
 });
+app.get('/test.html',function(req,res){
+  const data = fs.readFileSync('./test.html', 'utf8');
+ 
+  res.write(data); 
+  return res.end();
+  
+});
+app.get('/google',function(req,res){
+  console.log('+++++++++++++++++++++++++++++++++');
+  console.log(req);
+  const data = 'ok';
+ 
+  res.write(data); 
+  return res.end();
+  
+});
 
 
+//---------------------------------------------------------------------
+app.post('/profile_chunk',  function (req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+ 
+  const bb = busboy({ headers: req.headers });
+ let saveTo ;
+ let folder ;
+  bb.on('file', (name, file, info) => {
+    console.log('tai------------------file');
+     folder = './static/'+req.query.save +'/';
+     saveTo = folder + req.query.name_uniqueId ;
+    let stream = fs.createWriteStream(saveTo, {flags:'a'});
+      file.pipe(stream);
+   
+  });
+  bb.on('close', () => {
+   
+    if (req.query.part === req.query.part_max) {
+      // nếu client post phần cuối cùng của file thì đổi tên file
+      let list =  fs.readdirSync(folder) ;
+      let name = req.query.name ;
+      if (list.indexOf(name)===-1) {
+        fs.renameSync(saveTo, folder + name);  
+        
+      }else{
+        let name_change ;
+          let index ;
+              for (index = 1 ; index < 10000 ; index++) { 
+          
+                name_change =  index  +'_' + name ;
+                if (list.indexOf(name_change)===-1) {
+                  fs.renameSync(saveTo , folder + name_change);
+                
+                    break ;
+                }
+    
+            }
+
+      }
+
+   
+      
+    }
+    
+
+
+
+     res.send("ok"); 
+    
+  });
+
+  req.pipe(bb);
+  
+  
+})
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // readdirSync(Folder)  : đọc Folder sẽ được tên các file
@@ -263,12 +314,22 @@ for (let index = 0; index < array_file_name.length; index++) {
 // khi truyền argument kích thước lớn cũng không ảnh hưởng tới hiệu suất. ** đã test thử thậm chí còn thấy nhanh hơn truyền 1 giá trị cố định***  vì nó chỉ truyền tham chiếu
  model.push( require( array_file_name[index] ));
  console.log(array_url[index]);
- app.all(array_url[index], function (req, res ) {  model[index](req, res, con , fs, path, get_data_file_manager) });
+ app.all(array_url[index], function (req, res ) {
+
+  // cho phép truy cập host từ trang web khác
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  
+  model[index](req, res, con , fs, path, get_data_file_manager) });
 
 }
 
 
 app.use( function (req, res) {
+
+ 
+
 
   console.log(req.path);
   let string_path = req.path ;
@@ -276,8 +337,8 @@ app.use( function (req, res) {
  let path_match =  string_path.match(/\/.*/) ;
  console.log(path_match[0]);
       if (string_path === path_match[0]) {
-        return  res.send(index_html +   " <script > Router() ;  </script>  "); 
-        
+        return  res.send(index_html); 
+    
       }
 
       

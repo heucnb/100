@@ -140,15 +140,7 @@ function _alert(componet_react) {
    
 }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  function Reponsive() {
 
-    if (isMobile) { return PC(); } else { return Mobile(); }
-
-
-
-    
-  }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //****** childNodes[0] lấy text trong div chú ý remove space ********
   // remove space trong div dom mới hoạt động đúng được
@@ -160,3 +152,49 @@ function _alert(componet_react) {
     document.getSelection().removeAllRanges();
     document.getSelection().addRange(range);
   }
+
+  //--------------------------------------------------------------------------------------
+  function google_login(client_id, in_dom ) {
+    return  new Promise(function(resolve, reject) {
+      var newScript = document.createElement("script");
+      in_dom.appendChild(newScript);
+ newScript.src = "/CDN/accounts.google.com_gsi_client.js";
+ // khi tải xong file thì chạy function sau
+ newScript.onload = function () {
+   function handleCredentialResponse(response) {
+         function parseJwt (token) {
+           var base64Url = token.split('.')[1];
+           var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+         var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+         }).join(''));
+       
+         return JSON.parse(jsonPayload);
+       };
+
+       resolve(parseJwt(response.credential));
+     
+   }
+
+
+
+   google.accounts.id.initialize({
+     client_id: client_id ,
+     callback: handleCredentialResponse
+   });
+   google.accounts.id.renderButton(
+    in_dom,
+     { theme: "outline", size: "large" }  // customization attributes
+   );
+   google.accounts.id.prompt(); // also display the One Tap dialog
+   
+ }
+
+
+     
+
+
+  })
+    
+    
+   }

@@ -120,7 +120,7 @@ function _file_manager() {
       let ref_driver = useRef(null);
       let ref_bar = useRef(null);
       let ref_bar_1 = useRef(null);
-      let ref_bar_2 = useRef(null);
+      let ref_FileInput = useRef(null);
       let ref_bar_3 = useRef(null);
       let ref_bar_4 = useRef(null);
       let ref_bar_5 = useRef(null);
@@ -148,10 +148,12 @@ function _file_manager() {
           // xác định array file hoặc folder cần copy
           delete array_radio_checked.current[index];
           ref.current['radio'][index].checked = false;
-
+          console.log(array_radio_checked.current);
           // di chuyển content_menu tới vị trí radio_checked
           ref_content_menu.current.children[0].style.top = y_mouse.current + 'px';
           ref_content_menu.current.children[0].style.left = x_mouse.current + 20 + 'px';
+          File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - " + array_radio_checked.current.flat().length;
+          ref_content_menu.current.style.display = 'none';
           return;
         } else {
           // xác định array file hoặc folder cần copy
@@ -161,11 +163,16 @@ function _file_manager() {
           // di chuyển content_menu tới vị trí radio_checked
           ref_content_menu.current.children[0].style.top = y_mouse.current + 'px';
           ref_content_menu.current.children[0].style.left = x_mouse.current + 20 + 'px';
+          initial_select_radio.current = index;
+          max_select_radio.current = index;
+          min_select_radio.current = index;
+          File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - " + array_radio_checked.current.flat().length;
+          ref_content_menu.current.style.display = 'none';
           return;
         }
       }
       function Content_mennu(props) {
-        let ref = useRef({});
+        let ref = File_manager.Content_mennu_ref = useRef({});
         useEffect(() => {
           console.log(array_radio_checked.current);
 
@@ -255,6 +262,7 @@ function _file_manager() {
                 return name_foder_and_file_update;
               });
             });
+            ReactDOM.unmountComponentAtNode(ref_content_menu.current);
           };
 
           //---------------------------------------------------------------------------------------------------------------------    
@@ -305,20 +313,34 @@ function _file_manager() {
                   }
                 });
               }
+              function canel() {
+                ReactDOM.unmountComponentAtNode(ref_copy.current);
+              }
               return /*#__PURE__*/React.createElement("div", {
                 className: ` flex w-full  box-border  relative  bg-orange-200 justify-between border-t border-solid border-yellow-700  `
               }, /*#__PURE__*/React.createElement("div", {
                 className: `flex break-all p-2  `
-              }, " ", name_foder_and_file[index][0], "  "), /*#__PURE__*/React.createElement("div", {
+              }, " ", function () {
+                if (array_radio_checked.current.flat().length > 1) {
+                  return array_radio_checked.current.flat().length + ' items';
+                } else if (array_radio_checked.current.flat().length === 1) {
+                  return name_foder_and_file[index][0];
+                } else {
+                  return "0 item";
+                }
+              }(), "  "), /*#__PURE__*/React.createElement("div", {
                 className: ` flex p-2  `
               }, /*#__PURE__*/React.createElement("div", {
-                className: `flex mr-2 justify-center items-center rounded w-14 text-white bg-yellow-600 _shadow `
-              }, " Canel  "), /*#__PURE__*/React.createElement("div", {
+                className: `flex mr-2 justify-center items-center rounded w-14 text-white bg-yellow-600 _shadow `,
+                onClick: event => {
+                  canel();
+                }
+              }, " Canel  "), array_radio_checked.current.flat().length >= 1 ? /*#__PURE__*/React.createElement("div", {
                 className: `flex justify-center items-center rounded w-24 text-white bg-sky-600 _shadow `,
                 onClick: event => {
                   paste_here();
                 }
-              }, "  Paste here ")));
+              }, "  Paste here ") : ""));
             }
           };
 
@@ -341,6 +363,15 @@ function _file_manager() {
               File_manager.ref.current['radio'].length = 0;
             }
           };
+
+          //--------------------------------------------------------------------------------------------------
+
+          ref.current['select_all'].onclick = function (event) {
+            for (let sum = 0, len = name_foder_and_file.length; sum < len; sum++) {
+              array_radio_checked.current[sum] = sum;
+              File_manager.ref.current['radio'][sum].checked = true;
+            }
+          };
         }, []);
         return /*#__PURE__*/React.createElement("div", {
           ref: el => {
@@ -357,12 +388,12 @@ function _file_manager() {
             ref.current['copy'] = el;
           },
           className: `w-full px-5  hover:bg-sky-200`
-        }, " Copy  "), /*#__PURE__*/React.createElement("div", {
+        }, " Copy "), /*#__PURE__*/React.createElement("div", {
           ref: el => {
-            ref.current['paste'] = el;
+            ref.current['select_all'] = el;
           },
           className: `w-full px-5  hover:bg-sky-200`
-        }, " Paste "), /*#__PURE__*/React.createElement("div", {
+        }, " Select All "), /*#__PURE__*/React.createElement("div", {
           ref: el => {
             ref.current['rename'] = el;
           },
@@ -375,10 +406,9 @@ function _file_manager() {
         }, " Delete  "));
       }
       ;
-      useEffect(() => {
+      useEffect( /*#__PURE__*/_asyncToGenerator(function* () {
         console.log('------------------------------------------');
         console.log(path_cu.current);
-        File_manager.data = name_foder_and_file;
         window.addEventListener("contextmenu", e => e.preventDefault());
         let myTimeout;
         let collection = ref_0.current.children;
@@ -415,13 +445,58 @@ function _file_manager() {
             }
 
             //----------------------------------------------------------------
+            // chọn mul_select_radio
+            if (mul_select_radio.current === true && event.buttons === 1) {
+              console.log(3333, initial_select_radio.current, index - 1);
+              if (initial_select_radio.current < index - 1) {
+                if (max_select_radio.current <= index - 1) {
+                  max_select_radio.current = index - 1;
+                }
 
-            if (mul_select_radio.current === true) {
-              console.log(event.clientX, event.clientX, index);
-              // xác định array file hoặc folder cần copy
-              array_radio_checked.current[index] = index;
-              console.log(array_radio_checked.current);
-              ref.current['radio'][index - 1].checked = true;
+                // tô miền chọn
+
+                for (let sum = initial_select_radio.current; sum <= index - 1; sum++) {
+                  array_radio_checked.current[sum] = sum;
+                  console.log(array_radio_checked.current);
+                  ref.current['radio'][sum].checked = true;
+                }
+                // xoá miền chọn thừa
+
+                for (let sum = max_select_radio.current; sum > index - 1; sum--) {
+                  delete array_radio_checked.current[sum];
+                  ref.current['radio'][sum].checked = false;
+                }
+                File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - " + array_radio_checked.current.flat().length;
+              } else if (initial_select_radio.current > index - 1) {
+                if (min_select_radio.current >= index - 1) {
+                  min_select_radio.current = index - 1;
+                }
+
+                // tô miền chọn
+                for (let sum = initial_select_radio.current; sum >= index - 1; sum--) {
+                  array_radio_checked.current[sum] = sum;
+                  console.log(array_radio_checked.current);
+                  ref.current['radio'][sum].checked = true;
+                }
+                // xoá miền chọn thừa
+                for (let sum = min_select_radio.current; sum < index - 1; sum++) {
+                  delete array_radio_checked.current[sum];
+                  ref.current['radio'][sum].checked = false;
+                }
+                File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - " + array_radio_checked.current.flat().length;
+              } else {
+                if (min_select_radio.current !== initial_select_radio.current) {
+                  min_select_radio.current = initial_select_radio.current;
+                  delete array_radio_checked.current[initial_select_radio.current - 1];
+                  ref.current['radio'][initial_select_radio.current - 1].checked = false;
+                }
+                if (max_select_radio.current !== initial_select_radio.current) {
+                  max_select_radio.current = initial_select_radio.current;
+                  delete array_radio_checked.current[initial_select_radio.current + 1];
+                  ref.current['radio'][initial_select_radio.current + 1].checked = false;
+                }
+                File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - " + array_radio_checked.current.flat().length;
+              }
             }
           };
 
@@ -431,18 +506,17 @@ function _file_manager() {
             console.log(index, 'collection[index] onmousedown--------------');
             //----onmousedown
             if (event.buttons === 1 && kiem_tra_Content_mennu.current !== true) {
-              path_cu.current.push(name_foder_and_file[index - 1][0]);
-
               // Ở backend ta đã thiết lập name_foder_and_file[index-1][2] ==="" là folder khác "" là file
               // nếu là ấn vào folder thì chạy
               if (name_foder_and_file[index - 1][2] === "") {
-                console.log(path_cu.current);
                 axios.post("/Hieu/driver", {
-                  folder: path_cu.current.join("/")
+                  folder: path_cu.current.concat(name_foder_and_file[index - 1][0]).join("/")
                 }).then(function (response) {
                   let data = response.data;
                   useEffect_array_change.current = useEffect_array_change.current + 1;
                   set_state_1(data);
+                  path_cu.current.push(name_foder_and_file[index - 1][0]);
+                  console.log(path_cu.current);
                   ReactDOM.render( /*#__PURE__*/React.createElement(Path_to_folder, {
                     value: ["Driver"].concat(path_cu.current.slice(1)).map((i, index) => {
                       return i = i + " /";
@@ -475,14 +549,14 @@ function _file_manager() {
                         alignItems: 'center'
                       }
                     }, /*#__PURE__*/React.createElement("img", {
-                      className: 'w-4  ml-1 mr-1',
+                      className: 'w-8 px-2 py-1 h-6  hover:bg-orange-700',
                       src: "/SVG/back.svg",
                       onClick: event => {
                         _back();
                       }
                     }), props.value.map((i, index) => {
                       return /*#__PURE__*/React.createElement("div", {
-                        className: `hover:bg-sky-700`
+                        className: `hover:bg-orange-700 h-6`
                       }, "  ", i, " ");
                     }));
                   }
@@ -505,23 +579,22 @@ function _file_manager() {
                     zIndex: 2
                   }
                 }, /*#__PURE__*/React.createElement("div", {
-                  className: 'flex  items-center'
+                  className: 'flex ml-1 mt-1 items-center'
                 }, /*#__PURE__*/React.createElement("img", {
-                  className: 'w-4 h-[13px] ml-2 mr-1 mt-1 ',
+                  className: 'w-8 px-2 py-1 h-6 hover:bg-orange-700',
                   src: "/SVG/back_path_white.svg",
                   onClick: event => {
-                    path_cu.current.splice(-1, 1);
                     ReactDOM.unmountComponentAtNode(ref_show_file.current);
                   }
                 }), /*#__PURE__*/React.createElement("img", {
-                  className: 'w-4 mr-[4px]',
+                  className: 'w-8 px-2 py-1 h-6',
                   src: select_icon_from_file_name(name_foder_and_file[index - 1][0])
                 }), /*#__PURE__*/React.createElement("div", {
-                  className: 'text-white  mt-1 '
+                  className: 'text-white '
                 }, " ", name_foder_and_file[index - 1][0], "  ")), /*#__PURE__*/React.createElement("div", {
                   ref: ref_embed
                 }, "   ")), ref_show_file.current);
-                ref_embed.current.innerHTML = ` <embed type= ${convert_file_name_to_type(name_foder_and_file[index - 1][0])} src= ${encodeURI(path_cu.current.join("/"))}   style= '  width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; position: fixed; z-index: 3;'  >`;
+                ref_embed.current.innerHTML = ` <embed type= ${convert_file_name_to_type(name_foder_and_file[index - 1][0])} src= ${encodeURI(path_cu.current.concat(name_foder_and_file[index - 1][0]).join("/"))}   style= '  width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; position: fixed; z-index: 3;'  >`;
               }
             }
             if (event.buttons === 2) {
@@ -567,6 +640,8 @@ function _file_manager() {
               array_radio_checked.current[index - 1] = index - 1;
               ref.current['radio'][index - 1].checked = true;
               kiem_tra_Content_mennu.current = true;
+              ref_content_menu.current.style.display = 'none';
+              ReactDOM.unmountComponentAtNode(ref_giai_thich_file.current);
             }
           };
 
@@ -626,34 +701,110 @@ function _file_manager() {
         /////////////////////////////////////////////////////////////////////////
 
         ref_bar_1.current.onclick = function create_folder(event) {
-          useEffect_array_change.current = useEffect_array_change.current + 1;
-          set_state_1(name_foder_and_file => {
-            let name_foder_and_file_update = [["foder_new", "date_115/10/2022", "type_1", "size"]].concat(name_foder_and_file);
-            return name_foder_and_file_update;
-          });
-          ref_0.current.children[1].children[0].children[1].innerHTML = ` <div    style="  position:absolute;      background-color: azure; width: inherit; height: inherit ;   white-space: nowrap;    "> ${name_foder_and_file[0][0]}  </div>`;
-          let div_rename = ref_0.current.children[1].children[0].children[1].children[0];
-          div_rename.setAttribute("contenteditable", true);
-          let range = new Range();
-          // childNodes[0] lấy text trong div chú ý remove space
-          // ta có thể dùng textContent 
-          let len = div_rename.childNodes[0].length;
-          range.setStart(div_rename.childNodes[0], 0);
-          range.setEnd(div_rename.childNodes[0], len);
-          document.getSelection().removeAllRanges();
-          document.getSelection().addRange(range);
-          //--------------------------------------------------
-          div_rename.onblur = function () {
-            let text = div_rename.textContent;
-            useEffect_array_change.current = useEffect_array_change.current + 1;
-            set_state_1(name_foder_and_file => {
-              let name_foder_and_file_update = [].concat(name_foder_and_file);
-              name_foder_and_file_update[0][0] = text;
-              return name_foder_and_file_update;
-            });
-          };
-        };
+          function New_folder() {
+            let ref_0 = useRef(null);
+            let ref_cancel = useRef(null);
+            let ref_ok = useRef(null);
+            useEffect(() => {
+              let len = ref_0.current.textContent.length;
+              get_selection(ref_0.current, 0, len);
+              //------------------------------------------------------------------------------------
+              ref_0.current.onmousedown = function click_rename(event) {
+                document.getSelection().removeAllRanges();
+              };
+              ref_cancel.current.onclick = function click_cancel(event) {
+                ReactDOM.unmountComponentAtNode(ref_rename.current);
+              };
+              ref_ok.current.onclick = function click_ok(event) {
+                let copy_array_path_cu_1 = [].concat(path_cu.current);
+                copy_array_path_cu_1.push(ref_0.current.textContent);
+                let copy_array_path_cu_2 = [].concat(path_cu.current);
+                axios.post("/Hieu/driver_new_folder", {
+                  path_post: copy_array_path_cu_1.join("/"),
+                  path_begin: copy_array_path_cu_2.join("/")
+                }).then(function (response) {
+                  if (response.data[0] === "ok") {
+                    useEffect_array_change.current = useEffect_array_change.current + 1;
+                    set_state_1(response.data[1]);
+                    ReactDOM.unmountComponentAtNode(ref_rename.current);
+                  } else {
+                    _alert( /*#__PURE__*/React.createElement("div", null, " Th\u01B0 m\u1EE5c  ", /*#__PURE__*/React.createElement("span", {
+                      style: {
+                        color: 'crimson'
+                      }
+                    }, " ", ref_0.current.textContent, "  "), "  \u0111\xE3 t\u1ED3n t\u1EA1i r\u1ED3i   "));
+                  }
+                });
+              };
+            }, []);
+            return /*#__PURE__*/React.createElement("div", {
+              className: 'absolute flex justify-center items-center align-middle w-full h-full top-0 left-0 bg-slate-400 bg-opacity-50'
+            }, /*#__PURE__*/React.createElement("div", {
+              className: ' _shadow rounded w-1/2 bg-white  '
+            }, /*#__PURE__*/React.createElement("div", {
+              className: 'flex flex-wrap'
+            }, /*#__PURE__*/React.createElement("div", {
+              className: `mx-5 mt-2 w-full`
+            }, "  Create folder  "), /*#__PURE__*/React.createElement("div", {
+              ref: ref_0,
+              contentEditable: "true",
+              className: 'mx-5  mt-2 p-2 w-full border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0  '
+            }, "New folder"), /*#__PURE__*/React.createElement("div", {
+              className: ' my-2 w-full flex justify-end'
+            }, /*#__PURE__*/React.createElement("div", {
+              ref: ref_cancel,
+              className: `mx-10 rounded w-16 flex justify-center bg-stone-200 hover:bg-stone-400 _shadow`
+            }, "  Cancel "), /*#__PURE__*/React.createElement("div", {
+              ref: ref_ok,
+              className: 'mx-10 rounded w-16 flex justify-center bg-sky-500 hover:bg-sky-700 _shadow'
+            }, "  OK ")))));
+          }
 
+          //---------------------------------------------------------------------------------------------------------------------
+          ReactDOM.render( /*#__PURE__*/React.createElement(New_folder, null), ref_rename.current);
+        };
+        ///////////////////////////////////////////////////////////////////////////////////
+        ref_FileInput.current.onchange = /*#__PURE__*/function () {
+          var _upload_file = _asyncToGenerator(function* (event) {
+            console.log('---------------------------upload');
+
+            // lấy nhiều file
+            let files = event.target.files;
+            //lấy file đầu tiên
+            for (let _index = 0, len = files.length; _index < len; _index++) {
+              let file = files[_index];
+              let offset = 0;
+              let index = 1;
+              const chunksize = 64 * 100000;
+              let index_max = Math.ceil(file.size / chunksize);
+              let uniqueId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+              let folder = [].concat(path_cu.current).join("/");
+              console.log(folder);
+              while (offset < file.size) {
+                const chunkfile = yield file.slice(offset, offset + chunksize);
+                console.log(chunkfile);
+                let data = new FormData();
+                data.append('file_gui', chunkfile);
+                let config = {
+                  header: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                };
+                let response_await = yield axios.post("http://localhost:8000/profile_chunk?name=" + file.name + '&save=' + folder + '&name_uniqueId=' + uniqueId + '&part=' + index + '&part_max=' + index_max, data, config);
+
+                // kq.textContent =file.name + ' - '+ (index/index_max*100).toFixed(2) +'%' ;
+                console.log(file.name + ' - ' + (index / index_max * 100).toFixed(2) + '%');
+                offset += chunksize;
+                index = index + 1;
+              }
+            }
+            return;
+          });
+          function upload_file(_x5) {
+            return _upload_file.apply(this, arguments);
+          }
+          return upload_file;
+        }();
         ////////////////////////////////////////////////////////////////////////
         function hover_show_giai_thich_file(i) {
           // chú ý lỗi trong react 16
@@ -691,12 +842,16 @@ function _file_manager() {
         ;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      }, [useEffect_array_change.current]);
-      useEffect(() => {
+
         function change_width_to_undefined(event) {
           event.preventDefault();
           change_width = undefined;
           document.body.style.cursor = "default";
+          mul_select_radio.current = false;
+          if (ref_content_menu.current.style.display === "none") {
+            ref_content_menu.current.style.display = "block";
+            File_manager.Content_mennu_ref.current['0'].focus();
+          }
         }
 
         // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
@@ -738,6 +893,10 @@ function _file_manager() {
             for (let index = 1, len = collection.length; index < len; index++) {
               collection[index].style.gridTemplateColumns = string_gridTemplateColumns;
             }
+
+            // lưu lại giá trị gridTemplateColumns
+
+            string_gridTemplateColumns_save.current = string_gridTemplateColumns;
           }
 
           //---------------------------------------------------------------------------------------------
@@ -749,7 +908,72 @@ function _file_manager() {
         });
 
         //----------------------------------------------------------------------
-      }, []);
+        // nếu trước đó người dùng đã thay đổi kích thước các cột thì thay đổi kích thước đúng với kích thước người dùng đã thay đổi
+        if (string_gridTemplateColumns_save.current !== "") {
+          for (let index = 0, len = collection.length; index < len; index++) {
+            collection[index].style.gridTemplateColumns = string_gridTemplateColumns_save.current;
+          }
+        }
+
+        //--------------------------------------------------------------------------------------------------------------------------------
+
+        function google_login(client_id) {
+          return new Promise(function (resolve, reject) {
+            var newScript = document.createElement("script");
+            ref_api_login_google.current.appendChild(newScript);
+            newScript.src = "https://accounts.google.com/gsi/client";
+            // khi tải xong file thì chạy function sau
+            newScript.onload = function () {
+              function handleCredentialResponse(response) {
+                function parseJwt(token) {
+                  var base64Url = token.split('.')[1];
+                  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                  }).join(''));
+                  return JSON.parse(jsonPayload);
+                }
+                ;
+                resolve(parseJwt(response.credential));
+              }
+              google.accounts.id.initialize({
+                client_id: client_id,
+                callback: handleCredentialResponse
+              });
+              google.accounts.id.renderButton(ref_api_login_google.current, {
+                theme: "outline",
+                size: "large"
+              } // customization attributes
+              );
+
+              google.accounts.id.prompt(); // also display the One Tap dialog
+            };
+          });
+        }
+
+        let hhh = yield google_login('306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com');
+        console.log(hhh);
+
+        //    function handleCredentialResponse(response) {
+
+        //      console.log(9999999999,response);
+        //      console.log(8888888888888,response.credential);
+        //      console.log(JSON.stringify(parseJwt(response.credential)));
+        //          var xhr = new XMLHttpRequest();
+        //          xhr.open('GET', 'https://ff35-2a09-bac1-7ae0-50-00-245-37.ap.ngrok.io/google');
+        //          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        //          xhr.onload = function() {
+        //            console.log('Signed in as: ' + xhr.responseText);
+        //          };
+        //          xhr.send('idtoken=' + 999999);
+        //        }
+        //     ref_api_login_google.current.innerHTML = api_login_google ;
+        //     var newScript = document.createElement("script");
+        //     newScript.src = "https://accounts.google.com/gsi/client";
+        //     newScript.async = true;
+        //     newScript.defer = true;
+        //     ref_api_login_google.current.appendChild(newScript);
+      }), [useEffect_array_change.current]);
 
       //-----------------------------------------------------------------------------------------------------------------------------------------          
 
@@ -759,12 +983,14 @@ function _file_manager() {
       let path_cu = useRef([""]);
       let select_row = useRef(null);
       let mul_select_radio = useRef(false);
-      ;
+      let max_select_radio = useRef(null);
+      let min_select_radio = useRef(null);
+      let initial_select_radio = useRef(0);
+      let string_gridTemplateColumns_save = useRef("");
+      let ref_api_login_google = useRef(null);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      return /*#__PURE__*/React.createElement("div", {
-        className: `${tb('pl-1 pt-1', '')}  `
-      }, /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
         ref: ref_giai_thich_file
       }, "   "), /*#__PURE__*/React.createElement("div", {
         ref: ref_content_menu
@@ -773,11 +999,13 @@ function _file_manager() {
       }, "   "), /*#__PURE__*/React.createElement("div", {
         ref: ref_rename
       }, "   "), /*#__PURE__*/React.createElement("div", {
+        ref: ref_api_login_google
+      }, "   "), /*#__PURE__*/React.createElement("div", {
         className: ` flex ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')}    justify-between `
       }, /*#__PURE__*/React.createElement("div", {
         ref: ref_driver
       }, /*#__PURE__*/React.createElement("div", {
-        className: 'pl-[0.12rem]'
+        className: 'pl-1'
       }, "  Driver  ")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
         className: 'focus:bg-red-100 m-0 hover:bg-sky-700 outline-0 placeholder-slate-400 placeholder-shown:italic',
         type: "text",
@@ -796,16 +1024,6 @@ function _file_manager() {
       }), "  "), /*#__PURE__*/React.createElement("div", {
         className: ` ${tb('', 'w-full')}  text-white `
       }, " New folder   ")), /*#__PURE__*/React.createElement("div", {
-        ref: ref_bar_2,
-        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
-      }, /*#__PURE__*/React.createElement("div", {
-        className: ` flex justify-center items-center w-full`
-      }, "  ", /*#__PURE__*/React.createElement("img", {
-        className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
-        src: "/SVG/file_document.svg"
-      }), "  "), /*#__PURE__*/React.createElement("div", {
-        className: ` ${tb('', 'w-full')}   text-white `
-      }, "  New text file  ")), /*#__PURE__*/React.createElement("div", {
         ref: ref_bar_3,
         className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
       }, /*#__PURE__*/React.createElement("div", {
@@ -814,24 +1032,18 @@ function _file_manager() {
         className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
         src: "/SVG/file_upload.svg"
       }), "  "), /*#__PURE__*/React.createElement("div", {
-        className: ` ${tb('', 'w-full')}   text-white `
-      }, "  Upload file ")), /*#__PURE__*/React.createElement("div", {
-        ref: ref_bar_4,
-        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
-      }, /*#__PURE__*/React.createElement("div", {
-        className: ` flex justify-center items-center w-full`
-      }, "  ", /*#__PURE__*/React.createElement("img", {
-        className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
-        src: "/SVG/folder_upload.svg"
-      }), "  "), /*#__PURE__*/React.createElement("div", {
-        className: ` ${tb('', 'w-full')}  text-white `
-      }, "  Upload Folder ")), tb( /*#__PURE__*/React.createElement("div", {
-        ref: ref_bar_5,
-        className: `hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('', 'flex-wrap')} items-center border-yellow-900`
-      }, /*#__PURE__*/React.createElement("img", {
-        className: 'w-5 h-5 pr-1',
-        src: "/SVG/folder_upload.svg"
-      }), /*#__PURE__*/React.createElement("div", null, " Th\xF4ng b\xE1o   ")))), /*#__PURE__*/React.createElement("div", {
+        className: ` ${tb('', 'w-full')}   text-white `,
+        onClick: () => {
+          ref_FileInput.current.click();
+        }
+      }, "  Upload file "), "  ", /*#__PURE__*/React.createElement("input", {
+        type: "file",
+        multiple: true,
+        ref: ref_FileInput,
+        style: {
+          display: 'none'
+        }
+      }))), /*#__PURE__*/React.createElement("div", {
         className: ` ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')} grid box-border bg-white   overflow-hidden `
       }, /*#__PURE__*/React.createElement("div", {
         ref: ref_0,
@@ -991,14 +1203,6 @@ function _alert(componet_react) {
   return ReactDOM.render( /*#__PURE__*/React.createElement(Alert, null), _div);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function Reponsive() {
-  if (isMobile) {
-    return PC();
-  } else {
-    return Mobile();
-  }
-}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //****** childNodes[0] lấy text trong div chú ý remove space ********
 // remove space trong div dom mới hoạt động đúng được
@@ -1010,6 +1214,42 @@ function get_selection(dom, begin, end) {
   document.getSelection().removeAllRanges();
   document.getSelection().addRange(range);
 }
+
+//--------------------------------------------------------------------------------------
+function google_login(client_id, in_dom) {
+  return new Promise(function (resolve, reject) {
+    var newScript = document.createElement("script");
+    in_dom.appendChild(newScript);
+    newScript.src = "/CDN/accounts.google.com_gsi_client.js";
+    // khi tải xong file thì chạy function sau
+    newScript.onload = function () {
+      function handleCredentialResponse(response) {
+        function parseJwt(token) {
+          var base64Url = token.split('.')[1];
+          var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          return JSON.parse(jsonPayload);
+        }
+        ;
+        resolve(parseJwt(response.credential));
+      }
+      google.accounts.id.initialize({
+        client_id: client_id,
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(in_dom, {
+        theme: "outline",
+        size: "large"
+      } // customization attributes
+      );
+
+      google.accounts.id.prompt(); // also display the One Tap dialog
+    };
+  });
+}
+
 function Router() {
   let path_quy_ve = path_match(path_name);
   console.log(path_quy_ve);
@@ -4351,3 +4591,5 @@ function tb(string_pc, string_mobi) {
     return string_pc;
   }
 }
+let api_login_google = ' <div id="g_id_onload"  data-client_id="306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-auto_prompt="false" > </div> <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left" > </div>';
+Router();

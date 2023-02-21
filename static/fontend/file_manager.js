@@ -9,6 +9,7 @@ async function file_manager( dom ) {
     
     
     function  File_manager(props) {
+   
     let change_width ;
     let vi_tri_change ;
     let [name_foder_and_file, set_state_1] =  useState( props.value.data );
@@ -26,7 +27,7 @@ async function file_manager( dom ) {
       let ref_driver =  useRef(null) ;
       let ref_bar =  useRef(null) ;
       let ref_bar_1 =  useRef(null) ;
-      let ref_bar_2 =  useRef(null) ;
+      let ref_FileInput =  useRef(null) ;
       let ref_bar_3 =  useRef(null) ;
       let ref_bar_4 =  useRef(null) ;
       let ref_bar_5 =  useRef(null) ;
@@ -57,10 +58,13 @@ async function file_manager( dom ) {
             // xác định array file hoặc folder cần copy
             delete  array_radio_checked.current[index];
              ref.current['radio'][index].checked = false ;
-            
+             console.log(array_radio_checked.current);
             // di chuyển content_menu tới vị trí radio_checked
              ref_content_menu.current.children[0].style.top = y_mouse.current +'px'
              ref_content_menu.current.children[0].style.left = x_mouse.current+20 +'px'
+             
+             File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - "+  array_radio_checked.current.flat().length ;  
+             ref_content_menu.current.style.display ='none'  ;
 
              return;
           }else{
@@ -71,15 +75,21 @@ async function file_manager( dom ) {
             // di chuyển content_menu tới vị trí radio_checked
               ref_content_menu.current.children[0].style.top = y_mouse.current +'px'
               ref_content_menu.current.children[0].style.left = x_mouse.current+20 +'px'
- 
+              
+              initial_select_radio.current = index ;
+              max_select_radio.current = index ;
+              min_select_radio.current = index ;
+            
+              File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - "+  array_radio_checked.current.flat().length ;  
+              ref_content_menu.current.style.display ='none'  ;
               return;
           }
         
       }
       function Content_mennu( props) {
-     
-        let ref = useRef({}) ;
-     
+        let ref = File_manager.Content_mennu_ref = useRef({}) ;
+ 
+
                    useEffect(() => { 
                            
                    
@@ -189,6 +199,8 @@ async function file_manager( dom ) {
                               return name_foder_and_file_update ;} ) ;
                         
                             }) ;
+
+                            ReactDOM.unmountComponentAtNode(ref_content_menu.current) ;
     
                            
                           }
@@ -253,14 +265,21 @@ async function file_manager( dom ) {
                             
                                         
                                       }
+
+
+
+                                      function canel() {
+                                        ReactDOM.unmountComponentAtNode(ref_copy.current);
+                                        
+                                      }
                             
                                   return ( <div className={` flex w-full  box-border  relative  bg-orange-200 justify-between border-t border-solid border-yellow-700  `}  >  
                                     
-                                    <div  className={`flex break-all p-2  `} > {  name_foder_and_file[index][0] }  </div> 
-                                  <div className={` flex p-2  `}>  
+                                    <div  className={`flex break-all p-2  `} > { (function(){ if ( array_radio_checked.current.flat().length>1) { return array_radio_checked.current.flat().length +' items' } else if(array_radio_checked.current.flat().length===1) { return name_foder_and_file[index][0]  }  else {return "0 item"}       })()  }  </div> 
+                                    <div className={` flex p-2  `}>  
                             
-                                            <div className={`flex mr-2 justify-center items-center rounded w-14 text-white bg-yellow-600 _shadow `} > Canel  </div>
-                                            <div className={`flex justify-center items-center rounded w-24 text-white bg-sky-600 _shadow `} onClick = {( event )=>{  paste_here() }} >  Paste here </div>
+                                            <div className={`flex mr-2 justify-center items-center rounded w-14 text-white bg-yellow-600 _shadow `} onClick = {( event )=>{  canel() }} > Canel  </div>
+                                           {(array_radio_checked.current.flat().length>=1)? <div className={`flex justify-center items-center rounded w-24 text-white bg-sky-600 _shadow `} onClick = {( event )=>{  paste_here() }} >  Paste here </div>:""}
                                     </div>
                                     </div>
                             
@@ -299,7 +318,21 @@ async function file_manager( dom ) {
                 
                           }       
 
+
+                          //--------------------------------------------------------------------------------------------------
+
+                          ref.current['select_all'].onclick = function (event) {
+
+                            
+                            for (let sum = 0 , len = name_foder_and_file.length ; sum < len ; sum++) { 
+                              array_radio_checked.current[sum] = sum;
+                              File_manager.ref.current['radio'][sum].checked = true ;
         
+                              }
+
+
+
+                          }
         
         
         
@@ -311,8 +344,8 @@ async function file_manager( dom ) {
                      
               return  (<div ref = {(el)=> { ref.current['0'] = el } }   tabIndex={-1}  style={  {  top: props.value.top + 'px', left: props.value.left+ 20 + 'px', }  } className={` flex flex-wrap rounded w-40 absolute bg-stone-200 border border-stone-700 border-solid  _shadow ` } > 
         
-              <div ref = {(el)=> { ref.current['copy'] = el } }  className={`w-full px-5  hover:bg-sky-200`} > Copy  </div>
-              <div ref = {(el)=> { ref.current['paste'] = el } } className={`w-full px-5  hover:bg-sky-200`} > Paste </div> 
+              <div ref = {(el)=> { ref.current['copy'] = el } }  className={`w-full px-5  hover:bg-sky-200`} > Copy </div>
+              <div ref = {(el)=> { ref.current['select_all'] = el } } className={`w-full px-5  hover:bg-sky-200`} > Select All </div> 
               <div  ref = {(el)=> { ref.current['rename'] = el } }  className={`w-full px-5  hover:bg-sky-200`} > Rename </div> 
               <div ref = {(el)=> { ref.current['detele'] = el } } className={`w-full px-5  hover:bg-sky-200`} > Delete  </div> 
               </div> 
@@ -324,7 +357,7 @@ async function file_manager( dom ) {
     
     
      
-          useEffect(() => {
+          useEffect( async() => {
 
 
           
@@ -332,7 +365,7 @@ async function file_manager( dom ) {
          
             console.log(path_cu.current);
     
-            File_manager.data = name_foder_and_file ;
+ 
             window.addEventListener("contextmenu", e => e.preventDefault());
     
           
@@ -383,15 +416,86 @@ async function file_manager( dom ) {
                 }
 
                 //----------------------------------------------------------------
-             
-                if (mul_select_radio.current === true) {
+                // chọn mul_select_radio
+                if (mul_select_radio.current === true&&event.buttons ===1) {
 
-                  console.log(event.clientX, event.clientX, index);
-                     // xác định array file hoặc folder cần copy
-            array_radio_checked.current[index] = index;
-            console.log(array_radio_checked.current);
-              ref.current['radio'][index-1].checked = true ;
+                  console.log(3333, initial_select_radio.current,index-1 );
+
+                
+
+                  if (initial_select_radio.current < index-1) {
+
+                    if (max_select_radio.current<=index-1) {
+                      max_select_radio.current = index-1 ; 
+                    }
+
+                    // tô miền chọn
+                      
+                    for (let sum = initial_select_radio.current  ; sum <= index-1 ; sum++) { 
+                      array_radio_checked.current[sum] = sum;
+                      console.log(array_radio_checked.current);
+                        ref.current['radio'][sum].checked = true ;
+
+                      }
+                // xoá miền chọn thừa
+
+                for (let sum = max_select_radio.current  ; sum > index-1 ; sum--) { 
+                  delete  array_radio_checked.current[sum];
+                  ref.current['radio'][sum].checked = false ;
+
+                  }
+
+                   
+                  File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - "+  array_radio_checked.current.flat().length ;  
+
+
+                  }else if(initial_select_radio.current > index-1){
+
+                    if (min_select_radio.current>=index-1) {
+                      min_select_radio.current = index-1 ; 
+                    }
+
+                // tô miền chọn
+                    for (let sum = initial_select_radio.current  ; sum >= index-1 ; sum--) { 
+                      array_radio_checked.current[sum] = sum;
+                      console.log(array_radio_checked.current);
+                        ref.current['radio'][sum].checked = true ;
+
+                      }
+                 // xoá miền chọn thừa
+                 for (let sum = min_select_radio.current  ; sum < index-1 ; sum++) { 
+                  delete  array_radio_checked.current[sum];
+                  ref.current['radio'][sum].checked = false ;
+
+                  }
                   
+                 
+                  
+
+                  File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - "+  array_radio_checked.current.flat().length ;  
+
+
+                  }else{
+
+                    if (min_select_radio.current!==initial_select_radio.current) {
+                      min_select_radio.current = initial_select_radio.current ; 
+                      delete  array_radio_checked.current[initial_select_radio.current-1];
+                      ref.current['radio'][initial_select_radio.current-1].checked = false ;
+                    }
+                    if (max_select_radio.current!==initial_select_radio.current) {
+                      max_select_radio.current = initial_select_radio.current ; 
+
+                     delete  array_radio_checked.current[initial_select_radio.current+1];
+                     ref.current['radio'][initial_select_radio.current+1].checked = false ;
+
+
+                    }
+
+                    File_manager.Content_mennu_ref.current['copy'].textContent = "Copy - "+  array_radio_checked.current.flat().length ;  
+
+                  }
+
+                 
                 }
                           
                             
@@ -406,24 +510,23 @@ async function file_manager( dom ) {
             if (event.buttons === 1 &&kiem_tra_Content_mennu.current !== true) {
             
              
-                        
-                            path_cu.current.push(name_foder_and_file[index-1][0]) ;
-                         
-                            
-                     
                            // Ở backend ta đã thiết lập name_foder_and_file[index-1][2] ==="" là folder khác "" là file
                            // nếu là ấn vào folder thì chạy
                             if ( name_foder_and_file[index-1][2] ==="") {
-                              console.log(  path_cu.current );
-                              axios.post("/Hieu/driver", { folder : path_cu.current.join("/") }).then(function (response) { 
+                             
+                              axios.post("/Hieu/driver", { folder : path_cu.current.concat(name_foder_and_file[index-1][0]).join("/") }).then(function (response) { 
                                     
                                     let data = response.data ;
 
                                     useEffect_array_change.current = useEffect_array_change.current + 1 ;
                                  
                                     set_state_1(data) ;
-                                   
+                                 
+                                    path_cu.current.push(name_foder_and_file[index-1][0]) ;
+                                    console.log(  path_cu.current );
                                     ReactDOM.render( < Path_to_folder   value = { ["Driver"].concat(path_cu.current.slice(1)).map(( i, index )=>{ return i = i+ " /" })  } />, ref_driver.current );
+                                 
+                                  
         
                                     function Path_to_folder(props) {
         
@@ -453,11 +556,11 @@ async function file_manager( dom ) {
         
         
                                       return ( <div style={{  display: "flex", alignItems: 'center',  }}   >  
-                                        <img className={'w-4  ml-1 mr-1'}  src = "/SVG/back.svg"  onClick={(event)=>{ _back() }} />
+                                        <img className={'w-8 px-2 py-1 h-6  hover:bg-orange-700'}  src = "/SVG/back.svg"  onClick={(event)=>{ _back() }} />
                                        
                                         {
         
-                                          props.value.map(( i, index )=>{  return <div  className={`hover:bg-sky-700`} >  {i} </div> })
+                                          props.value.map(( i, index )=>{  return <div  className={`hover:bg-orange-700 h-6`} >  {i} </div> })
         
                                         }
                                        
@@ -479,18 +582,18 @@ async function file_manager( dom ) {
     
                                   console.log(  path_cu.current );
                                     ReactDOM.render( <div  style={  {  position: 'fixed', width: '100%', height: '100%', top: 0, left: 0, right: 0, bottom: 0,  background: ' rgba(		0, 0, 0, 0.8)', zIndex: 2, }}  >
-                                          <div className={'flex  items-center'}  >  
-                                          <img className={'w-4 h-[13px] ml-2 mr-1 mt-1 '}  src = "/SVG/back_path_white.svg"  onClick={(event)=>{ path_cu.current.splice(-1,1) ;  ReactDOM.unmountComponentAtNode( ref_show_file.current );   }} />
-                                    
-                                          <img className={'w-4 mr-[4px]'} src = {select_icon_from_file_name(name_foder_and_file[index-1][0])} />
-                                          <div className={'text-white  mt-1 '} > { name_foder_and_file[index-1][0] }  </div>
+                                          <div className={'flex ml-1 mt-1 items-center'}  >  
+                                                    <img className={'w-8 px-2 py-1 h-6 hover:bg-orange-700'}  src = "/SVG/back_path_white.svg"  onClick={(event)=>{   ReactDOM.unmountComponentAtNode( ref_show_file.current );   }} />
+                                              
+                                                    <img className={'w-8 px-2 py-1 h-6'} src = {select_icon_from_file_name(name_foder_and_file[index-1][0])} />
+                                                    <div className={'text-white '} > { name_foder_and_file[index-1][0] }  </div>
                                           </div>
                                           
                                           <div  ref = {  ref_embed } >   </div>
                                          
                                           </div>, ref_show_file.current );
                                       
-                                     ref_embed.current.innerHTML = ` <embed type= ${ convert_file_name_to_type(name_foder_and_file[index-1][0])} src= ${ encodeURI(path_cu.current.join("/"))  }   style= '  width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; position: fixed; z-index: 3;'  >`      
+                                     ref_embed.current.innerHTML = ` <embed type= ${ convert_file_name_to_type(name_foder_and_file[index-1][0])} src= ${ encodeURI( path_cu.current.concat(name_foder_and_file[index-1][0]).join("/"))  }   style= '  width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; position: fixed; z-index: 3;'  >`      
                               
                               
                             }
@@ -538,9 +641,11 @@ async function file_manager( dom ) {
              
               kiem_tra_Content_mennu.current = true ; 
              
-                
-            
+              ref_content_menu.current.style.display ='none'  ;
 
+              
+            
+              ReactDOM.unmountComponentAtNode( ref_giai_thich_file.current ); 
               
              
             
@@ -623,46 +728,123 @@ async function file_manager( dom ) {
     
     ref_bar_1.current.onclick = function create_folder(event) {
 
-     useEffect_array_change.current = useEffect_array_change.current + 1 ;
-    set_state_1( ( name_foder_and_file )=>{
-    let  name_foder_and_file_update = [["foder_new","date_115/10/2022" ,"type_1", "size"]].concat(name_foder_and_file);
-    return name_foder_and_file_update  ;} ) ;
+    function New_folder() {
+      let ref_0 = useRef(null) ;
+      let ref_cancel = useRef(null) ;
+      let ref_ok = useRef(null) ;
+         useEffect(() => {      
+
+          let len = ref_0.current.textContent.length ;
+          get_selection(ref_0.current,0,len) ;
+          //------------------------------------------------------------------------------------
+          ref_0.current.onmousedown =function click_rename(event) {
+            document.getSelection().removeAllRanges();
+          }
+
+          
+          ref_cancel.current.onclick =function click_cancel(event) {
+           
+            ReactDOM.unmountComponentAtNode( ref_rename.current );
+          }
+
+
+          ref_ok.current.onclick =function click_ok(event) {
+
+           let copy_array_path_cu_1 = [].concat(path_cu.current);
+           copy_array_path_cu_1.push(ref_0.current.textContent);
+           let copy_array_path_cu_2 = [].concat(path_cu.current);
     
-    ref_0.current.children[1].children[0].children[1].innerHTML = ` <div    style="  position:absolute;      background-color: azure; width: inherit; height: inherit ;   white-space: nowrap;    "> ${  name_foder_and_file[0][0] }  </div>`;
+            axios.post("/Hieu/driver_new_folder", { path_post : copy_array_path_cu_1.join("/"), path_begin : copy_array_path_cu_2.join("/") }).then(function (response) { 
+
+             
+              if (response.data[0] === "ok") {
+                                          useEffect_array_change.current = useEffect_array_change.current + 1 ;
+                                          set_state_1( response.data[1] ) ;
+                                          ReactDOM.unmountComponentAtNode( ref_rename.current );
+                                     
+                                        } else {   
+                                            
+                                          _alert( <div  > Thư mục  <span  style={  {   color: 'crimson' }  } > {ref_0.current.textContent }  </span>  đã tồn tại rồi   </div>) ;
+                                        
+                                           
+                                        }
+            
+            }) ;
+
+          
+
+        
+          }
+
+
+         
+            }, []);
+      return <div className={'absolute flex justify-center items-center align-middle w-full h-full top-0 left-0 bg-slate-400 bg-opacity-50'} > 
+      <div   className={' _shadow rounded w-1/2 bg-white  '}  > 
+              <div className={'flex flex-wrap'} >  
+                  <div  className={`mx-5 mt-2 w-full`}  >  Create folder  </div>
+                  <div ref = {ref_0 } contentEditable='true'  className={'mx-5  mt-2 p-2 w-full border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0  '} >New folder</div>
+                  <div className={' my-2 w-full flex justify-end'} > 
+                        <div ref = {ref_cancel } className={`mx-10 rounded w-16 flex justify-center bg-stone-200 hover:bg-stone-400 _shadow` } >  Cancel </div>
+                        <div ref = {ref_ok } className={'mx-10 rounded w-16 flex justify-center bg-sky-500 hover:bg-sky-700 _shadow'} >  OK </div>
+                  </div>
+                
+  
+              </div>
+                
+        </div>
+     
+       </div>
       
-    let div_rename = ref_0.current.children[1].children[0].children[1].children[0] ;
-    
-    div_rename.setAttribute("contenteditable", true) ;
-    
-    
-    let range = new Range();
-    // childNodes[0] lấy text trong div chú ý remove space
-    // ta có thể dùng textContent 
-    let len = div_rename.childNodes[0].length ;
-    range.setStart(div_rename.childNodes[0], 0);
-    
-    range.setEnd(div_rename.childNodes[0], len);
-    document.getSelection().removeAllRanges();
-    document.getSelection().addRange(range);
-    //--------------------------------------------------
-    div_rename.onblur = function () {
-    
-    
-      let text = div_rename.textContent ;
-      useEffect_array_change.current = useEffect_array_change.current + 1 ;
-      set_state_1( ( name_foder_and_file )=>{
-    let  name_foder_and_file_update = [].concat(name_foder_and_file);
-    name_foder_and_file_update[0][0] = text ;
-    return name_foder_and_file_update  ;} ) ;
-    
-    
-    
     }
-    
-    
-    }
-    
  
+    
+    //---------------------------------------------------------------------------------------------------------------------
+    ReactDOM.render(<New_folder/>, ref_rename.current) ;
+
+
+
+    }
+    ///////////////////////////////////////////////////////////////////////////////////
+    ref_FileInput.current.onchange = async function upload_file(event) {
+      console.log('---------------------------upload');
+      
+       // lấy nhiều file
+        let files = event.target.files;
+        //lấy file đầu tiên
+        for (let _index = 0 , len = files.length ; _index < len ; _index++) {
+          let file = files[_index];
+          let offset = 0;
+            let index = 1 ;
+            const chunksize = 64 * 100000;
+            let index_max = Math.ceil(file.size / chunksize); 
+            let  uniqueId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+            let folder = ([].concat(path_cu.current)).join("/") ;
+            console.log(folder);
+          while( offset < file.size ) {
+            const chunkfile = await file.slice( offset, offset + chunksize );
+            console.log(chunkfile);
+            let data = new FormData();
+            data.append('file_gui', chunkfile);
+            let config = { header : { 'Content-Type' : 'multipart/form-data' } } ;
+            let response_await = await axios.post("http://localhost:8000/profile_chunk?name="+ file.name+'&save='+folder+'&name_uniqueId='+ uniqueId+'&part='+index+'&part_max='+index_max, data, config) ;
+          
+            // kq.textContent =file.name + ' - '+ (index/index_max*100).toFixed(2) +'%' ;
+            console.log(file.name + ' - '+ (index/index_max*100).toFixed(2) +'%');
+            offset += chunksize;
+            index = index + 1 ;
+          
+          }
+
+          
+
+         }
+
+   
+ 
+return ;
+
+    }
     ////////////////////////////////////////////////////////////////////////
     function hover_show_giai_thich_file(i ){
           // chú ý lỗi trong react 16
@@ -720,103 +902,183 @@ async function file_manager( dom ) {
           };
            
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   
+      
+    function change_width_to_undefined(event) {
+                
+      event.preventDefault() ;
+      
+      change_width = undefined ;  document.body.style.cursor ="default" ;
+      mul_select_radio.current = false ;
+      if (ref_content_menu.current.style.display === "none") {
+        ref_content_menu.current.style.display = "block";
+        File_manager.Content_mennu_ref.current['0'].focus();
+      
+      } 
+      
+      }
 
+
+      
+      
+      // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
+      document.addEventListener('mouseup', change_width_to_undefined);
+      
+      // change_width === true tức là đã ấn giữ chuột trái khi di chuyển 
+      // dùng document lắng nghe để khi di chuyển ra ngoài element kích hoạt sự kiện sự kiện vẫn xảy ra
+
+  
+      document.addEventListener('mousemove', function (event) {
+      
+      if ( change_width === true ) {
+      
+          let collection = ref_0.current.children ;
+          let width ;
+              width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x ;
+              // xác định min của cột
+              if (width <= font_size*10 && vi_tri_change === 2) {
+                width = font_size*10 ;
+                document.body.style.cursor ="not-allowed" ;
+              }else if
+              (width <= font_size*3 && vi_tri_change === 1) {
+                width = font_size*3 ;
+                document.body.style.cursor ="not-allowed" ;
+              }else{
+                document.body.style.cursor ="col-resize" ;
+              }
+
+              // col_initialization là mảng cột sau đó ta cắt cột thay đổi kích thước được cột không thay đổi kích thước
+              let col_initialization = [0,1,2];
+              col_initialization.splice(vi_tri_change - 1,1) ;
+              let width_col_initialization = ref_0.current.children[0].children[col_initialization[0]].getBoundingClientRect().width + 'px' ;
+            let array_gridTemplateColumns =  [width_col_initialization, width_col_initialization, width_col_initialization] ;
+            array_gridTemplateColumns.map(( i, index )=>{ if (index === vi_tri_change - 1) { array_gridTemplateColumns[index]  =  width +'px' }  }) ;
+            let string_gridTemplateColumns =  array_gridTemplateColumns.join(' ') ;
+          console.log(string_gridTemplateColumns, "---", col_initialization);
+              ref_0.current.parentElement.style.overflowX = 'auto' ;
+              collection[0].style.gridTemplateColumns = string_gridTemplateColumns;
+              for (let index = 1, len = collection.length; index < len; index++) {
+                collection[index].style.gridTemplateColumns = string_gridTemplateColumns;
+              }
+
+
+              // lưu lại giá trị gridTemplateColumns
+
+              string_gridTemplateColumns_save.current = string_gridTemplateColumns ;
+
+
+
+        
+              
+            }
+
+
+            //---------------------------------------------------------------------------------------------
+          
+            if (select_row.current === 1&&event.buttons ===1) {
+              console.log('document.addEventListener');
+              mul_select_radio.current = true ;
+              
+            }
+        
+      
+      });
+
+
+
+      //----------------------------------------------------------------------
+      // nếu trước đó người dùng đã thay đổi kích thước các cột thì thay đổi kích thước đúng với kích thước người dùng đã thay đổi
+     if ( string_gridTemplateColumns_save.current!=="") {
+      for (let index = 0, len = collection.length; index < len; index++) {
+        collection[index].style.gridTemplateColumns =  string_gridTemplateColumns_save.current;
+      }
+
+     }
+
+
+     //--------------------------------------------------------------------------------------------------------------------------------
+    
+       function google_login(client_id ) {
+      return  new Promise(function(resolve, reject) {
+        var newScript = document.createElement("script");
+      ref_api_login_google.current.appendChild(newScript);
+   newScript.src = "https://accounts.google.com/gsi/client";
+   // khi tải xong file thì chạy function sau
+   newScript.onload = function () {
+     function handleCredentialResponse(response) {
+           function parseJwt (token) {
+             var base64Url = token.split('.')[1];
+             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+           var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+           }).join(''));
+         
+           return JSON.parse(jsonPayload);
+         };
+
+         resolve(parseJwt(response.credential));
+       
+     }
+ 
+
+
+     google.accounts.id.initialize({
+       client_id: client_id ,
+       callback: handleCredentialResponse
+     });
+     google.accounts.id.renderButton(
+       ref_api_login_google.current,
+       { theme: "outline", size: "large" }  // customization attributes
+     );
+     google.accounts.id.prompt(); // also display the One Tap dialog
+     
+   }
+
+
+       
+
+
+    })
+      
+      
+     }
+
+     let hhh = await google_login('306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com')  ;
+
+     console.log( hhh );
+  
+      
+     
+     
+
+
+     
+ 
+     
+  //    function handleCredentialResponse(response) {
+         
+  //      console.log(9999999999,response);
+  //      console.log(8888888888888,response.credential);
+  //      console.log(JSON.stringify(parseJwt(response.credential)));
+  //          var xhr = new XMLHttpRequest();
+  //          xhr.open('GET', 'https://ff35-2a09-bac1-7ae0-50-00-245-37.ap.ngrok.io/google');
+  //          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  //          xhr.onload = function() {
+  //            console.log('Signed in as: ' + xhr.responseText);
+  //          };
+  //          xhr.send('idtoken=' + 999999);
+  //        }
+  //     ref_api_login_google.current.innerHTML = api_login_google ;
+  //     var newScript = document.createElement("script");
+  //     newScript.src = "https://accounts.google.com/gsi/client";
+  //     newScript.async = true;
+  //     newScript.defer = true;
+  //     ref_api_login_google.current.appendChild(newScript);
 
     
 
     
           },[useEffect_array_change.current]);
     
-    useEffect(() => {   
-            
-    
-                
-                function change_width_to_undefined(event) {
-                
-                event.preventDefault() ;
-                
-                change_width = undefined ;  document.body.style.cursor ="default" ;
-                
-                }
-
-
-                
-                
-                // xoá bỏ lắng nghe sự kiện thay đổi kích thước cột tại element kích hoạt sự kiện
-                document.addEventListener('mouseup', change_width_to_undefined);
-                
-                // change_width === true tức là đã ấn giữ chuột trái khi di chuyển 
-                // dùng document lắng nghe để khi di chuyển ra ngoài element kích hoạt sự kiện sự kiện vẫn xảy ra
-
-            
-                document.addEventListener('mousemove', function (event) {
-                
-                if ( change_width === true ) {
-                
-                    let collection = ref_0.current.children ;
-                    let width ;
-                        width = event.clientX - ref_0.current.children[0].children[vi_tri_change - 1].getBoundingClientRect().x ;
-                        // xác định min của cột
-                        if (width <= font_size*10 && vi_tri_change === 2) {
-                          width = font_size*10 ;
-                          document.body.style.cursor ="not-allowed" ;
-                        }else if
-                        (width <= font_size*3 && vi_tri_change === 1) {
-                          width = font_size*3 ;
-                          document.body.style.cursor ="not-allowed" ;
-                        }else{
-                          document.body.style.cursor ="col-resize" ;
-                        }
-
-                        // col_initialization là mảng cột sau đó ta cắt cột thay đổi kích thước được cột không thay đổi kích thước
-                        let col_initialization = [0,1,2];
-                        col_initialization.splice(vi_tri_change - 1,1) ;
-                        let width_col_initialization = ref_0.current.children[0].children[col_initialization[0]].getBoundingClientRect().width + 'px' ;
-                      let array_gridTemplateColumns =  [width_col_initialization, width_col_initialization, width_col_initialization] ;
-                      array_gridTemplateColumns.map(( i, index )=>{ if (index === vi_tri_change - 1) { array_gridTemplateColumns[index]  =  width +'px' }  }) ;
-                      let string_gridTemplateColumns =  array_gridTemplateColumns.join(' ') ;
-                    console.log(string_gridTemplateColumns, "---", col_initialization);
-                        ref_0.current.parentElement.style.overflowX = 'auto' ;
-                        collection[0].style.gridTemplateColumns = string_gridTemplateColumns;
-                        for (let index = 1, len = collection.length; index < len; index++) {
-                          collection[index].style.gridTemplateColumns = string_gridTemplateColumns;
-                        }
-
-
-                        
-
-
-
-                  
-                        
-                      }
-
-
-                      //---------------------------------------------------------------------------------------------
-                    
-                      if (select_row.current === 1&&event.buttons ===1) {
-                        console.log('document.addEventListener');
-                        mul_select_radio.current = true ;
-                        
-                      }
-                  
-                
-                });
-
-
-
-                //----------------------------------------------------------------------
-               
-            
-
-    
-               
-     
-    
-    
-          }, []);
-
 //-----------------------------------------------------------------------------------------------------------------------------------------          
 
             ref.current['radio'] = [];
@@ -825,19 +1087,25 @@ async function file_manager( dom ) {
         
             let path_cu =  useRef([""]) ;
             let select_row =  useRef(null) ;
-            let mul_select_radio = useRef(false) ; ;
+            let mul_select_radio = useRef(false) ; 
+            let max_select_radio =  useRef(null) ;
+            let min_select_radio =  useRef(null) ;
+            let initial_select_radio =  useRef(0) ;
+            let string_gridTemplateColumns_save = useRef("") ;
+            let ref_api_login_google =  useRef(null) ;
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        
-            return (<div className={`${tb('pl-1 pt-1', '')}  `}  >
+            return (<div   >
             <div ref = { ref_giai_thich_file }   >   </div>
             <div ref = { ref_content_menu } >   </div>
             <div ref = { ref_show_file } >   </div>
             <div ref = { ref_rename } >   </div>
+            <div ref = { ref_api_login_google } >   </div>
               {/* -------------------------------------------------------------------------------------------------------------------- */}
             <div className={` flex ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')}    justify-between `} >  
              
                 <div ref = { ref_driver } > 
-                  <div className={'pl-[0.12rem]'} >  Driver  </div> 
+                  <div className={'pl-1'} >  Driver  </div> 
                 </div>
              
                 
@@ -860,26 +1128,13 @@ async function file_manager( dom ) {
               <div  className={` ${tb('','w-full')}  text-white `} > New folder   </div>  
               </div>
             
-            <div ref = { ref_bar_2 } className={`hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('','flex-wrap')} items-center border-yellow-900`}   > 
-            <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/SVG/file_document.svg" />  </div>
-           
-             <div  className={` ${tb('','w-full')}   text-white `}  >  New text file  </div>
-            </div>
+         
             <div ref = { ref_bar_3 } className={`hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('','flex-wrap')} items-center border-yellow-900`}    >
             <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/SVG/file_upload.svg" />  </div>
             
-                <div  className={` ${tb('','w-full')}   text-white `}   >  Upload file </div> 
+                <div  className={` ${tb('','w-full')}   text-white `}   onClick={()=>{ ref_FileInput.current.click(); }} >  Upload file </div>  <input type="file" multiple ref={ref_FileInput}  style={{display: 'none'}} />
                  </div>  
-            <div  ref = { ref_bar_4 } className={`hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('','flex-wrap')} items-center border-yellow-900`}    >
-            <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/SVG/folder_upload.svg" />  </div>
            
-                <div  className={` ${tb('','w-full')}  text-white `}  >  Upload Folder </div> 
-             </div>
-            {tb(<div ref = { ref_bar_5 } className={`hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('','flex-wrap')} items-center border-yellow-900`}    > 
-            <img className={'w-5 h-5 pr-1'}  src = "/SVG/folder_upload.svg" /> 
-             <div   > Thông báo   </div>
-            </div>,        )}
-            
             </div>
         
         

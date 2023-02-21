@@ -3,20 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "//": "để restart nodemon trong win 10 wsl phải thêm --legacy-watch",
+    "//": "watch ở đây sẽ theo dõi sự thay đổi ở các file trong tailwind.config.js",
     "ghep_file": "nodemon ghep_file.js --legacy-watch --watch static/fontend  --watch ghep_file.js  ",
     "dev": "nodemon index.js index --legacy-watch --watch backend  --watch index.js --watch index.html ",
-    "//": "watch ở đây sẽ theo dõi sự thay đổi ở các file trong tailwind.config.js",
     "css": "npx tailwindcss -i ./src/tailwind.css -o ./static/fontend/style.css --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "busboy": "^1.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
+    "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
-    "node-notifier": "^10.0.1"
+    "node-notifier": "^10.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
