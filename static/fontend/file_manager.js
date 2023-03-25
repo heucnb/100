@@ -121,7 +121,7 @@ async function file_manager( dom ) {
                                    
                                     ReactDOM.unmountComponentAtNode( props.value.rename);
                                   }
-
+                                 
 
                                   ref_ok.current.onclick =function click_ok(event) {
 
@@ -997,85 +997,13 @@ return ;
 
      //--------------------------------------------------------------------------------------------------------------------------------
     
-       function google_login(client_id ) {
-      return  new Promise(function(resolve, reject) {
-        var newScript = document.createElement("script");
-      ref_api_login_google.current.appendChild(newScript);
-   newScript.src = "https://accounts.google.com/gsi/client";
-   // khi tải xong file thì chạy function sau
-   newScript.onload = function () {
-     function handleCredentialResponse(response) {
-           function parseJwt (token) {
-             var base64Url = token.split('.')[1];
-             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-           var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-           }).join(''));
-         
-           return JSON.parse(jsonPayload);
-         };
-
-         resolve(parseJwt(response.credential));
-       
-     }
- 
 
 
-     google.accounts.id.initialize({
-       client_id: client_id ,
-       callback: handleCredentialResponse
-     });
-     google.accounts.id.renderButton(
-       ref_api_login_google.current,
-       { theme: "outline", size: "large" }  // customization attributes
-     );
-     google.accounts.id.prompt(); // also display the One Tap dialog
-     
-   }
+     let obj_login = await google_login('306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com', ref_api_login_google.current)  ;
 
-
-       
-
-
-    })
-      
-      
-     }
-
-     let hhh = await google_login('306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com')  ;
-
-     console.log( hhh );
+     console.log( obj_login );
   
       
-     
-     
-
-
-     
- 
-     
-  //    function handleCredentialResponse(response) {
-         
-  //      console.log(9999999999,response);
-  //      console.log(8888888888888,response.credential);
-  //      console.log(JSON.stringify(parseJwt(response.credential)));
-  //          var xhr = new XMLHttpRequest();
-  //          xhr.open('GET', 'https://ff35-2a09-bac1-7ae0-50-00-245-37.ap.ngrok.io/google');
-  //          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  //          xhr.onload = function() {
-  //            console.log('Signed in as: ' + xhr.responseText);
-  //          };
-  //          xhr.send('idtoken=' + 999999);
-  //        }
-  //     ref_api_login_google.current.innerHTML = api_login_google ;
-  //     var newScript = document.createElement("script");
-  //     newScript.src = "https://accounts.google.com/gsi/client";
-  //     newScript.async = true;
-  //     newScript.defer = true;
-  //     ref_api_login_google.current.appendChild(newScript);
-
-    
-
     
           },[useEffect_array_change.current]);
     
@@ -1101,6 +1029,8 @@ return ;
             <div ref = { ref_show_file } >   </div>
             <div ref = { ref_rename } >   </div>
             <div ref = { ref_api_login_google } >   </div>
+             <Chat/>
+             <Chat_2/>
               {/* -------------------------------------------------------------------------------------------------------------------- */}
             <div className={` flex ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')}    justify-between `} >  
              

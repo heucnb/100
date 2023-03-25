@@ -15,9 +15,11 @@
     "busboy": "^1.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "node-notifier": "^10.0.1",
+    "socket.io": "^4.6.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

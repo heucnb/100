@@ -1,5 +1,7 @@
-﻿const express = require("express");
-
+﻿const jwt = require('jsonwebtoken');
+const express = require("express");
+var events = require('events');
+var em = new events.EventEmitter();
 var fs = require("fs");
 const busboy = require('busboy');
 
@@ -104,11 +106,41 @@ const path = require('path');
 // Với việc sử dụng .env : Giấu các thông tin bí mật (username, password) trong file .env, không được commit thông qua git thông thường. Tận dụng để chuyển qua lại giữa các môi trường ứng với mục đích sử dụng khác nhau.
 const dotenv = require("dotenv");
 dotenv.config();
+
 var mysql = require("mysql");
 var con = mysql.createConnection({ host: process.env.host, user: process.env.user, password:process.env.password, database: process.env.database, }); con.connect(function (err) { if (err) { console.log("Error connecting to Db"); return; } console.log("Connection mysql established"); });
 
 const app = express();
 const port = process.env.port;
+let refreshTokens = [] ;
+const token_secret = process.env.TOKEN_SECRET;
+const refresh_secret = process.env.REFRESH_TOKEN_SECRET;
+const verifyToken = (req, res, next) => {
+  const token =req.body.token ;
+  let refreshToken = req.body.refreshToken ;
+console.log(99999, token);
+  if (token === undefined) {
+    return  res.send('Bạn phải đăng nhập lại'); 
+  }
+  try {
+    jwt.verify(token, token_secret);
+    return next();
+    
+  } catch (err) {
+    // kiểm tra refresh token
+                                try {
+                                  jwt.verify(refreshToken, refresh_secret);
+                                  return next();
+                                  
+                                } catch (error) {
+                                  
+                                  return  res.send('Có lỗi, Bạn phải đăng nhập lại'); 
+                                  
+                                }
+  
+  }
+ 
+};
 //vd: truy cập file /static/product_index.js trên url gõ localhost/product_index.js
 
 app.use( function (req, res, next) {
@@ -131,6 +163,7 @@ app.use( function (req, res, next) {
 
 
 
+
 var options = {
   etag: true,
   redirect: true,
@@ -146,7 +179,9 @@ var options = {
   }
 }
 
-app.use(express.static((__dirname + "/static") , options   )  );
+
+
+app.use( express.static((__dirname + "/static") , options   )  );
 
 
 
@@ -159,6 +194,7 @@ app.use(express.static((__dirname + "/static") , options   )  );
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb', extended: true}));
+
 
 app.get('/excel/file',function(req,res){
 
@@ -208,18 +244,73 @@ if (req.query.home === "true") {
 });
 
 
-app.get('/hh.html',function(req,res){
+app.post('/login',function(req,res){
+console.log( req.body.name, req.body.password );
+// kiểm tra trong data login có
+//gửi về token
+const token = jwt.sign({name: req.body.name , quyen : 'bt' ,  }, token_secret , { expiresIn: '1800s' });
+const refreshToken = jwt.sign({name: req.body.name , quyen : 'bt' ,  } , refresh_secret , { expiresIn: '180000s'})
+refreshTokens.push(refreshToken) ;
+  res.write([token, refreshToken]); 
+  return res.end();
+  
+});
+
+app.post('/truy_van', verifyToken ,function(req,res){
+  console.log( "token phù hợp" );
+  
+   
+    res.write('token phù hợp'); 
+    return res.end();
+    
+  });
+
+
+app.get('/hh',verifyToken,function(req,res){
+  console.log('--------verifyToken------phù hợp');
   const data = fs.readFileSync('./static/hh.html', 'utf8');
  
   res.write(data); 
   return res.end();
   
 });
-app.get('/test.html',function(req,res){
-  const data = fs.readFileSync('./test.html', 'utf8');
+app.get('/test',function(req,res){
+  const data = fs.readFileSync('./socket.html', 'utf8');
  
   res.write(data); 
   return res.end();
+
+  
+});
+
+app.get('/test1',function(req,res){
+
+ 
+em.emit('FirstEvent', 'This is my first Node.js event emitter example.');
+  return res.end();
+
+
+
+ 
+  
+});
+app.get('/gobal',function(req,res){
+
+  em.on('FirstEvent', function (data) {
+    console.log('First subscriber: ' + data);
+    res.write(data); 
+    return res.end();
+});
+
+  // setInterval(( )=>{ 
+  //   console.log(xxx);
+  //   if (xxx === true) {
+  //   res.write('333333333333333333'); 
+  //   return res.end();
+    
+  //  }  }, 1000);
+ 
+ 
   
 });
 app.get('/google',function(req,res){
@@ -313,7 +404,7 @@ for (let index = 0; index < array_file_name.length; index++) {
 // do đó ta phải truyển argument từ file này tới fuction mà require tạo ra
 // khi truyền argument kích thước lớn cũng không ảnh hưởng tới hiệu suất. ** đã test thử thậm chí còn thấy nhanh hơn truyền 1 giá trị cố định***  vì nó chỉ truyền tham chiếu
  model.push( require( array_file_name[index] ));
- console.log(array_url[index]);
+ console.log(111,array_url[index]);
  app.all(array_url[index], function (req, res ) {
 
   // cho phép truy cập host từ trang web khác
@@ -331,7 +422,7 @@ app.use( function (req, res) {
  
 
 
-  console.log(req.path);
+  console.log(222,req.path);
   let string_path = req.path ;
   // lấy string đầu tiên có / và đừng sau là bất kì ký tự gì
  let path_match =  string_path.match(/\/.*/) ;

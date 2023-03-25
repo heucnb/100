@@ -7,6 +7,10 @@ function Router() {
  console.log(path_quy_ve);
     switch (path_quy_ve) {
       //-----------------------------------------------------------------------------------------------------------------
+      case '/Login':
+       ReactDOM.render(React.createElement(Login, null), document.getElementById('root'));
+       break;
+      //-----------------------------------------------------------------------------------------------------------------
       case '/excel':
        ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
        break;

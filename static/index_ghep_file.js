@@ -4,6 +4,70 @@ function App() {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(F, null), /*#__PURE__*/React.createElement(Footer, null));
 }
 ;
+function Chat() {
+  let ref_0 = useRef(null);
+  let ref_input = useRef(null);
+  let ref_send = useRef(null);
+  useEffect(() => {
+    ref_send.current.onclick = function (event) {
+      socket.emit('chat message', ref_input.current.textContent);
+      ref_input.current.textContent = '';
+      ;
+    };
+    let messages = ref_send.current;
+    socket.on('chat message', function (msg) {
+      var item = document.createElement('li');
+      item.textContent = msg;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: 'flex flex-wrap'
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: ref_0,
+    className: `mx-5 mt-2 w-full`
+  }, " Chat socket  "), /*#__PURE__*/React.createElement("div", {
+    ref: ref_input,
+    contentEditable: "true",
+    className: 'mx-5  mt-2 p-2 grow  border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0  '
+  }), /*#__PURE__*/React.createElement("div", {
+    ref: ref_send,
+    className: ' my-2  flex justify-end'
+  }, "Send"));
+}
+function Chat_2() {
+  let ref_0 = useRef(null);
+  let ref_input = useRef(null);
+  let ref_send = useRef(null);
+  useEffect(() => {
+    ref_send.current.onclick = function (event) {
+      socket.emit('chat message_2', ref_input.current.textContent);
+      ref_input.current.textContent = '';
+      ;
+    };
+    let messages = ref_send.current;
+    socket.on('chat message_2', function (msg) {
+      var item = document.createElement('li');
+      item.textContent = msg;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  }, []);
+  return /*#__PURE__*/React.createElement("div", {
+    className: 'flex flex-wrap'
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: ref_0,
+    className: `mx-5 mt-2 w-full`
+  }, " Chat socket  "), /*#__PURE__*/React.createElement("div", {
+    ref: ref_input,
+    contentEditable: "true",
+    className: 'mx-5  mt-2 p-2 grow  border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0  '
+  }), /*#__PURE__*/React.createElement("div", {
+    ref: ref_send,
+    className: ' my-2  flex justify-end'
+  }, "Send"));
+}
 function F() {
   let ref_1 = useRef(null);
   let ref_2 = useRef(null);
@@ -917,62 +981,8 @@ function _file_manager() {
 
         //--------------------------------------------------------------------------------------------------------------------------------
 
-        function google_login(client_id) {
-          return new Promise(function (resolve, reject) {
-            var newScript = document.createElement("script");
-            ref_api_login_google.current.appendChild(newScript);
-            newScript.src = "https://accounts.google.com/gsi/client";
-            // khi tải xong file thì chạy function sau
-            newScript.onload = function () {
-              function handleCredentialResponse(response) {
-                function parseJwt(token) {
-                  var base64Url = token.split('.')[1];
-                  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                  }).join(''));
-                  return JSON.parse(jsonPayload);
-                }
-                ;
-                resolve(parseJwt(response.credential));
-              }
-              google.accounts.id.initialize({
-                client_id: client_id,
-                callback: handleCredentialResponse
-              });
-              google.accounts.id.renderButton(ref_api_login_google.current, {
-                theme: "outline",
-                size: "large"
-              } // customization attributes
-              );
-
-              google.accounts.id.prompt(); // also display the One Tap dialog
-            };
-          });
-        }
-
-        let hhh = yield google_login('306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com');
-        console.log(hhh);
-
-        //    function handleCredentialResponse(response) {
-
-        //      console.log(9999999999,response);
-        //      console.log(8888888888888,response.credential);
-        //      console.log(JSON.stringify(parseJwt(response.credential)));
-        //          var xhr = new XMLHttpRequest();
-        //          xhr.open('GET', 'https://ff35-2a09-bac1-7ae0-50-00-245-37.ap.ngrok.io/google');
-        //          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //          xhr.onload = function() {
-        //            console.log('Signed in as: ' + xhr.responseText);
-        //          };
-        //          xhr.send('idtoken=' + 999999);
-        //        }
-        //     ref_api_login_google.current.innerHTML = api_login_google ;
-        //     var newScript = document.createElement("script");
-        //     newScript.src = "https://accounts.google.com/gsi/client";
-        //     newScript.async = true;
-        //     newScript.defer = true;
-        //     ref_api_login_google.current.appendChild(newScript);
+        let obj_login = yield google_login('306462046146-abrpr0q4aep5uca528h6ehept83m3ghv.apps.googleusercontent.com', ref_api_login_google.current);
+        console.log(obj_login);
       }), [useEffect_array_change.current]);
 
       //-----------------------------------------------------------------------------------------------------------------------------------------          
@@ -1000,7 +1010,7 @@ function _file_manager() {
         ref: ref_rename
       }, "   "), /*#__PURE__*/React.createElement("div", {
         ref: ref_api_login_google
-      }, "   "), /*#__PURE__*/React.createElement("div", {
+      }, "   "), /*#__PURE__*/React.createElement(Chat, null), /*#__PURE__*/React.createElement(Chat_2, null), /*#__PURE__*/React.createElement("div", {
         className: ` flex ${tb('w-3/4 border border-solid border-yellow-900', 'w-full')}    justify-between `
       }, /*#__PURE__*/React.createElement("div", {
         ref: ref_driver
@@ -1250,10 +1260,80 @@ function google_login(client_id, in_dom) {
   });
 }
 
+function Login() {
+  let ref_eyes = useRef(null);
+  let ref_name_login = useRef(null);
+  let ref_password = useRef(null);
+  function dang_nhap(event) {
+    axios.post("/login", {
+      name: ref_name_login.current.textContent,
+      password: ref_password.current.value
+    }).then(function (response) {
+      localStorage.setItem('token', response.data[0]);
+      localStorage.setItem('refreshToken', response.data[1]);
+      console.log(response.data);
+    });
+  }
+  function truy_van(event) {
+    let token = localStorage.getItem("token");
+    let refreshToken = localStorage.getItem("refreshToken");
+    axios.post("/truy_van", {
+      token: token,
+      refreshToken: refreshToken
+    }).then(function (response) {
+      console.log(response.data);
+    });
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: `  flex  justify-center `
+  }, /*#__PURE__*/React.createElement("div", {
+    className: ` ${tb('w-1/2 top-1/2  transform -translate-y-1/2 ', 'w-4/5 top-6 ')} flex flex-wrap   gap-4   absolute   `
+  }, /*#__PURE__*/React.createElement("div", {
+    className: ` w-full flex items-center  font-medium`
+  }, " \u0110i\u1EC1n th\xF4ng tin \u0111\u0103ng nh\u1EADp "), /*#__PURE__*/React.createElement("div", {
+    ref: ref_name_login,
+    contentEditable: "true",
+    className: ` rounded w-full  h-8 pl-2 before:text-slate-400 border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0 empty:before:content-['Tên_đăng_nhập']`
+  }), /*#__PURE__*/React.createElement("div", {
+    className: ` rounded pl-2 pr-1 flex w-full border border-solid border-emerald-400  focus:border-2 focus:border-solid focus:border-emerald-600 outline-0 `
+  }, /*#__PURE__*/React.createElement("input", {
+    ref: ref_password,
+    className: `  h-8  outline-0   grow `,
+    type: "password",
+    placeholder: "Password"
+  }), /*#__PURE__*/React.createElement("img", {
+    ref: ref_eyes,
+    src: "/SVG/eyes_hide.svg",
+    onClick: event => {
+      if (ref_password.current.type === "password") {
+        ref_password.current.type = "text";
+        ref_eyes.current.src = "/SVG/eyes_show.svg";
+      } else {
+        ref_password.current.type = "password";
+        ref_eyes.current.src = "/SVG/eyes_hide.svg";
+      }
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: ` _shadow rounded w-full  bg-sky-500 hover:bg-sky-700 h-8 flex items-center justify-center pl-2  font-medium `,
+    onClick: event => {
+      dang_nhap();
+    }
+  }, "  \u0110\u0103ng nh\u1EADp "), /*#__PURE__*/React.createElement("div", {
+    className: ` _shadow rounded w-full  bg-sky-500 hover:bg-sky-700 h-8 flex items-center justify-center pl-2  font-medium `,
+    onClick: event => {
+      truy_van();
+    }
+  }, "  truy v\xE1n 1 ")));
+}
+;
 function Router() {
   let path_quy_ve = path_match(path_name);
   console.log(path_quy_ve);
   switch (path_quy_ve) {
+    //-----------------------------------------------------------------------------------------------------------------
+    case '/Login':
+      ReactDOM.render(React.createElement(Login, null), document.getElementById('root'));
+      break;
     //-----------------------------------------------------------------------------------------------------------------
     case '/excel':
       ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
@@ -4580,6 +4660,7 @@ const {
 let path_name = window.location.pathname;
 let font_size = 16;
 let isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
+let socket = io('http://localhost:3000');
 if (isMobile) {
   font_size = 14;
 }
