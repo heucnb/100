@@ -265,7 +265,7 @@ function _file_manager() {
                   copy_array_path_cu_1.push(name_foder_and_file[index][0]);
                   let copy_array_path_cu_2 = [].concat(path_cu.current);
                   copy_array_path_cu_2.push(ref_0.current.textContent);
-                  axios.post("/Hieu/driver_rename", {
+                  axios.post("/node/Hieu/driver_rename", {
                     file_cu: copy_array_path_cu_1.join("/"),
                     file_moi: copy_array_path_cu_2.join("/")
                   }).then(function (response) {
@@ -314,7 +314,7 @@ function _file_manager() {
             let index = props.value.index - 1;
             let copy_array_path_cu_1 = [].concat(path_cu.current);
             copy_array_path_cu_1.push(name_foder_and_file[index][0]);
-            axios.post("/Hieu/driver_detele", {
+            axios.post("/node/Hieu/driver_detele", {
               file: copy_array_path_cu_1.join("/"),
               name_file: name_foder_and_file[index][0]
             }).then(function (response) {
@@ -354,7 +354,7 @@ function _file_manager() {
                 let copy_array_path_cu_2 = [].concat(path_cu.current);
                 let path_file_paste = copy_array_path_cu_2.join("/");
                 console.log('paste', path_file_paste);
-                axios.post("/Hieu/driver_copy", {
+                axios.post("/node/Hieu/driver_copy", {
                   file: [array_path_file_copy, path_file_paste]
                 }).then(function (response) {
                   if (response.data[0] === "ok") {
@@ -573,7 +573,7 @@ function _file_manager() {
               // Ở backend ta đã thiết lập name_foder_and_file[index-1][2] ==="" là folder khác "" là file
               // nếu là ấn vào folder thì chạy
               if (name_foder_and_file[index - 1][2] === "") {
-                axios.post("/Hieu/driver", {
+                axios.post("/node/Hieu/driver", {
                   folder: path_cu.current.concat(name_foder_and_file[index - 1][0]).join("/")
                 }).then(function (response) {
                   let data = response.data;
@@ -594,7 +594,7 @@ function _file_manager() {
                       } else {
                         // thay đổi mảng hiện tại bằng cách cát đi 1 phần tử ở vị trí cuối cùng -1
                         path_cu.current.splice(-1, 1);
-                        axios.post("/Hieu/driver", {
+                        axios.post("/node/Hieu/driver", {
                           folder: path_cu.current.join("/")
                         }).then(function (response) {
                           useEffect_array_change.current = useEffect_array_change.current + 1;
@@ -614,7 +614,7 @@ function _file_manager() {
                       }
                     }, /*#__PURE__*/React.createElement("img", {
                       className: 'w-8 px-2 py-1 h-6  hover:bg-orange-700',
-                      src: "/SVG/back.svg",
+                      src: "/node/static/SVG/back.svg",
                       onClick: event => {
                         _back();
                       }
@@ -646,7 +646,7 @@ function _file_manager() {
                   className: 'flex ml-1 mt-1 items-center'
                 }, /*#__PURE__*/React.createElement("img", {
                   className: 'w-8 px-2 py-1 h-6 hover:bg-orange-700',
-                  src: "/SVG/back_path_white.svg",
+                  src: "/node/static/SVG/back_path_white.svg",
                   onClick: event => {
                     ReactDOM.unmountComponentAtNode(ref_show_file.current);
                   }
@@ -783,7 +783,7 @@ function _file_manager() {
                 let copy_array_path_cu_1 = [].concat(path_cu.current);
                 copy_array_path_cu_1.push(ref_0.current.textContent);
                 let copy_array_path_cu_2 = [].concat(path_cu.current);
-                axios.post("/Hieu/driver_new_folder", {
+                axios.post("/node/Hieu/driver_new_folder", {
                   path_post: copy_array_path_cu_1.join("/"),
                   path_begin: copy_array_path_cu_2.join("/")
                 }).then(function (response) {
@@ -1030,7 +1030,7 @@ function _file_manager() {
         className: ` flex justify-center items-center w-full`
       }, "  ", /*#__PURE__*/React.createElement("img", {
         className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
-        src: "/SVG/folder.svg"
+        src: "/node/static/SVG/folder.svg"
       }), "  "), /*#__PURE__*/React.createElement("div", {
         className: ` ${tb('', 'w-full')}  text-white `
       }, " New folder   ")), /*#__PURE__*/React.createElement("div", {
@@ -1040,7 +1040,7 @@ function _file_manager() {
         className: ` flex justify-center items-center w-full`
       }, "  ", /*#__PURE__*/React.createElement("img", {
         className: `${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`,
-        src: "/SVG/file_upload.svg"
+        src: "/node/static/SVG/file_upload.svg"
       }), "  "), /*#__PURE__*/React.createElement("div", {
         className: ` ${tb('', 'w-full')}   text-white `,
         onClick: () => {
@@ -1100,7 +1100,7 @@ function _file_manager() {
       }, "   ")));
     }
     return ReactDOM.render( /*#__PURE__*/React.createElement(File_manager, {
-      value: yield axios.post("/Hieu/driver", {
+      value: yield axios.post("/node/Hieu/driver", {
         folder: ""
       })
     }), dom);
@@ -1139,19 +1139,19 @@ function select_icon_from_file_name(file_name) {
   extension = file_name.slice((Math.max(0, file_name.lastIndexOf(".")) || Infinity) + 1);
   switch (extension) {
     case '':
-      return "/SVG/folder.svg";
+      return "/node/static/SVG/folder.svg";
     case 'jpg':
-      return "/SVG/file_image.svg";
+      return "/node/static/SVG/file_image.svg";
     case 'png':
-      return "/SVG/file_image.svg";
+      return "/node/static/SVG/file_image.svg";
     case 'git':
-      return "/SVG/file_image.svg";
+      return "/node/static/SVG/file_image.svg";
     case 'js':
-      return "/SVG/file_js.svg";
+      return "/node/static/SVG/file_js.svg";
     case 'json':
-      return "/SVG/file_json.svg";
+      return "/node/static/SVG/file_json.svg";
     default:
-      return "/SVG/file_document.svg";
+      return "/node/static/SVG/file_document.svg";
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1190,6 +1190,10 @@ function hover(event, object_style, object_style_leave, dom) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function _alert(componet_react) {
+  let _div = document.createElement("_div");
+  document.getElementById("root").appendChild(_div);
+  document.getElementById("root").style.position = "absolute";
+  document.getElementById("root").style.zIndex = "100";
   function Alert() {
     return /*#__PURE__*/React.createElement("div", {
       className: 'flex flex-wrap absolute rounded border border-solid border-slate-400 bg-amber-400  _shadow ',
@@ -1208,8 +1212,6 @@ function _alert(componet_react) {
       }
     }, "Tho\xE1t")));
   }
-  let _div = document.createElement("_div");
-  document.getElementById("root").appendChild(_div);
   return ReactDOM.render( /*#__PURE__*/React.createElement(Alert, null), _div);
 }
 
@@ -1230,7 +1232,7 @@ function google_login(client_id, in_dom) {
   return new Promise(function (resolve, reject) {
     var newScript = document.createElement("script");
     in_dom.appendChild(newScript);
-    newScript.src = "/CDN/accounts.google.com_gsi_client.js";
+    newScript.src = "/node/static/CDN/accounts.google.com_gsi_client.js";
     // khi tải xong file thì chạy function sau
     newScript.onload = function () {
       function handleCredentialResponse(response) {
@@ -1331,43 +1333,50 @@ function Router() {
   console.log(path_quy_ve);
   switch (path_quy_ve) {
     //-----------------------------------------------------------------------------------------------------------------
-    case '/Login':
+    case '/node/Login':
       ReactDOM.render(React.createElement(Login, null), document.getElementById('root'));
       break;
     //-----------------------------------------------------------------------------------------------------------------
-    case '/excel':
+    case '/node/excel':
       ReactDOM.render(React.createElement(Table_hieu_2, null), document.getElementById('root'));
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/F':
+    case '/node/F':
       ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/F/From_1':
+    case '/node/F/From_1':
       ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
       F.show_From_1();
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/F/From_2':
+    case '/node/F/From_2':
       ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
       F.show_From_2();
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/F/From_3':
+    case '/node/F/From_3':
       ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
       F.show_From_3();
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/B':
+    case '/node/B':
       ReactDOM.render("trang B", document.getElementById('root'));
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/File':
+    case '/node/File':
       file_manager(document.getElementById('root'));
       break;
     //----------------------------------------------------------------------------------------------------------------
-    case '/hh':
+    case '/node/hh':
       ReactDOM.render(React.createElement(Svg_file, null), document.getElementById('root'));
+      break;
+    case '/node/test':
+      ReactDOM.render(React.createElement(Table, {
+        value: {
+          data: [[1, 2, 3, 4, 5, 6], [10, 11, 12, 13, 14, 15, 16]]
+        }
+      }), document.getElementById('root'));
       break;
     default:
       ReactDOM.render("trang home", document.getElementById('root'));
@@ -1378,6 +1387,11 @@ function Router() {
 // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
 function Table_hieu_2(props) {
+  let col = 200;
+  let row = 100;
+  let limit_scroll = 45;
+  let limit_scroll_col = 45;
+
   // dùng fill chậm hơn một ít không đáng kể so với for 
   var Data = new Array(1000).fill(null).map(i => i = new Array(1000).fill(null));
   var text_formular = new Array(1000).fill(null).map(i => i = new Array(1000).fill(null));
@@ -1426,10 +1440,95 @@ function Table_hieu_2(props) {
   var ref_file_name = useRef(null);
   var thanh_dia_chi_0 = useRef(null);
   var thanh_dia_chi_1 = useRef(null);
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   var limit_view;
   var limit_col_view;
   let tro_ve_vi_tri_begin;
+  let select_range_excel = false;
+
+  //-----------------------------------------------------------------
+  var ref_track = useRef(null);
+  var ref_thumb = useRef(null);
+  let move_thumb = false;
+  let left_thumb = 0;
+  let x_thumb = 0;
+  var ref_track_col = useRef(null);
+  var ref_thumb_col = useRef(null);
+  let move_thumb_col = false;
+  let top_thumb = 0;
+  let y_thumb = 0;
+  //------------------------------------------------------
+  function button_bar_scroll_right_click(event) {
+    let rect_ref_track = ref_track.current.getBoundingClientRect();
+    let move = rect_ref_track.width / (limit_scroll_col + 1);
+    left_thumb = ref_thumb.current.getBoundingClientRect().left - rect_ref_track.left + 20;
+    console.log(12369, rect_ref_track.width + 20);
+    console.log(left_thumb + 15);
+    if (left_thumb + move + 15 < rect_ref_track.width + 20) {
+      console.log(124, left_thumb + move);
+      ref_thumb.current.style.left = left_thumb + move + "px";
+      table_excel.current.scrollLeft = table_excel.current.scrollLeft + click_scroll_dichuyen;
+    }
+    if (left_thumb + move + 15 >= rect_ref_track.width + 20) {
+      ref_thumb.current.style.left = rect_ref_track.width + 20 - 15 + "px";
+      table_excel.current.scrollLeft = table_excel.current.scrollLeft + click_scroll_dichuyen;
+    }
+  }
+
+  //------------------------------------------------------------------
+  function button_bar_scroll_left_click(event) {
+    let rect_ref_track = ref_track.current.getBoundingClientRect();
+    let move = rect_ref_track.width / (limit_scroll_col + 1);
+    left_thumb = ref_thumb.current.getBoundingClientRect().left - rect_ref_track.left + 20;
+    if (left_thumb - move > 20) {
+      ref_thumb.current.style.left = left_thumb - move + "px";
+      table_excel.current.scrollLeft = table_excel.current.scrollLeft - click_scroll_dichuyen;
+    }
+    if (left_thumb - move <= 20) {
+      ref_thumb.current.style.left = 20 + "px";
+      table_excel.current.scrollLeft = table_excel.current.scrollLeft - click_scroll_dichuyen;
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------
+  function button_bar_scroll_top_click(event) {
+    let rect_ref_track = ref_track_col.current.getBoundingClientRect();
+    let move = rect_ref_track.height / (limit_scroll + 1);
+    top_thumb = ref_thumb_col.current.getBoundingClientRect().top - rect_ref_track.top + 20;
+    console.log('*****', rect_ref_track.height);
+    console.log('*****', move);
+    console.log('*****', top_thumb);
+    if (top_thumb - move > 20) {
+      ref_thumb_col.current.style.top = top_thumb - move + "px";
+      console.log('*****', top_thumb + move + "px");
+      table_excel.current.scrollTop = table_excel.current.scrollTop - click_scroll_dichuyen;
+    }
+    if (top_thumb - move <= 20) {
+      ref_thumb_col.current.style.top = "20px";
+      table_excel.current.scrollTop = table_excel.current.scrollTop - click_scroll_dichuyen;
+    }
+  }
+  //--------------------------------------------------------------------------
+
+  function button_bar_scroll_bottom_click(event) {
+    let rect_ref_track = ref_track_col.current.getBoundingClientRect();
+    let move = rect_ref_track.height / (limit_scroll + 1);
+    top_thumb = ref_thumb_col.current.getBoundingClientRect().top - rect_ref_track.top + 20;
+    console.log('*****', rect_ref_track.height);
+    console.log('*****', move);
+    console.log('*****', top_thumb);
+    if (top_thumb + move + 15 < rect_ref_track.height + 20) {
+      ref_thumb_col.current.style.top = top_thumb + move + "px";
+      console.log('*****', top_thumb + move + "px");
+      table_excel.current.scrollTop = table_excel.current.scrollTop + click_scroll_dichuyen;
+    }
+    if (top_thumb + move + 15 >= rect_ref_track.height + 20) {
+      ref_thumb_col.current.style.top = rect_ref_track.height + 20 - 15 + "px";
+      table_excel.current.scrollTop = table_excel.current.scrollTop + click_scroll_dichuyen;
+    }
+  }
+  //---------------------------------------------------------------------------------------------------------------------
+
   useEffect(() => {
     table_excel.current.addEventListener("scroll", _onScroll);
     tro_ve_vi_tri_begin = a.current.children[1].children[limit_col + 1].getBoundingClientRect().left;
@@ -1499,6 +1598,52 @@ function Table_hieu_2(props) {
         thanh_dia_chi_0.current.focus({
           preventScroll: true
         });
+      }
+    });
+
+    // thay đổi  move_thumb về false
+    document.addEventListener('mouseup', event => {
+      select_range_excel = false;
+      move_thumb = false;
+      move_thumb_col = false;
+    });
+    document.addEventListener('mousemove', function (event) {
+      if (move_thumb === true) {
+        let move = event.clientX - x_thumb;
+        let rect_ref_track = ref_track.current.getBoundingClientRect();
+        let width_ref_track = rect_ref_track.width;
+        if (left_thumb + move + 15 < width_ref_track + 20 && left_thumb + move > 20) {
+          ref_thumb.current.style.left = left_thumb + move + "px";
+          table_excel.current.scrollLeft = (left_thumb + move - 20) / width_ref_track * limit_scroll_col * click_scroll_dichuyen;
+        }
+        if (left_thumb + move + 15 > width_ref_track + 20) {
+          ref_thumb.current.style.left = width_ref_track + 20 - 15 + "px";
+          table_excel.current.scrollLeft = limit_scroll_col * click_scroll_dichuyen;
+        }
+        if (left_thumb + move <= 20) {
+          ref_thumb.current.style.left = "20px";
+          table_excel.current.scrollLeft = 0;
+        }
+      }
+
+      //--------------------------------------------------------------------------------------
+
+      if (move_thumb_col === true) {
+        let move = event.clientY - y_thumb;
+        let rect_ref_track_col = ref_track_col.current.getBoundingClientRect();
+        let height_ref_track_col = rect_ref_track_col.height;
+        if (top_thumb + move + 15 < height_ref_track_col + 20 && top_thumb + move > 20) {
+          ref_thumb_col.current.style.top = top_thumb + move + "px";
+          table_excel.current.scrollTop = (top_thumb + move - 20) / height_ref_track_col * limit_scroll * click_scroll_dichuyen;
+        }
+        if (top_thumb + move + 15 > height_ref_track_col + 20) {
+          ref_thumb_col.current.style.top = height_ref_track_col + 20 - 15 + "px";
+          table_excel.current.scrollTop = limit_scroll * click_scroll_dichuyen;
+        }
+        if (top_thumb + move <= 20) {
+          ref_thumb_col.current.style.top = "20px";
+          table_excel.current.scrollTop = 0;
+        }
       }
     });
 
@@ -2386,6 +2531,7 @@ function Table_hieu_2(props) {
 
     event.persist();
     if (event.buttons == 1) {
+      select_range_excel = true;
       _onMouseEnter_not_event(x, y, i, j);
 
       // khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
@@ -3406,7 +3552,7 @@ function Table_hieu_2(props) {
   // cố định scrollHeight bằng mã if ( Math.round(_table.scrollTop) >= data_lenght - 100*20 )
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
   let table_excel_height = window.innerHeight - 87.742 - 60;
-  let table_excel_width = window.innerWidth - 40;
+  let table_excel_width = window.innerWidth - 80;
 
   // ở zoom 100 % 1 click scroll ở chrome di chuyển 40 pixcel 
   let zoom = window.devicePixelRatio;
@@ -3436,7 +3582,7 @@ function Table_hieu_2(props) {
 
     // dừng scroll tại vị trí muốn
 
-    if (di_chuyen <= data_lenght) {} else {
+    if (di_chuyen <= limit_scroll * click_scroll_dichuyen) {} else {
       // chú ý *****
       // ở chỗ khác thì (bình thường không cần quan tâm thứ tự sắp xếp hàm scrollTop sẽ chạy đầu tiên sau đó requestAnimationFrame cuối cùng là setTimeout)
       // nhưng ở đây scrollTop sử dụng trong hàm scroll (scrollTop được tạo bởi addEventListener scroll) tức là nó phải đợi các hàm trong sự kiện scroll ở đây 
@@ -3458,19 +3604,19 @@ function Table_hieu_2(props) {
       // nếu chỉ dùng _onScroll(); thì _onScroll(); phải đặt sau  _table.scrollTop = data_lenght ;
       // vì nếu đặt trước thì sẽ tạo thành vòng lặp vô hạn nên lỗi
       // đặt sau thì _onScroll() sẽ kích hoạt lập tức scrollTop sẽ rẽ nhánh bên trên thoát khỏi vòng lặp
-      _table.scrollTop = data_lenght;
+      _table.scrollTop = limit_scroll * click_scroll_dichuyen;
       _onScroll();
       //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
 
-      return di_chuyen = data_lenght;
+      return di_chuyen = limit_scroll * click_scroll_dichuyen;
     }
 
     // dừng scroll tại vị trí muốn tthanh cuộn ngang
-    if (di_chuyen_col <= data_col_lenght) {} else {
+    if (di_chuyen_col <= limit_scroll_col * click_scroll_dichuyen) {} else {
       //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
-      _table.scrollLeft = data_col_lenght;
+      _table.scrollLeft = limit_scroll_col * click_scroll_dichuyen;
       _onScroll();
-      return di_chuyen_col = data_col_lenght;
+      return di_chuyen_col = limit_scroll_col * click_scroll_dichuyen;
     }
 
     // vị trí cắt là  a.current.children[0 + 1].children[0].innerHTML lúc sau khi render UI xong
@@ -3693,6 +3839,11 @@ function Table_hieu_2(props) {
       console.log(x, y, i, j);
       _onMouseEnter_not_event(x, y, i, j, false);
     }
+
+    // Bước 4: di chuyển thumb trên thanh scroll bar tự tạo
+
+    ref_thumb_col.current.style.top = table_excel.current.scrollTop / ((limit_scroll + 1) * click_scroll_dichuyen) * ref_track_col.current.getBoundingClientRect().height + 20 + "px";
+    ref_thumb.current.style.left = table_excel.current.scrollLeft / ((limit_scroll_col + 1) * click_scroll_dichuyen) * ref_track.current.getBoundingClientRect().width + 20 + "px";
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3916,7 +4067,7 @@ function Table_hieu_2(props) {
       }
 
       // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên phải -----------------------------------------------------------------
-      if (event_window.buttons == 1 && mouse_Y > table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight && mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
+      if (event_window.buttons == 1 && select_range_excel === true && mouse_Y > table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight && mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
         console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên phải');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -3927,7 +4078,7 @@ function Table_hieu_2(props) {
         }, 10);
       }
       // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái -----------------------------------------------------------------
-      else if (event_window.buttons == 1 && mouse_Y > table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight && mouse_X < table_excel.current.getBoundingClientRect().x + width_bar_reference_col) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_Y > table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight && mouse_X < table_excel.current.getBoundingClientRect().x + width_bar_reference_col) {
         console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái ');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -3938,7 +4089,7 @@ function Table_hieu_2(props) {
         }, 10);
       }
       // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài góc trên bên trái----------------------------------------------------------------------------------
-      else if (event_window.buttons == 1 && mouse_Y < table_excel.current.getBoundingClientRect().y + 21 && mouse_X < table_excel.current.getBoundingClientRect().x + width_bar_reference_col) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_Y < table_excel.current.getBoundingClientRect().y + 21 && mouse_X < table_excel.current.getBoundingClientRect().x + width_bar_reference_col) {
         console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài góc trên bên trái');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -3949,7 +4100,7 @@ function Table_hieu_2(props) {
         }, 10);
       }
       // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải -----------------------------------------------------------------
-      else if (event_window.buttons == 1 && mouse_Y < table_excel.current.getBoundingClientRect().y + 21 && mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_Y < table_excel.current.getBoundingClientRect().y + 21 && mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
         console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -3960,7 +4111,7 @@ function Table_hieu_2(props) {
         }, 10);
       }
       // cuộn thanh dọc khi vị trí mouse nằm dưới brower
-      else if (event_window.buttons == 1 && mouse_Y > table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_Y > table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight) {
         console.log('cuộn thanh dọc khi vị trí mouse nằm dưới brower');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -4002,7 +4153,7 @@ function Table_hieu_2(props) {
         }, 0);
       }
       // cuộn thanh ngang khi vị trí mouse nằm ngoài bên phải brower
-      else if (event_window.buttons == 1 && mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
         console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên phải brower');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -4045,7 +4196,7 @@ function Table_hieu_2(props) {
       }
 
       // cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower
-      else if (event_window.buttons == 1 && mouse_Y < table_excel.current.getBoundingClientRect().y + 21) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_Y < table_excel.current.getBoundingClientRect().y + 21) {
         console.log('cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -4086,7 +4237,7 @@ function Table_hieu_2(props) {
         }, 0);
       }
       // cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower
-      else if (event_window.buttons == 1 && mouse_X < table_excel.current.getBoundingClientRect().x + width_bar_reference_col) {
+      else if (event_window.buttons == 1 && select_range_excel === true && mouse_X < table_excel.current.getBoundingClientRect().x + width_bar_reference_col) {
         console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower');
         position_mouse_brower = 'ouside_brower';
         myInterval_0 = setTimeout(function doSomething() {
@@ -4649,7 +4800,127 @@ function Table_hieu_2(props) {
         backgroundColor: "white"
       }
     }));
-  }))));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: "1px ridge #ccc",
+      top: -17,
+      display: 'flex',
+      position: 'relative',
+      width: table_excel_width - 17
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "/10/static/SVG/left-chevron-svgrepo-com.svg",
+    style: {
+      background: '#000',
+      width: 20,
+      height: 15
+    },
+    onMouseDown: event => {
+      return button_bar_scroll_left_click(event);
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    ref: ref_thumb,
+    style: {
+      width: 15,
+      height: 15,
+      background: '#5f88c1',
+      position: 'absolute',
+      left: 20
+    },
+    onMouseDown: event => {
+      if (event.buttons === 1) {
+        move_thumb = true;
+        x_thumb = event.clientX;
+        left_thumb = ref_thumb.current.getBoundingClientRect().left - ref_track.current.getBoundingClientRect().left;
+      }
+    },
+    onDragStart: event => event.preventDefault()
+  }, " "), /*#__PURE__*/React.createElement("div", {
+    ref: ref_track,
+    style: {
+      width: '100%',
+      height: 15,
+      backgroundImage: 'linear-gradient(#A9A9A9, #D3D3D3)'
+    },
+    onDragStart: event => event.preventDefault()
+  }, " "), /*#__PURE__*/React.createElement("img", {
+    src: "/10/static/SVG/right-chevron-svgrepo-com.svg",
+    style: {
+      background: '#000',
+      width: 20,
+      height: 15
+    },
+    onMouseDown: event => {
+      return button_bar_scroll_right_click(event);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: "1px ridge #ccc",
+      height: table_excel_height,
+      position: 'absolute',
+      left: table_excel_width - 17,
+      bottom: 17
+    }
+  }, /*#__PURE__*/React.createElement("img", {
+    src: "/10/static/SVG/up-chevron-svgrepo-com.svg",
+    style: {
+      background: '#000',
+      width: 15,
+      height: 20
+    },
+    onMouseDown: event => {
+      return button_bar_scroll_top_click(event);
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    ref: ref_thumb_col,
+    style: {
+      width: 15,
+      height: 15,
+      background: '#5f88c1',
+      position: 'absolute'
+    },
+    onMouseDown: event => {
+      if (event.buttons === 1) {
+        move_thumb_col = true;
+        y_thumb = event.clientY;
+        top_thumb = ref_thumb_col.current.getBoundingClientRect().top - ref_track_col.current.getBoundingClientRect().top;
+      }
+    },
+    onDragStart: event => event.preventDefault()
+  }, " "), /*#__PURE__*/React.createElement("div", {
+    ref: ref_track_col,
+    style: {
+      width: 15,
+      height: table_excel_height - 40 - 17,
+      backgroundImage: 'linear-gradient(to right, #BEBEBE , #E8E8E8)'
+    },
+    onDragStart: event => event.preventDefault()
+  }, " "), /*#__PURE__*/React.createElement("img", {
+    src: "/10/static/SVG/down-chevron-svgrepo-com.svg",
+    style: {
+      background: '#000',
+      width: 15,
+      height: 20
+    },
+    onMouseDown: event => {
+      return button_bar_scroll_bottom_click(event);
+    }
+  })));
+}
+;
+function Table(props) {
+  let data_2d = props.value.data;
+  return /*#__PURE__*/React.createElement("div", {
+    className: '   '
+  }, data_2d.map((row, i) => {
+    return /*#__PURE__*/React.createElement("div", {
+      className: ' flex w-full border border-sky-500  '
+    }, row.map((cell, j) => {
+      return /*#__PURE__*/React.createElement("div", {
+        className: `  flex  ${j === 0 ? 'w-40' : 'w-16'}  border border-sky-500  `
+      }, " ", cell, "  ");
+    }));
+  }));
 }
 ;
 const {
@@ -4660,7 +4931,9 @@ const {
 let path_name = window.location.pathname;
 let font_size = 16;
 let isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
-let socket = io('http://localhost:3000');
+// mở kết nối tới socket
+// let socket =  io('http://localhost:8001')
+
 if (isMobile) {
   font_size = 14;
 }

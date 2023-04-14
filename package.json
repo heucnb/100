@@ -6,7 +6,7 @@
     "//": "watch ở đây sẽ theo dõi sự thay đổi ở các file trong tailwind.config.js",
     "ghep_file": "nodemon ghep_file.js --legacy-watch --watch static/fontend  --watch ghep_file.js  ",
     "dev": "nodemon index.js index --legacy-watch --watch backend  --watch index.js --watch index.html ",
-    "css": "npx tailwindcss -i ./src/tailwind.css -o ./static/fontend/style.css --watch"
+    "css": "npx tailwindcss -i ./src/tailwind.css -o ./static/style.css --watch"
   },
   "keywords": [],
   "author": "",

@@ -2,8 +2,11 @@
   // *** thẻ input và button khi click sẽ làm mất sự kiện tiêu điểm của focus, thẻ div thì không. Do đó ta phải setTimeout để lấy lại tiêu điểm sau.
 
 
-
   function Table_hieu_2(props) {
+    let col =200 ;   
+    let row =100 ; 
+    let limit_scroll = 45 ; 
+    let limit_scroll_col = 45 ;
 
       // dùng fill chậm hơn một ít không đáng kể so với for 
   var Data = new Array(1000).fill(null).map((i)=> i = new Array(1000).fill(null)) ;
@@ -75,12 +78,142 @@ let ref_file =  useRef(null) ;
      var canvas_ = useRef(null) ;
      var ref_0 = useRef(null) ;
      var ref_file_name = useRef(null) ;
-      var thanh_dia_chi_0 =  useRef(null);
-      var thanh_dia_chi_1 =  useRef(null);
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      var limit_view   ;
-      var limit_col_view  ;
-      let tro_ve_vi_tri_begin ;
+     var thanh_dia_chi_0 =  useRef(null);
+     var thanh_dia_chi_1 =  useRef(null);
+
+     var limit_view   ;
+     var limit_col_view  ;
+     let tro_ve_vi_tri_begin ;
+     let  select_range_excel = false ;
+   
+   //-----------------------------------------------------------------
+   var ref_track = useRef(null) ;
+   var ref_thumb = useRef(null) ;
+   let move_thumb = false ;
+   let left_thumb = 0;
+   let x_thumb = 0 ;
+
+   var ref_track_col = useRef(null) ;
+   var ref_thumb_col = useRef(null) ;
+   let move_thumb_col = false ;
+   let top_thumb = 0;
+   let y_thumb = 0 ;
+   //------------------------------------------------------
+   function button_bar_scroll_right_click(event) {
+    let rect_ref_track = ref_track.current.getBoundingClientRect() ;
+
+    let  move = (rect_ref_track.width)/(limit_scroll_col+1 );
+ 
+   
+    left_thumb = ref_thumb.current.getBoundingClientRect().left - rect_ref_track.left + 20;
+    console.log(12369,rect_ref_track.width +20,);
+    console.log(left_thumb +15);
+    if (left_thumb + move +15 < rect_ref_track.width +20 ) {
+      console.log(124, left_thumb + move);
+        ref_thumb.current.style.left =left_thumb + move+ "px"  ; 
+  
+        table_excel.current.scrollLeft = table_excel.current.scrollLeft + click_scroll_dichuyen  ; 
+       
+        
+    }
+    if (left_thumb+move +15 >= rect_ref_track.width +20 ) {
+      ref_thumb.current.style.left =rect_ref_track.width + 20 -15 + "px"  ; 
+
+      table_excel.current.scrollLeft = table_excel.current.scrollLeft + click_scroll_dichuyen  ; 
+      
+
+  }
+  
+    
+}
+
+//------------------------------------------------------------------
+function button_bar_scroll_left_click(event) {
+let rect_ref_track = ref_track.current.getBoundingClientRect() ;
+let  move = (rect_ref_track.width)/(limit_scroll_col+1 );
+ 
+   
+left_thumb = ref_thumb.current.getBoundingClientRect().left - rect_ref_track.left + 20;
+
+  if (left_thumb - move  > 20  ) {
+      ref_thumb.current.style.left =left_thumb -  move+ "px"  ; 
+
+      table_excel.current.scrollLeft = table_excel.current.scrollLeft - click_scroll_dichuyen  ; 
+      
+  }
+  if (left_thumb - move  <= 20  ) {
+    ref_thumb.current.style.left =20+ "px"  ; 
+
+    table_excel.current.scrollLeft = table_excel.current.scrollLeft - click_scroll_dichuyen  ; 
+    
+}
+
+  
+}
+
+//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------
+function button_bar_scroll_top_click(event) {
+let rect_ref_track = ref_track_col.current.getBoundingClientRect() ;
+
+let  move = (rect_ref_track.height)/(limit_scroll+1 );
+
+
+top_thumb = ref_thumb_col.current.getBoundingClientRect().top - rect_ref_track.top + 20;
+console.log('*****',rect_ref_track.height );
+
+console.log('*****',move );
+console.log('*****',top_thumb );
+if (top_thumb - move  > 20 ) {
+
+  ref_thumb_col.current.style.top =top_thumb - move+ "px"  ; 
+  console.log('*****',top_thumb + move+ "px" );
+    table_excel.current.scrollTop = table_excel.current.scrollTop - click_scroll_dichuyen  ; 
+   
+    
+}
+if (top_thumb- move  <=20 ) {
+  ref_thumb_col.current.style.top = "20px"  ; 
+
+  table_excel.current.scrollTop = table_excel.current.scrollTop - click_scroll_dichuyen  ; 
+  
+
+}
+
+} 
+//--------------------------------------------------------------------------
+
+function button_bar_scroll_bottom_click(event) {
+let rect_ref_track = ref_track_col.current.getBoundingClientRect() ;
+
+let  move = (rect_ref_track.height)/(limit_scroll+1 );
+
+
+top_thumb = ref_thumb_col.current.getBoundingClientRect().top - rect_ref_track.top + 20;
+console.log('*****',rect_ref_track.height );
+
+console.log('*****',move );
+console.log('*****',top_thumb );
+if (top_thumb + move +15 < rect_ref_track.height +20 ) {
+
+  ref_thumb_col.current.style.top =top_thumb + move+ "px"  ; 
+  console.log('*****',top_thumb + move+ "px" );
+    table_excel.current.scrollTop = table_excel.current.scrollTop + click_scroll_dichuyen  ; 
+   
+    
+}
+if (top_thumb+move +15 >= rect_ref_track.height +20 ) {
+  ref_thumb_col.current.style.top =rect_ref_track.height + 20 -15 + "px"  ; 
+
+  table_excel.current.scrollTop = table_excel.current.scrollTop + click_scroll_dichuyen  ; 
+  
+
+}
+
+
+} 
+//---------------------------------------------------------------------------------------------------------------------
+   
       useEffect(() => {
 
      
@@ -170,6 +303,8 @@ let ref_file =  useRef(null) ;
 // ta dùng addEventListener để lắng nghe 2 sự kiện document mousemove kích hoạt ở 2 chỗ khác nhau
 //nếu dùng  document.onmousemove = fuction thì khi sự kiện 2 ta cũng dùng document.onmousemove = fuction khác thì nó sẽ gán thành 1 sự kiện
       document.addEventListener("mousemove", (evt) => {
+
+
          
           // vịtrí ô viết công thức không nằm trong khung nhìn thì focus tại thanh công thức
           if ( (vi_tri_o_truoc[0] <= limit_view - 1 )&( vi_tri_o_truoc[0] >= 0) && (vi_tri_o_truoc[1] <= limit_col_view - 1 )&( vi_tri_o_truoc[1] >= 0)  ) {
@@ -182,10 +317,77 @@ let ref_file =  useRef(null) ;
       });
 
 
+ // thay đổi  move_thumb về false
+      document.addEventListener('mouseup', (event)=>{ select_range_excel = false;  move_thumb =  false;  move_thumb_col = false });
+
+      document.addEventListener('mousemove', function (event) {
+      
+        if ( move_thumb === true ) {
+         
+          let  move = event.clientX - x_thumb ;
+          let rect_ref_track = ref_track.current.getBoundingClientRect() ;
+          let width_ref_track = rect_ref_track.width ;
+        
+          if (left_thumb + move +15 < width_ref_track +20 && left_thumb+ move>20 ) {
+        
+              ref_thumb.current.style.left = left_thumb + move+ "px"  ; 
+        
+              table_excel.current.scrollLeft = (left_thumb + move-20)/width_ref_track *limit_scroll_col*click_scroll_dichuyen  ; 
+              
+          }
+          if (left_thumb + move +15 > width_ref_track +20  ) {
+          
+              ref_thumb.current.style.left = width_ref_track +20-15 + "px"  ; 
+        
+              table_excel.current.scrollLeft = limit_scroll_col*click_scroll_dichuyen  ; 
+              
+          }
+          if (left_thumb+ move <= 20  ) {
+          
+              ref_thumb.current.style.left = "20px"  ; 
+        
+              table_excel.current.scrollLeft = 0  ; 
+              
+          }
+        
+        }
+
+        //--------------------------------------------------------------------------------------
+        
+        if ( move_thumb_col === true ) {
+         
+          let  move = event.clientY - y_thumb ;
+          let rect_ref_track_col = ref_track_col.current.getBoundingClientRect() ;
+          let height_ref_track_col = rect_ref_track_col.height ;
+        
+          if (top_thumb + move +15 < height_ref_track_col +20 && top_thumb+ move>20 ) {
+        
+              ref_thumb_col.current.style.top = top_thumb + move+ "px"  ; 
+        
+              table_excel.current.scrollTop = (top_thumb + move-20)/height_ref_track_col *limit_scroll*click_scroll_dichuyen  ; 
+              
+          }
+          if (top_thumb + move +15 > height_ref_track_col +20  ) {
+          
+            ref_thumb_col.current.style.top = height_ref_track_col +20-15 + "px"  ; 
+        
+              table_excel.current.scrollTop = limit_scroll*click_scroll_dichuyen  ; 
+              
+          }
+          if (top_thumb+ move <= 20  ) {
+          
+            ref_thumb_col.current.style.top = "20px"  ; 
+        
+              table_excel.current.scrollTop = 0  ; 
+              
+          }
+        
+        }
 
 
 
 
+      });
 
 
 
@@ -1398,7 +1600,7 @@ console.log('_onKeyDown------------------------------');
     
         if (event.buttons == 1) {
 
-       
+          select_range_excel = true ;
     
           _onMouseEnter_not_event (x, y,i,j);
 
@@ -2890,7 +3092,7 @@ data_array_2d.push(data_array_col) ;
   // cố định scrollHeight bằng mã if ( Math.round(_table.scrollTop) >= data_lenght - 100*20 )
   // hoặc để chiều dài bar_scroll + scrollTop bé hơn scrollHeight (data.lenght  10000 trở lên thì được)
   let table_excel_height = window.innerHeight - 87.742 -60 ;
-  let table_excel_width = window.innerWidth -40 ;
+  let table_excel_width = window.innerWidth -80 ;
 
  // ở zoom 100 % 1 click scroll ở chrome di chuyển 40 pixcel 
  let zoom = window.devicePixelRatio;
@@ -2929,58 +3131,58 @@ let _table  = table_excel.current;
            
             // dừng scroll tại vị trí muốn
        
-              if (di_chuyen <=data_lenght ) {
+            if (di_chuyen <=limit_scroll*click_scroll_dichuyen ) {
                
               
               
+            }
+            else
+            {
+              
+              // chú ý *****
+              // ở chỗ khác thì (bình thường không cần quan tâm thứ tự sắp xếp hàm scrollTop sẽ chạy đầu tiên sau đó requestAnimationFrame cuối cùng là setTimeout)
+              // nhưng ở đây scrollTop sử dụng trong hàm scroll (scrollTop được tạo bởi addEventListener scroll) tức là nó phải đợi các hàm trong sự kiện scroll ở đây 
+              // chạy xong thì nó mới kích hoạt hàm scrollTop nên ở đây thứ tự sẽ là requestAnimationFrame sau đó setTimeout sau đó scrollTop
+              // do đó ở đây ta không dùng được    // window.requestAnimationFrame(remove_scroll); tức là đợi scrollTop scroll tới vị trí mong muốn rồi xoa bỏ lắng nghe scroll  được
+              // vì  window.requestAnimationFrame sẽ chạy trước scrollTop
+              // mà thay vào đó ta phải dùng  // window.requestAnimationFrame(_onScroll); hoặc có thể chỉ dùng ********   _onScroll();  
+              // mục đích để khi gọi hàm _onScroll tức là sự kiện scroll được kích hoạt do đó hàm scrollTop sẽ được kích hoạt chạy luôn
+              // ở đây hàm này chạy trước để quay lại vòng lặp chỗ này 1 hoặc 2 lần tuỳ ta scroll mạnh không rồi brower patting nên không bị lác.
+            
+              // nếu không dùng window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll()  mà chỉ có  _table.scrollTop = data_lenght ;  sẽ bị lác vì sự kiện oncsroll sẽ bị lắng nghe rất nhiều lần rồi scrollTop mới chạy do đó sẽ được patting trước scrollTop nên gây lác
+              // nếu viết thêm window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll() thì nó sẽ kích hoạt hàm scrollTop sẽ được kích hoạt chạy luôn trước khi lắng nghe  
+              // các sự kiện oncsroll khác mà hàm scrollTop chạy tốn thời gian nên các sự kiện oncsroll khác chỉ chạy thêm được 1 lần khi ta scrool mạnh thôi.
+              // *** giải thích thêm 
+              // sự kiện oncsroll sẽ bị lắng nghe rất nhiều lần nếu không dùng window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll() vì
+              // scrollTop là hàm bất đồng bộ sẽ bị đẩy ra để các sự kiện oncsroll được lắng nghe
+              // khi oncsroll được lắng nghe nó lặp lại đoạn code này do đoạn code này trả về ngay nên trong khoảng thời gian 16ms lắng nghe và thực thi code  nó sẽ được lắng nghe rất nhiều lần
+             // chú ý thêm ****
+             // nếu chỉ dùng _onScroll(); thì _onScroll(); phải đặt sau  _table.scrollTop = data_lenght ;
+             // vì nếu đặt trước thì sẽ tạo thành vòng lặp vô hạn nên lỗi
+             // đặt sau thì _onScroll() sẽ kích hoạt lập tức scrollTop sẽ rẽ nhánh bên trên thoát khỏi vòng lặp
+              _table.scrollTop = limit_scroll*click_scroll_dichuyen ;
+              _onScroll();
+              //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
+         
+                return di_chuyen = limit_scroll*click_scroll_dichuyen ;
+             
+            }
+
+           
+
+               // dừng scroll tại vị trí muốn tthanh cuộn ngang
+               if ( di_chuyen_col <=limit_scroll_col*click_scroll_dichuyen) {
+               
               }
               else
               {
-                
-                // chú ý *****
-                // ở chỗ khác thì (bình thường không cần quan tâm thứ tự sắp xếp hàm scrollTop sẽ chạy đầu tiên sau đó requestAnimationFrame cuối cùng là setTimeout)
-                // nhưng ở đây scrollTop sử dụng trong hàm scroll (scrollTop được tạo bởi addEventListener scroll) tức là nó phải đợi các hàm trong sự kiện scroll ở đây 
-                // chạy xong thì nó mới kích hoạt hàm scrollTop nên ở đây thứ tự sẽ là requestAnimationFrame sau đó setTimeout sau đó scrollTop
-                // do đó ở đây ta không dùng được    // window.requestAnimationFrame(remove_scroll); tức là đợi scrollTop scroll tới vị trí mong muốn rồi xoa bỏ lắng nghe scroll  được
-                // vì  window.requestAnimationFrame sẽ chạy trước scrollTop
-                // mà thay vào đó ta phải dùng  // window.requestAnimationFrame(_onScroll); hoặc có thể chỉ dùng ********   _onScroll();  
-                // mục đích để khi gọi hàm _onScroll tức là sự kiện scroll được kích hoạt do đó hàm scrollTop sẽ được kích hoạt chạy luôn
-                // ở đây hàm này chạy trước để quay lại vòng lặp chỗ này 1 hoặc 2 lần tuỳ ta scroll mạnh không rồi brower patting nên không bị lác.
               
-                // nếu không dùng window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll()  mà chỉ có  _table.scrollTop = data_lenght ;  sẽ bị lác vì sự kiện oncsroll sẽ bị lắng nghe rất nhiều lần rồi scrollTop mới chạy do đó sẽ được patting trước scrollTop nên gây lác
-                // nếu viết thêm window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll() thì nó sẽ kích hoạt hàm scrollTop sẽ được kích hoạt chạy luôn trước khi lắng nghe  
-                // các sự kiện oncsroll khác mà hàm scrollTop chạy tốn thời gian nên các sự kiện oncsroll khác chỉ chạy thêm được 1 lần khi ta scrool mạnh thôi.
-                // *** giải thích thêm 
-                // sự kiện oncsroll sẽ bị lắng nghe rất nhiều lần nếu không dùng window.requestAnimationFrame(_onScroll) hoặc gọi thêm hàm _onScroll() vì
-                // scrollTop là hàm bất đồng bộ sẽ bị đẩy ra để các sự kiện oncsroll được lắng nghe
-                // khi oncsroll được lắng nghe nó lặp lại đoạn code này do đoạn code này trả về ngay nên trong khoảng thời gian 16ms lắng nghe và thực thi code  nó sẽ được lắng nghe rất nhiều lần
-               // chú ý thêm ****
-               // nếu chỉ dùng _onScroll(); thì _onScroll(); phải đặt sau  _table.scrollTop = data_lenght ;
-               // vì nếu đặt trước thì sẽ tạo thành vòng lặp vô hạn nên lỗi
-               // đặt sau thì _onScroll() sẽ kích hoạt lập tức scrollTop sẽ rẽ nhánh bên trên thoát khỏi vòng lặp
-                _table.scrollTop = data_lenght ;
-                _onScroll();
                 //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
-           
-                  return di_chuyen = data_lenght ;
-               
+                _table.scrollLeft = limit_scroll_col*click_scroll_dichuyen  ;
+                _onScroll();
+                return di_chuyen_col = limit_scroll_col*click_scroll_dichuyen ;
               }
-
              
-
-                 // dừng scroll tại vị trí muốn tthanh cuộn ngang
-                 if ( di_chuyen_col <=data_col_lenght) {
-                 
-                }
-                else
-                {
-                
-                  //hoặc ta có thể dùng window.requestAnimationFrame(_onScroll);
-                  _table.scrollLeft = data_col_lenght  ;
-                  _onScroll();
-                  return di_chuyen_col = data_col_lenght ;
-                }
-               
           
               // vị trí cắt là  a.current.children[0 + 1].children[0].innerHTML lúc sau khi render UI xong
             
@@ -3251,6 +3453,14 @@ let _table  = table_excel.current;
 
 
 
+
+                   // Bước 4: di chuyển thumb trên thanh scroll bar tự tạo
+             
+                   ref_thumb_col.current.style.top = table_excel.current.scrollTop/((limit_scroll+1)*click_scroll_dichuyen)*ref_track_col.current.getBoundingClientRect().height +20+ "px"  ;
+                   ref_thumb.current.style.left = table_excel.current.scrollLeft/((limit_scroll_col+1)*click_scroll_dichuyen)*ref_track.current.getBoundingClientRect().width + 20+"px"  ; 
+ 
+ 
+ 
             
 
 
@@ -3596,7 +3806,7 @@ event.persist();
 
 // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên phải -----------------------------------------------------------------
         if (
-          event_window.buttons == 1 &&
+          event_window.buttons == 1 &&select_range_excel === true&&
           (mouse_Y >table_excel.current.getBoundingClientRect().y +  table_excel.current.clientHeight &&
           mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth)
         
@@ -3614,7 +3824,8 @@ event.persist();
 
         } 
 // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái -----------------------------------------------------------------
-          else if (event_window.buttons == 1 && mouse_Y > (table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight  )&&  mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col)) {
+          else if (event_window.buttons == 1 && select_range_excel === true&&
+            mouse_Y > (table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight  )&&  mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col)) {
           
               console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía dưới bên trái ');
               position_mouse_brower = 'ouside_brower';
@@ -3633,7 +3844,7 @@ event.persist();
           } 
 // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài góc trên bên trái----------------------------------------------------------------------------------
         else if (
-          event_window.buttons == 1 &&
+          event_window.buttons == 1 &&select_range_excel === true&&
         (mouse_Y < (table_excel.current.getBoundingClientRect().y + 21) &&
           mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col))
 
@@ -3654,7 +3865,8 @@ event.persist();
         
         }
 // cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải -----------------------------------------------------------------
-        else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBoundingClientRect().y + 21)&& mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
+        else if (event_window.buttons == 1 &&select_range_excel === true&&
+           mouse_Y < (table_excel.current.getBoundingClientRect().y + 21)&& mouse_X > table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) {
         
         console.log('cuộn cả 2 thanh khi bên ngoài brower vị trí mouse ngoài phía trên bên phải');
         position_mouse_brower = 'ouside_brower';
@@ -3672,7 +3884,8 @@ event.persist();
 
         } 
 // cuộn thanh dọc khi vị trí mouse nằm dưới brower
-        else if (event_window.buttons == 1 && mouse_Y > (table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight  )) {
+        else if (event_window.buttons == 1 &&select_range_excel === true&&
+           mouse_Y > (table_excel.current.getBoundingClientRect().y + table_excel.current.clientHeight  )) {
           
           console.log('cuộn thanh dọc khi vị trí mouse nằm dưới brower');
 
@@ -3728,7 +3941,8 @@ event.persist();
 
         } 
 // cuộn thanh ngang khi vị trí mouse nằm ngoài bên phải brower
-        else if (event_window.buttons == 1 && mouse_X > (table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) ) {
+        else if (event_window.buttons == 1 &&select_range_excel === true&&
+           mouse_X > (table_excel.current.getBoundingClientRect().x + table_excel.current.clientWidth) ) {
           
           console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên phải brower');
 
@@ -3782,7 +3996,8 @@ event.persist();
         }
 
  // cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower
-        else if (event_window.buttons == 1 && mouse_Y < (table_excel.current.getBoundingClientRect().y + 21)) {
+        else if (event_window.buttons == 1 &&select_range_excel === true&&
+           mouse_Y < (table_excel.current.getBoundingClientRect().y + 21)) {
           
           console.log('cuộn thanh doc khi vị trí mouse nằm ngoài bên trên brower');
           position_mouse_brower = 'ouside_brower';
@@ -3830,7 +4045,8 @@ event.persist();
 
         }
 // cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower
-        else if (event_window.buttons == 1 && mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col)) {
+        else if (event_window.buttons == 1 &&select_range_excel === true&&
+           mouse_X < (table_excel.current.getBoundingClientRect().x + width_bar_reference_col)) {
           
           console.log('cuộn thanh ngang khi vị trí mouse nằm ngoài bên trái brower');
           position_mouse_brower = 'ouside_brower';
@@ -4290,6 +4506,36 @@ console.log('save');
    
     
     </div>
+
+
+
+
+    
+    {/* bar_scroll_row */}
+    <div  style={ { border: "1px ridge #ccc", top: -17,  display: 'flex', position: 'relative', width: table_excel_width -17, }} > 
+                            <img  src = "/10/static/SVG/left-chevron-svgrepo-com.svg" style={ {  background: '#000', width: 20, height: 15,}}  onMouseDown={(event)=>{ return button_bar_scroll_left_click(event) }}  /> 
+                            <div ref={ ref_thumb  } style={ {    width: 15, height: 15, background: '#5f88c1', position: 'absolute', left: 20,}}  onMouseDown={(event)=>{  if (event.buttons === 1) { move_thumb = true ; x_thumb = event.clientX ; left_thumb = ref_thumb.current.getBoundingClientRect().left - ref_track.current.getBoundingClientRect().left  ; } }}   onDragStart={(event)=> event.preventDefault()} > </div> 
+                            <div  ref={ ref_track  } style={ {    width: '100%', height: 15,  backgroundImage: 'linear-gradient(#A9A9A9, #D3D3D3)',  }}  onDragStart={(event)=> event.preventDefault()}  > </div> 
+                            <img  src = "/10/static/SVG/right-chevron-svgrepo-com.svg"  style={ {  background: '#000', width: 20, height: 15,}} onMouseDown={(event)=>{ return button_bar_scroll_right_click(event) }}  /> 
+
+                        
+    </div>
+
+
+       {/* bar_scroll_col */}
+   <div  style={ {  border: "1px ridge #ccc",   height: table_excel_height ,  position: 'absolute', left: table_excel_width -17  ,   bottom: 17 }}   > 
+                              <img  src = "/10/static/SVG/up-chevron-svgrepo-com.svg" style={ {  background: '#000', width: 15, height: 20,}}  onMouseDown={(event)=>{ return button_bar_scroll_top_click(event) }} /> 
+                                <div ref={ ref_thumb_col  } style={ {    width: 15, height: 15, background: '#5f88c1', position: 'absolute',}} onMouseDown={(event)=>{  if (event.buttons === 1) { move_thumb_col = true ; y_thumb = event.clientY ; top_thumb = ref_thumb_col.current.getBoundingClientRect().top - ref_track_col.current.getBoundingClientRect().top  ; } }}   onDragStart={(event)=> event.preventDefault()} > </div> 
+                                <div  ref={ ref_track_col  } style={ {    width: 15, height: table_excel_height - 40-17,   backgroundImage: 'linear-gradient(to right, #BEBEBE , #E8E8E8)',   }}  onDragStart={(event)=> event.preventDefault()}  > </div> 
+                            <img  src = "/10/static/SVG/down-chevron-svgrepo-com.svg"  style={ {  background: '#000', width: 15, height: 20,}}  onMouseDown={(event)=>{ return button_bar_scroll_bottom_click(event) }} /> 
+                            
+   </div>                   
+   
+   
+   
+
+
+
    
     
         </div> 

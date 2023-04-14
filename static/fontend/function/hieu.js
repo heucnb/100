@@ -22,24 +22,24 @@ function select_icon_from_file_name( file_name) {
   
     switch (extension) {
       case '':
-        return  "/SVG/folder.svg" ;
+        return  "/node/static/SVG/folder.svg" ;
         case 'jpg':
-          return  "/SVG/file_image.svg" ;
+          return  "/node/static/SVG/file_image.svg" ;
     
           case 'png':
-            return    "/SVG/file_image.svg" ;
+            return    "/node/static/SVG/file_image.svg" ;
         
             case 'git':
-              return "/SVG/file_image.svg" ;
+              return "/node/static/SVG/file_image.svg" ;
            
             case 'js':
-              return  "/SVG/file_js.svg" ;
+              return  "/node/static/SVG/file_js.svg" ;
          
             case 'json':
-              return   "/SVG/file_json.svg" ;
+              return   "/node/static/SVG/file_json.svg" ;
           
         default:
-          return  "/SVG/file_document.svg" ;
+          return  "/node/static/SVG/file_document.svg" ;
     }
       
     
@@ -121,6 +121,10 @@ function hover(event, object_style,object_style_leave, dom) {
 
  
 function _alert(componet_react) {
+  let _div = document.createElement("_div");
+  document.getElementById("root").appendChild(_div);
+  document.getElementById("root").style.position = "absolute";
+  document.getElementById("root").style.zIndex = "100";
   function Alert() {
 
     return ( <div className={'flex flex-wrap absolute rounded border border-solid border-slate-400 bg-amber-400  _shadow '}  style={  { top: '10%', left: '30%' }  } >
@@ -134,8 +138,6 @@ function _alert(componet_react) {
     
   }
 
-  let _div = document.createElement("_div");
-  document.getElementById("root").appendChild(_div);
   return   ReactDOM.render( <Alert />  ,  _div ) ;
    
 }
@@ -158,7 +160,7 @@ function _alert(componet_react) {
     return  new Promise(function(resolve, reject) {
       var newScript = document.createElement("script");
       in_dom.appendChild(newScript);
- newScript.src = "/CDN/accounts.google.com_gsi_client.js";
+ newScript.src = "/node/static/CDN/accounts.google.com_gsi_client.js";
  // khi tải xong file thì chạy function sau
  newScript.onload = function () {
    function handleCredentialResponse(response) {

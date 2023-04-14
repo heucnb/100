@@ -131,7 +131,7 @@ async function file_manager( dom ) {
                                    copy_array_path_cu_2.push(ref_0.current.textContent);
 
                             
-                                    axios.post("/Hieu/driver_rename", { file_cu : copy_array_path_cu_1.join("/"), file_moi : copy_array_path_cu_2.join("/") }).then(function (response) { 
+                                    axios.post("/node/Hieu/driver_rename", { file_cu : copy_array_path_cu_1.join("/"), file_moi : copy_array_path_cu_2.join("/") }).then(function (response) { 
                                      
                                       if (response.data !=="ok") { _alert('Có lỗi'); }
                                     
@@ -189,7 +189,7 @@ async function file_manager( dom ) {
                           let copy_array_path_cu_1 = [].concat(path_cu.current);
 
                           copy_array_path_cu_1.push(name_foder_and_file[index][0])
-                            axios.post("/Hieu/driver_detele", { file : copy_array_path_cu_1.join("/"), name_file : name_foder_and_file[index][0] }).then(function (response) { 
+                            axios.post("/node/Hieu/driver_detele", { file : copy_array_path_cu_1.join("/"), name_file : name_foder_and_file[index][0] }).then(function (response) { 
                               console.log(response.data); 
                               useEffect_array_change.current = useEffect_array_change.current + 1 ;
                               set_state_1( ( name_foder_and_file )=>{ 
@@ -231,7 +231,7 @@ async function file_manager( dom ) {
                                       let copy_array_path_cu_2 = [].concat(path_cu.current);    
                                         let path_file_paste = copy_array_path_cu_2.join("/") ;
                                         console.log('paste',path_file_paste);
-                                        axios.post("/Hieu/driver_copy", { file : [array_path_file_copy,  path_file_paste ] }).then(function (response) { 
+                                        axios.post("/node/Hieu/driver_copy", { file : [array_path_file_copy,  path_file_paste ] }).then(function (response) { 
                             
                             
                                         if (response.data[0] === "ok") {
@@ -514,7 +514,7 @@ async function file_manager( dom ) {
                            // nếu là ấn vào folder thì chạy
                             if ( name_foder_and_file[index-1][2] ==="") {
                              
-                              axios.post("/Hieu/driver", { folder : path_cu.current.concat(name_foder_and_file[index-1][0]).join("/") }).then(function (response) { 
+                              axios.post("/node/Hieu/driver", { folder : path_cu.current.concat(name_foder_and_file[index-1][0]).join("/") }).then(function (response) { 
                                     
                                     let data = response.data ;
 
@@ -540,7 +540,7 @@ async function file_manager( dom ) {
                                           // thay đổi mảng hiện tại bằng cách cát đi 1 phần tử ở vị trí cuối cùng -1
                                         path_cu.current.splice(-1,1) ;
                                      
-                                          axios.post("/Hieu/driver", { folder :  path_cu.current.join("/") }).then(function (response) {
+                                          axios.post("/node/Hieu/driver", { folder :  path_cu.current.join("/") }).then(function (response) {
 
                                          useEffect_array_change.current = useEffect_array_change.current + 1 ;
                                             set_state_1(response.data) ;
@@ -556,7 +556,7 @@ async function file_manager( dom ) {
         
         
                                       return ( <div style={{  display: "flex", alignItems: 'center',  }}   >  
-                                        <img className={'w-8 px-2 py-1 h-6  hover:bg-orange-700'}  src = "/SVG/back.svg"  onClick={(event)=>{ _back() }} />
+                                        <img className={'w-8 px-2 py-1 h-6  hover:bg-orange-700'}  src = "/node/static/SVG/back.svg"  onClick={(event)=>{ _back() }} />
                                        
                                         {
         
@@ -583,7 +583,7 @@ async function file_manager( dom ) {
                                   console.log(  path_cu.current );
                                     ReactDOM.render( <div  style={  {  position: 'fixed', width: '100%', height: '100%', top: 0, left: 0, right: 0, bottom: 0,  background: ' rgba(		0, 0, 0, 0.8)', zIndex: 2, }}  >
                                           <div className={'flex ml-1 mt-1 items-center'}  >  
-                                                    <img className={'w-8 px-2 py-1 h-6 hover:bg-orange-700'}  src = "/SVG/back_path_white.svg"  onClick={(event)=>{   ReactDOM.unmountComponentAtNode( ref_show_file.current );   }} />
+                                                    <img className={'w-8 px-2 py-1 h-6 hover:bg-orange-700'}  src = "/node/static/SVG/back_path_white.svg"  onClick={(event)=>{   ReactDOM.unmountComponentAtNode( ref_show_file.current );   }} />
                                               
                                                     <img className={'w-8 px-2 py-1 h-6'} src = {select_icon_from_file_name(name_foder_and_file[index-1][0])} />
                                                     <div className={'text-white '} > { name_foder_and_file[index-1][0] }  </div>
@@ -599,7 +599,7 @@ async function file_manager( dom ) {
                             }
     
     
-                           
+                               
                            
     
               } 
@@ -754,7 +754,7 @@ async function file_manager( dom ) {
            copy_array_path_cu_1.push(ref_0.current.textContent);
            let copy_array_path_cu_2 = [].concat(path_cu.current);
     
-            axios.post("/Hieu/driver_new_folder", { path_post : copy_array_path_cu_1.join("/"), path_begin : copy_array_path_cu_2.join("/") }).then(function (response) { 
+            axios.post("/node/Hieu/driver_new_folder", { path_post : copy_array_path_cu_1.join("/"), path_begin : copy_array_path_cu_2.join("/") }).then(function (response) { 
 
              
               if (response.data[0] === "ok") {
@@ -1054,13 +1054,13 @@ return ;
         
             <div ref = { ref_bar }  className={`${tb('w-3/4 border-l border-r border-solid border-yellow-900', 'w-full')}  flex box-border bg-yellow-800  `} >
               <div ref = { ref_bar_1 } className={`hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('','flex-wrap')} items-center border-yellow-900`}    >
-               <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/SVG/folder.svg" />  </div>  
+               <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/node/static/SVG/folder.svg" />  </div>  
               <div  className={` ${tb('','w-full')}  text-white `} > New folder   </div>  
               </div>
             
          
             <div ref = { ref_bar_3 } className={`hover:bg-sky-700 overflow-hidden whitespace-nowrap m-0 pr-2 pl-2 text-center text-base border-0 border-solid p-0 flex ${tb('','flex-wrap')} items-center border-yellow-900`}    >
-            <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/SVG/file_upload.svg" />  </div>
+            <div className={` flex justify-center items-center w-full`} >  <img className={`${tb('w-5 h-5 pr-1', 'w-8 h-4 mt-1 pr-1 self-end ')}`}  src = "/node/static/SVG/file_upload.svg" />  </div>
             
                 <div  className={` ${tb('','w-full')}   text-white `}   onClick={()=>{ ref_FileInput.current.click(); }} >  Upload file </div>  <input type="file" multiple ref={ref_FileInput}  style={{display: 'none'}} />
                  </div>  
@@ -1130,7 +1130,7 @@ return ;
     
     
     
-    return ReactDOM.render( <File_manager value = {await axios.post("/Hieu/driver" ,{ folder : "" }) }  /> ,  dom ) ;
+    return ReactDOM.render( <File_manager value = {await axios.post("/node/Hieu/driver" ,{ folder : "" }) }  /> ,  dom ) ;
     
     }
     

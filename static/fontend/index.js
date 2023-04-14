@@ -3,8 +3,8 @@ const { useState , useRef, useEffect  } = React ;
 let path_name = window.location.pathname ; 
 let font_size = 16;
 let isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
-
-let socket =  io('http://localhost:3000')
+// mở kết nối tới socket
+// let socket =  io('http://localhost:8001')
 
 if (isMobile) {font_size = 14 } ;
 function tb(string_pc, string_mobi) {

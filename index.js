@@ -141,23 +141,23 @@ console.log(99999, token);
   }
  
 };
-//vd: truy cập file /static/product_index.js trên url gõ localhost/product_index.js
 
-app.use( function (req, res, next) {
 
-  if (req.query.home === "true") {
+// app.use( function (req, res, next) {
 
-    res.write(index_html); 
-    return res.end();
+//   if (req.query.home === "true") {
+
+//     res.write(index_html); 
+//     return res.end();
    
     
-  }
-// phải dùng next() ở đây vì sau khi trả về trang index_html 
-// trong trang index_html có code lại truy cập đến server  rồi vào  app.use ở đây trước 
-// tại đây không có next nó sẽ không sang được app khác
-  next() ;
+//   }
+// // phải dùng next() ở đây vì sau khi trả về trang index_html 
+// // trong trang index_html có code lại truy cập đến server  rồi vào  app.use ở đây trước 
+// // tại đây không có next nó sẽ không sang được app khác
+//   next() ;
       
-});
+// });
 
 
 
@@ -179,9 +179,9 @@ var options = {
   }
 }
 
+//vd: truy cập file /static/product_index.js trên url gõ localhost/product_index.js
 
-
-app.use( express.static((__dirname + "/static") , options   )  );
+app.use('/static', express.static((__dirname + "/static") , options   )  );
 
 
 
@@ -274,14 +274,7 @@ app.get('/hh',verifyToken,function(req,res){
   return res.end();
   
 });
-app.get('/test',function(req,res){
-  const data = fs.readFileSync('./socket.html', 'utf8');
- 
-  res.write(data); 
-  return res.end();
 
-  
-});
 
 app.get('/test1',function(req,res){
 
@@ -416,21 +409,35 @@ for (let index = 0; index < array_file_name.length; index++) {
 
 }
 
+app.get('/test100',function(req,res){
+  console.time();
+  let i = 1;
+while (i < 1000000000) {
+
+  i++;
+}
+console.timeEnd();
+  return  res.send('2222222222'); 
+});
+
+app.get('/',function(req,res){
+  return  res.send(index_html); 
+});
+
 
 app.use( function (req, res) {
 
  
-
-
   console.log(222,req.path);
   let string_path = req.path ;
-  // lấy string đầu tiên có / và đừng sau là bất kì ký tự gì
- let path_match =  string_path.match(/\/.*/) ;
- console.log(path_match[0]);
-      if (string_path === path_match[0]) {
+  let result = string_path.indexOf("/static/");
+
+      if (result === -1) {
+        console.log('---------',req.path);
         return  res.send(index_html); 
     
       }
+
 
       
 });
