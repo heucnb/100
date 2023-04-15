@@ -1587,6 +1587,7 @@ function Table_hieu_2(props) {
           display: "none"
         });
         turn_off_onMouseEnter = true;
+        select_range_excel = true;
       }
     };
 
@@ -2531,7 +2532,6 @@ function Table_hieu_2(props) {
 
     event.persist();
     if (event.buttons == 1) {
-      select_range_excel = true;
       _onMouseEnter_not_event(x, y, i, j);
 
       // khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
@@ -2561,7 +2561,7 @@ function Table_hieu_2(props) {
           // cell đo X, Y là cell cuối lựa chọn
           Y = a.current.children[mien_select[2] + 1].children[mien_select[3] + 1].getBoundingClientRect().y;
           X = a.current.children[mien_select[2] + 1].children[mien_select[3] + 1].getBoundingClientRect().x;
-          if (e.buttons == 1 && x <= X && y <= Y) {
+          if (e.buttons == 1 && select_range_excel === true && x <= X && y <= Y) {
             console.log('ve lai trong canvas_ --- duoi phai');
             if (mien_select[3] === b_1) {
               _onMouseEnter(event, a_1, b_1, mien_select[2] - 1, mien_select[3]);
@@ -2570,7 +2570,7 @@ function Table_hieu_2(props) {
             } else {
               _onMouseEnter(event, a_1, b_1, mien_select[2] - 1, mien_select[3] - 1);
             }
-          } else if (e.buttons == 1 && x <= X) {
+          } else if (e.buttons == 1 && select_range_excel === true && x <= X) {
             console.log('ve lai trong canvas_--- duoi phai');
             if (mien_select[3] === b_1) {
               _onMouseEnter(event, a_1, b_1, mien_select[2] - 1, mien_select[3]);
@@ -2579,7 +2579,7 @@ function Table_hieu_2(props) {
             } else {
               _onMouseEnter(event, a_1, b_1, mien_select[2], mien_select[3] - 1);
             }
-          } else if (e.buttons == 1 && y <= Y) {
+          } else if (e.buttons == 1 && select_range_excel === true && y <= Y) {
             console.log('ve lai trong canvas_--- duoi phai');
             if (mien_select[3] === b_1) {
               _onMouseEnter(event, a_1, b_1, mien_select[2] - 1, mien_select[3]);
@@ -2594,7 +2594,7 @@ function Table_hieu_2(props) {
           // cell đo X, Y là cell cuối lựa chọn cách 1 cột
           Y = a.current.children[mien_select[2] + 1].children[mien_select[3] + 1 + 1].getBoundingClientRect().y;
           X = a.current.children[mien_select[2] + 1].children[mien_select[3] + 1 + 1].getBoundingClientRect().x;
-          if (e.buttons == 1 && x >= X && y <= Y) {
+          if (e.buttons == 1 && select_range_excel === true && x >= X && y <= Y) {
             console.log('ve lai trong canvas_--- duoi trai');
             console.log(mien_select[2], mien_select[3] + 1);
 
@@ -2605,7 +2605,7 @@ function Table_hieu_2(props) {
             } else {
               _onMouseEnter(event, a_1, b_1, mien_select[2] - 1, mien_select[3] + 1);
             }
-          } else if (e.buttons == 1 && x >= X) {
+          } else if (e.buttons == 1 && select_range_excel === true && x >= X) {
             console.log('ve lai trong canvas_--- duoi trai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
@@ -2615,7 +2615,7 @@ function Table_hieu_2(props) {
             } else {
               _onMouseEnter(event, a_1, b_1, mien_select[2], mien_select[3] + 1);
             }
-          } else if (e.buttons == 1 && y <= Y) {
+          } else if (e.buttons == 1 && select_range_excel === true && y <= Y) {
             console.log('ve lai trong canvas_--- duoi trai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
@@ -2631,7 +2631,7 @@ function Table_hieu_2(props) {
           // cell đo X, Y là cell cuối lựa chọn cách 1 dòng
           Y = a.current.children[mien_select[2] + 1 + 1].children[mien_select[3] + 1].getBoundingClientRect().y;
           X = a.current.children[mien_select[2] + 1 + 1].children[mien_select[3] + 1].getBoundingClientRect().x;
-          if (e.buttons == 1 && x <= X && y >= Y) {
+          if (e.buttons == 1 && select_range_excel === true && x <= X && y >= Y) {
             console.log('ve lai trong canvas_--- tren phai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
@@ -2641,7 +2641,7 @@ function Table_hieu_2(props) {
             } else {
               _onMouseEnter(event, a_1, b_1, mien_select[2] + 1, mien_select[3] - 1);
             }
-          } else if (e.buttons == 1 && x <= X) {
+          } else if (e.buttons == 1 && select_range_excel === true && x <= X) {
             console.log('ve lai trong canvas_--- tren phai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
@@ -2651,7 +2651,7 @@ function Table_hieu_2(props) {
             } else {
               _onMouseEnter(event, a_1, b_1, mien_select[2], mien_select[3] - 1);
             }
-          } else if (e.buttons == 1 && y >= Y) {
+          } else if (e.buttons == 1 && select_range_excel === true && y >= Y) {
             console.log('ve lai trong canvas_--- tren phai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
@@ -2667,17 +2667,17 @@ function Table_hieu_2(props) {
           // cell đo X, Y là cell cuối lựa chọn cách 1 dòng, 1 cột
           Y = a.current.children[mien_select[2] + 1 + 1].children[mien_select[3] + 1 + 1].getBoundingClientRect().y;
           X = a.current.children[mien_select[2] + 1 + 1].children[mien_select[3] + 1 + 1].getBoundingClientRect().x;
-          if (e.buttons == 1 && x >= X && y >= Y) {
+          if (e.buttons == 1 && select_range_excel === true && x >= X && y >= Y) {
             console.log('ve lai trong canvas_--- tren trai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
             _onMouseEnter(event, a_1, b_1, mien_select[2] + 1, mien_select[3] + 1);
-          } else if (e.buttons == 1 && x >= X) {
+          } else if (e.buttons == 1 && select_range_excel === true && x >= X) {
             console.log('ve lai trong canvas_--- tren trai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
             _onMouseEnter(event, a_1, b_1, mien_select[2], mien_select[3] + 1);
-          } else if (e.buttons == 1 && y >= Y) {
+          } else if (e.buttons == 1 && select_range_excel === true && y >= Y) {
             console.log('ve lai trong canvas_--- tren trai');
 
             // tới ô cách ô cuối theo đường chéo 1 ô
@@ -2699,6 +2699,7 @@ function Table_hieu_2(props) {
             display: "none"
           });
           turn_off_onMouseEnter = true;
+          select_range_excel = true;
         }
       };
     }
@@ -2812,6 +2813,8 @@ function Table_hieu_2(props) {
       }
       ;
     }() === false) {
+      select_range_excel = true;
+      console.log('******************************', select_range_excel);
       // huỷ bỏ miền chọn cũ
 
       Object.assign(canvas_.current.style, {
@@ -4762,27 +4765,29 @@ function Table_hieu_2(props) {
           return _onMouseDown(_this, i, j, event);
         },
         onMouseEnter: event => {
-          clearTimeout(myInterval_0);
-          clearTimeout(myInterval);
-          let a_1 = vi_tri_o_truoc[0];
-          let b_1 = vi_tri_o_truoc[1];
-          if (a_1 < 0) {
-            a_1 = 0;
+          if (select_range_excel === true) {
+            clearTimeout(myInterval_0);
+            clearTimeout(myInterval);
+            let a_1 = vi_tri_o_truoc[0];
+            let b_1 = vi_tri_o_truoc[1];
+            if (a_1 < 0) {
+              a_1 = 0;
+            }
+            ;
+            if (b_1 < 0) {
+              b_1 = 0;
+            }
+            ;
+            if (a_1 > limit_view - 1) {
+              a_1 = limit_view - 1;
+            }
+            ;
+            if (b_1 > limit_col_view) {
+              b_1 = limit_col_view;
+            }
+            ;
+            _onMouseEnter(event, a_1, b_1, i, j);
           }
-          ;
-          if (b_1 < 0) {
-            b_1 = 0;
-          }
-          ;
-          if (a_1 > limit_view - 1) {
-            a_1 = limit_view - 1;
-          }
-          ;
-          if (b_1 > limit_col_view) {
-            b_1 = limit_col_view;
-          }
-          ;
-          _onMouseEnter(event, a_1, b_1, i, j);
         }
         // biến onKeyDown mặc định là false
         ,

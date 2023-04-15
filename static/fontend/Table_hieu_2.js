@@ -291,6 +291,7 @@ if (top_thumb+move +15 >= rect_ref_track.height +20 ) {
               console.log('ẩn canvas----------------');
               Object.assign(canvas_.current.style ,{display : "none"}) ;
               turn_off_onMouseEnter = true ;
+              select_range_excel = true ;
               
             }
               
@@ -1600,8 +1601,7 @@ console.log('_onKeyDown------------------------------');
     
         if (event.buttons == 1) {
 
-          select_range_excel = true ;
-    
+       
           _onMouseEnter_not_event (x, y,i,j);
 
               // khi nhấn chuột trái và di chuyển trong box canvas_ thì ẩn canvas_ đi
@@ -1638,7 +1638,7 @@ console.log('_onKeyDown------------------------------');
              
           
           
-               if (e.buttons == 1 && ( x <= X  && y <= Y  )) {
+               if (e.buttons == 1 && select_range_excel === true&& ( x <= X  && y <= Y  )) {
                 console.log('ve lai trong canvas_ --- duoi phai');
 
 
@@ -1659,7 +1659,7 @@ console.log('_onKeyDown------------------------------');
                     }
               
                
-              }  else if (e.buttons == 1 && ( x <= X   )) {
+              }  else if (e.buttons == 1 &&select_range_excel === true&& ( x <= X   )) {
 
                 console.log('ve lai trong canvas_--- duoi phai');
               
@@ -1681,7 +1681,7 @@ console.log('_onKeyDown------------------------------');
 
 
 
-              }else if (e.buttons == 1 && ( y <= Y  )) {
+              }else if (e.buttons == 1 &&select_range_excel === true&& ( y <= Y  )) {
 
                 console.log('ve lai trong canvas_--- duoi phai');
                
@@ -1713,7 +1713,7 @@ console.log('_onKeyDown------------------------------');
          
 
               
-              if (e.buttons == 1 && ( x >= X && y <= Y )) {
+              if (e.buttons == 1 &&select_range_excel === true&& ( x >= X && y <= Y )) {
                           console.log('ve lai trong canvas_--- duoi trai');
                         
                          console.log(mien_select[2], mien_select[3]+1);
@@ -1731,7 +1731,7 @@ console.log('_onKeyDown------------------------------');
                         }
                     
                               
-              }else if (e.buttons == 1 && (  x >= X   )) {
+              }else if (e.buttons == 1 &&select_range_excel === true&& (  x >= X   )) {
 
                                     console.log('ve lai trong canvas_--- duoi trai');
                                             
@@ -1750,7 +1750,7 @@ console.log('_onKeyDown------------------------------');
                                   }
 
 
-              }else if (e.buttons == 1 && ( y <= Y  )) {
+              }else if (e.buttons == 1 &&select_range_excel === true&& ( y <= Y  )) {
 
                                   console.log('ve lai trong canvas_--- duoi trai');
                                           
@@ -1778,7 +1778,7 @@ console.log('_onKeyDown------------------------------');
                Y = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1].getBoundingClientRect().y ;
                X = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1].getBoundingClientRect().x;
              
-              if (e.buttons == 1 && ( x <= X && y >= Y )) {
+              if (e.buttons == 1 &&select_range_excel === true&& ( x <= X && y >= Y )) {
                               console.log('ve lai trong canvas_--- tren phai');
                              
                       
@@ -1795,7 +1795,7 @@ console.log('_onKeyDown------------------------------');
                         }
            
                      
-             }else if (e.buttons == 1 && (  x <= X   )) {
+             }else if (e.buttons == 1 &&select_range_excel === true&& (  x <= X   )) {
 
                           console.log('ve lai trong canvas_--- tren phai');
                         
@@ -1813,7 +1813,7 @@ console.log('_onKeyDown------------------------------');
                     }
 
 
-             }else if (e.buttons == 1 && (  y >= Y   )) {
+             }else if (e.buttons == 1 &&select_range_excel === true&& (  y >= Y   )) {
 
                           console.log('ve lai trong canvas_--- tren phai');
                        
@@ -1840,7 +1840,7 @@ console.log('_onKeyDown------------------------------');
               Y = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1+1].getBoundingClientRect().y ;
               X = a.current.children[mien_select[2] +1 +1].children[mien_select[3]+1+1].getBoundingClientRect().x;
              
-             if (e.buttons == 1 && ( x >= X && y >= Y )) {
+             if (e.buttons == 1 &&select_range_excel === true&& ( x >= X && y >= Y )) {
                       console.log('ve lai trong canvas_--- tren trai');
                 
               
@@ -1850,7 +1850,7 @@ console.log('_onKeyDown------------------------------');
 
           
                     
-            }else if (e.buttons == 1 && (  x >= X   )) {
+            }else if (e.buttons == 1 &&select_range_excel === true&& (  x >= X   )) {
 
                     console.log('ve lai trong canvas_--- tren trai');
                
@@ -1858,7 +1858,7 @@ console.log('_onKeyDown------------------------------');
               // tới ô cách ô cuối theo đường chéo 1 ô
                 _onMouseEnter(event,a_1, b_1, mien_select[2] , mien_select[3] +1)  ;
 
-            }else if (e.buttons == 1 && ( y >= Y  )) {
+            }else if (e.buttons == 1 &&select_range_excel === true&& ( y >= Y  )) {
                         console.log('ve lai trong canvas_--- tren trai');
                    
                 
@@ -1876,7 +1876,6 @@ console.log('_onKeyDown------------------------------');
 
           };
 
-
           // khi nhấn chuột hoặc bàn phím gõ vào khung canvas_  thì ẩn canvas_ đi
           // lúc này bảng tính phía sau canvas_ sẽ không bị canvas_ che nữa
           // và nó sẽ lắng nghe sự kiện _onMouseEnter nhưng lúc này ta thiết lập   turn_off_onMouseEnter = true
@@ -1889,6 +1888,7 @@ console.log('_onKeyDown------------------------------');
                   console.log('ẩn canvas');
                   Object.assign(canvas_.current.style ,{display : "none"}) ;
                   turn_off_onMouseEnter = true ;
+                  select_range_excel = true ;
                   
                 }
                   
@@ -2059,7 +2059,8 @@ console.log('_onKeyDown------------------------------');
      
       if ( (_this.kiem_tra == 0 || _this.kiem_tra == undefined)&&   (function() {  if (_this.children[0]!== undefined) { return _this.children[0].hasAttribute("contenteditable") ; }else{ return false ; }; })() === false  ) {
 
-                
+        select_range_excel = true ;  
+        console.log('******************************',select_range_excel);        
         // huỷ bỏ miền chọn cũ
        
         Object.assign(canvas_.current.style ,{display : "none"}) ;
@@ -4488,7 +4489,7 @@ console.log('save');
                           
                       onMouseDown={(event)=>{var _this =  a.current.children[i + 1].children[j+1]; return _onMouseDown(_this, i, j, event)}} 
 
-                      onMouseEnter={(event)=>{  clearTimeout(myInterval_0); clearTimeout(myInterval); let a_1 = vi_tri_o_truoc[0]; let b_1 = vi_tri_o_truoc[1] ; if (a_1 <  0) { a_1 = 0 } ; if (b_1 <  0) { b_1 = 0 } ; if (a_1 >  limit_view - 1) { a_1 =  limit_view - 1} ;  if (b_1 >  limit_col_view) {b_1 =  limit_col_view} ; _onMouseEnter(event,a_1, b_1,i,j)}  } 
+                      onMouseEnter={(event)=>{    if (select_range_excel === true) {  clearTimeout(myInterval_0); clearTimeout(myInterval); let a_1 = vi_tri_o_truoc[0]; let b_1 = vi_tri_o_truoc[1] ; if (a_1 <  0) { a_1 = 0 } ; if (b_1 <  0) { b_1 = 0 } ; if (a_1 >  limit_view - 1) { a_1 =  limit_view - 1} ;  if (b_1 >  limit_col_view) {b_1 =  limit_col_view} ;_onMouseEnter(event,a_1, b_1,i,j)  }    }  } 
                       // biến onKeyDown mặc định là false
                       onKeyDown={(event)=>{ if(onKeyDown){}else{_onKeyDown(event,i,j)}  }}
                       > {cell}  </div>
