@@ -4808,13 +4808,13 @@ function Table_hieu_2(props) {
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       border: "1px ridge #ccc",
-      top: -17,
+      top: table_excel_height - 17 - 17 + 88 + 60,
       display: 'flex',
-      position: 'relative',
+      position: 'absolute',
       width: table_excel_width - 17
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/10/static/SVG/left-chevron-svgrepo-com.svg",
+    src: "/node/static/SVG/left-chevron-svgrepo-com.svg",
     style: {
       background: '#000',
       width: 20,
@@ -4849,7 +4849,7 @@ function Table_hieu_2(props) {
     },
     onDragStart: event => event.preventDefault()
   }, " "), /*#__PURE__*/React.createElement("img", {
-    src: "/10/static/SVG/right-chevron-svgrepo-com.svg",
+    src: "/node/static/SVG/right-chevron-svgrepo-com.svg",
     style: {
       background: '#000',
       width: 20,
@@ -4867,7 +4867,7 @@ function Table_hieu_2(props) {
       bottom: 17
     }
   }, /*#__PURE__*/React.createElement("img", {
-    src: "/10/static/SVG/up-chevron-svgrepo-com.svg",
+    src: "/node/static/SVG/up-chevron-svgrepo-com.svg",
     style: {
       background: '#000',
       width: 15,
@@ -4901,7 +4901,7 @@ function Table_hieu_2(props) {
     },
     onDragStart: event => event.preventDefault()
   }, " "), /*#__PURE__*/React.createElement("img", {
-    src: "/10/static/SVG/down-chevron-svgrepo-com.svg",
+    src: "/node/static/SVG/down-chevron-svgrepo-com.svg",
     style: {
       background: '#000',
       width: 15,

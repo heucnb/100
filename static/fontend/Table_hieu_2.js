@@ -4511,24 +4511,22 @@ console.log('save');
 
 
 
-    
     {/* bar_scroll_row */}
-    <div  style={ { border: "1px ridge #ccc", top: -17,  display: 'flex', position: 'relative', width: table_excel_width -17, }} > 
-                            <img  src = "/10/static/SVG/left-chevron-svgrepo-com.svg" style={ {  background: '#000', width: 20, height: 15,}}  onMouseDown={(event)=>{ return button_bar_scroll_left_click(event) }}  /> 
+    <div  style={ { border: "1px ridge #ccc", top: table_excel_height -17-17+88+60,  display: 'flex', position: 'absolute', width: table_excel_width -17, }} > 
+                            <img  src = "/node/static/SVG/left-chevron-svgrepo-com.svg" style={ {  background: '#000', width: 20, height: 15,}}  onMouseDown={(event)=>{ return button_bar_scroll_left_click(event) }}  /> 
                             <div ref={ ref_thumb  } style={ {    width: 15, height: 15, background: '#5f88c1', position: 'absolute', left: 20,}}  onMouseDown={(event)=>{  if (event.buttons === 1) { move_thumb = true ; x_thumb = event.clientX ; left_thumb = ref_thumb.current.getBoundingClientRect().left - ref_track.current.getBoundingClientRect().left  ; } }}   onDragStart={(event)=> event.preventDefault()} > </div> 
                             <div  ref={ ref_track  } style={ {    width: '100%', height: 15,  backgroundImage: 'linear-gradient(#A9A9A9, #D3D3D3)',  }}  onDragStart={(event)=> event.preventDefault()}  > </div> 
-                            <img  src = "/10/static/SVG/right-chevron-svgrepo-com.svg"  style={ {  background: '#000', width: 20, height: 15,}} onMouseDown={(event)=>{ return button_bar_scroll_right_click(event) }}  /> 
+                            <img  src = "/node/static/SVG/right-chevron-svgrepo-com.svg"  style={ {  background: '#000', width: 20, height: 15,}} onMouseDown={(event)=>{ return button_bar_scroll_right_click(event) }}  /> 
 
                         
     </div>
 
-
        {/* bar_scroll_col */}
    <div  style={ {  border: "1px ridge #ccc",   height: table_excel_height ,  position: 'absolute', left: table_excel_width -17  ,   bottom: 17 }}   > 
-                              <img  src = "/10/static/SVG/up-chevron-svgrepo-com.svg" style={ {  background: '#000', width: 15, height: 20,}}  onMouseDown={(event)=>{ return button_bar_scroll_top_click(event) }} /> 
+                              <img  src = "/node/static/SVG/up-chevron-svgrepo-com.svg" style={ {  background: '#000', width: 15, height: 20,}}  onMouseDown={(event)=>{ return button_bar_scroll_top_click(event) }} /> 
                                 <div ref={ ref_thumb_col  } style={ {    width: 15, height: 15, background: '#5f88c1', position: 'absolute',}} onMouseDown={(event)=>{  if (event.buttons === 1) { move_thumb_col = true ; y_thumb = event.clientY ; top_thumb = ref_thumb_col.current.getBoundingClientRect().top - ref_track_col.current.getBoundingClientRect().top  ; } }}   onDragStart={(event)=> event.preventDefault()} > </div> 
                                 <div  ref={ ref_track_col  } style={ {    width: 15, height: table_excel_height - 40-17,   backgroundImage: 'linear-gradient(to right, #BEBEBE , #E8E8E8)',   }}  onDragStart={(event)=> event.preventDefault()}  > </div> 
-                            <img  src = "/10/static/SVG/down-chevron-svgrepo-com.svg"  style={ {  background: '#000', width: 15, height: 20,}}  onMouseDown={(event)=>{ return button_bar_scroll_bottom_click(event) }} /> 
+                            <img  src = "/node/static/SVG/down-chevron-svgrepo-com.svg"  style={ {  background: '#000', width: 15, height: 20,}}  onMouseDown={(event)=>{ return button_bar_scroll_bottom_click(event) }} /> 
                             
    </div>                   
    

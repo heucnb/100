@@ -412,7 +412,7 @@ for (let index = 0; index < array_file_name.length; index++) {
 app.get('/test100',function(req,res){
   console.time();
   let i = 1;
-while (i < 1000000000) {
+while (i < 10000000000) {
 
   i++;
 }
@@ -425,22 +425,22 @@ app.get('/',function(req,res){
 });
 
 
-app.use( function (req, res) {
+// app.use( function (req, res) {
 
  
-  console.log(222,req.path);
-  let string_path = req.path ;
-  let result = string_path.indexOf("/static/");
+//   console.log(222,req.path);
+//   let string_path = req.path ;
+//   let result = string_path.indexOf("/static/");
 
-      if (result === -1) {
-        console.log('---------',req.path);
-        return  res.send(index_html); 
+//       if (result === -1) {
+//         console.log('---------',req.path);
+//         return  res.send(index_html); 
     
-      }
+//       }
 
 
       
-});
+// });
 
 
 // http://localhost:8000
