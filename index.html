@@ -9,6 +9,15 @@
  
 
     <!-- <link rel="stylesheet" href="/node/static/style_converted.css"> -->
+
+
+    <script type="text/javascript" src="/node/static/CDN/tailwindcss.com3.2.4.js"></script>
+    <script type="text/javascript" src="/node/static/CDN/react.development.min.js"></script>
+    <script type="text/javascript" src="/node/static/CDN/react-dom.development.min.js"></script>
+    <script type="text/javascript" src="/node/static/CDN/axios.min.map.js"></script>
+    <script type="text/javascript" src="/node/static/CDN/socket.io.min.js"></script>
+
+
     <style id="style" >
       /* ngăn chặn anh huong thao tac copy tren trinh duyet */
       /* How to disable selection of text on a web page */
@@ -28,6 +37,9 @@
          }
      
      </style>
+
+
+
 </head>
 <body > 
 
@@ -37,33 +49,15 @@
 <script id="script_root" >
 console.log(window.location.host);
 
-  // dùng khi ta muốn thay đổi file trên server các file đã lưu trong cache của browser client không còn dùng được nữa. Client phải tải lại file trên server
-   let resresh_cache_client = "";
-   var newScript_1 = document.createElement("script");
-   var newScript_2 = document.createElement("script");
-   var newScript_3 = document.createElement("script");
-   var newScript_4 = document.createElement("script");
-   var newScript_5 = document.createElement("script");
-   var newScript_end = document.createElement("script");
+// load hết dom xong mới tải 
+window.onload = function()
+{
+  var newScript_1 = document.createElement("script");
    script_root.appendChild(newScript_1);
-   script_root.appendChild(newScript_2);
-   script_root.appendChild(newScript_3);
-   script_root.appendChild(newScript_4);
-   script_root.appendChild(newScript_5);
-   script_root.appendChild(newScript_end);
-let sum_script_dowload = 0;
-// các file này tải bất đồng bộ
- newScript_1.src ="/node/static/"+ resresh_cache_client + "CDN/tailwindcss.com3.2.4.js";
- newScript_2.src = "/node/static/"+ resresh_cache_client + "CDN/react.development.min.js";
- newScript_3.src = "/node/static/"+ resresh_cache_client + "CDN/react-dom.development.min.js";
- newScript_4.src = "/node/static/"+ resresh_cache_client + "CDN/axios.min.map.js";
- newScript_5.src = "/node/static/"+ resresh_cache_client + "CDN/socket.io.min.js";
-// sau khi tải xong file trên mới tải file cuối index_ghep_file.js
- newScript_1.onload = function () { sum_script_dowload = sum_script_dowload + 1; if (sum_script_dowload === 5) { newScript_end.src = "/node/static/index_ghep_file.js"; } };
- newScript_2.onload = function () { sum_script_dowload = sum_script_dowload + 1; if (sum_script_dowload === 5) { newScript_end.src = "/node/static/index_ghep_file.js"; } };
- newScript_3.onload = function () { sum_script_dowload = sum_script_dowload + 1; if (sum_script_dowload === 5) { newScript_end.src = "/node/static/index_ghep_file.js"; } };
- newScript_4.onload = function () { sum_script_dowload = sum_script_dowload + 1; if (sum_script_dowload === 5) { newScript_end.src = "/node/static/index_ghep_file.js"; } };
- newScript_5.onload = function () { sum_script_dowload = sum_script_dowload + 1; if (sum_script_dowload === 5) { newScript_end.src = "/node/static/index_ghep_file.js"; } };
+ newScript_1.src ="/node/static/index_ghep_file.js";
+ 
+};
+ 
 </script>
 
 
