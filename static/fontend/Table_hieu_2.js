@@ -626,9 +626,11 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // hàm xử lý xuất hiện thẻ input khi scroll 
       function change_input_scroll(row_vi_tri_remove,col_vi_tri_remove, row_vi_tri_add, col_vi_tri_add) {
-
-        let i_array_2d =parseInt((a.current.children[0+1].children[0].innerHTML)); 
-        let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+        console.log(row_vi_tri_remove,col_vi_tri_remove, row_vi_tri_add, col_vi_tri_add);
+        let i_array_2d =parseInt((a.current.children[0 + dong_co_dinh+1].children[0].innerHTML)); 
+        let j_array_2d =parseInt((a.current.children[0].children[0 + cot_co_dinh + 1].innerHTML)); 
+    
+     
 
               //  xoá tô màu  vị trí trước đó: nếu vị trí trước đó  không nằm trong khung nhìn thì xoá focus đang hiện diện ngược lại xoá tô màu
            
@@ -658,7 +660,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                        vi_tri_o_truoc[0] = row_vi_tri_add ; 
                          vi_tri_o_truoc[1] = col_vi_tri_add ; 
                            // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
+                           dia_chi_o_click(row_vi_tri_add+i_array_2d - dong_co_dinh,col_vi_tri_add + j_array_2d - cot_co_dinh,row_vi_tri_add  ,col_vi_tri_add) ;
 
 
                             }
@@ -681,6 +683,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                         // xuất hiện lại thẻ input và focus
                       
                         console.log('xuất hiện lại thẻ input và focus') ;
+                        console.log(row_vi_tri_add+i_array_2d, col_vi_tri_add + j_array_2d);
                       
                         a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].style.zIndex = 100 ;
                           a.current.children[row_vi_tri_add +1 ].children[col_vi_tri_add+1].innerHTML = '<div  contenteditable="true"></div>'  ;
@@ -689,7 +692,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                           Object.assign(input_.style,css.input_focus , { width: width_input_focus} ) ;
      
                       
-                          if ( text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d]  === null) {           
+                          if ( text_formular[row_vi_tri_add+i_array_2d - dong_co_dinh][col_vi_tri_add + j_array_2d - cot_co_dinh]  === null) {           
                             input_.focus({preventScroll:true}) ; 
                             }else{
 
@@ -703,7 +706,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                
                                 console.log(vi_tri_focus);
                              
-                                let paint =  paint_text( text_formular[row_vi_tri_add+i_array_2d][col_vi_tri_add + j_array_2d],vi_tri_focus ) ;
+                                let paint =  paint_text( text_formular[row_vi_tri_add+i_array_2d - dong_co_dinh][col_vi_tri_add + j_array_2d - cot_co_dinh],vi_tri_focus ) ;
                               
                                 input_.innerHTML = paint[0] ;
                 
@@ -726,7 +729,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                 run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d , j_array_2d);
 
                                  // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(row_vi_tri_add + i_array_2d,col_vi_tri_add + j_array_2d,row_vi_tri_add  ,col_vi_tri_add) ;
+                           dia_chi_o_click(row_vi_tri_add+i_array_2d - dong_co_dinh,col_vi_tri_add + j_array_2d - cot_co_dinh,row_vi_tri_add  ,col_vi_tri_add) ;
 
                            console.log(vi_tri_click_in_Data);
                            
@@ -811,9 +814,8 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       console.log('tính toán           '+ vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
 
      
-     
-       let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
-       let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+      let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+      let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
       
       var text = text_formular[i+i_array_2d][j + j_array_2d];  
 
@@ -1316,8 +1318,9 @@ console.log('_onKeyDown------------------------------');
     // mục đích khi xuất hiện thẻ input thì tắt lắng nghe sự kiện _onKeyDown ở elment này
     if (onKeyDown_1_element === false) {
     
-      let i_array_2d =parseInt((a.current.children[0 +1 ].children[0].innerHTML)); 
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML));  
+      let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+    let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
+    
       
       
       // 1. element được kích hoạt và element không ở trạng thái tính toán mà bấm phím enter sẽ xuống dòng 
@@ -1472,12 +1475,9 @@ console.log('_onKeyDown------------------------------');
       ctx.clearRect(0, 0, canvas_.current.width, canvas_.current.height) ;
  
      
-
-      
-      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-
-
+ 
+      let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+      let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
 
           mien_select[0] = x ; 
           mien_select[1] = y ;
@@ -1947,8 +1947,8 @@ console.log('_onKeyDown------------------------------');
    
     
     
-      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+      let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+      let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
      
       // đầu tiên nó chạy hàm 1 click khởi tạo kiem_tra = 1 do đó khi click thêm trong vòng 300 ms giây thì kiem_tra vẫn = 1 => nó chạy hàm 2 click
     
@@ -2498,8 +2498,8 @@ console.log('_onKeyDown------------------------------');
   function paste(event) {
     console.log(vi_tri_o_truoc);
 
-    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+    let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+    let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
 
     navigator.clipboard.readText().then(
 
@@ -2687,9 +2687,8 @@ console.log('_onKeyDown------------------------------');
 
    
    console.log(data_array_2d);
-
-     let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-     let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
+   let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+   let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
      
 
 // lặp trong mảng data_array_2d lấy công thức push vào formular
@@ -2950,10 +2949,8 @@ data_array_2d.push(data_array_col) ;
 
       console.log(data_array_2d);
 
-   
-      let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML));  
-      let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-      
+      let i_array_2d =parseInt((a.current.children[0 + i+1].children[0].innerHTML))-i; 
+      let j_array_2d =parseInt((a.current.children[0].children[0 + j+1].innerHTML))-j; 
  
  // lặp trong mảng data_array_2d lấy công thức push vào formular
  
@@ -3104,6 +3101,8 @@ data_array_2d.push(data_array_col) ;
 
 var width_bar_reference_col ;
 var vi_tri_khung_nhin_truoc_scroll = [null, null] ;
+let dong_co_dinh =3 ;
+let cot_co_dinh =2 ;
 
   function _onScroll(event) {
   
@@ -3117,10 +3116,12 @@ let _table  = table_excel.current;
         vi_tri_cat = Math.round(di_chuyen/ click_scroll_dichuyen) ; 
         vi_tri_cat_col =  Math.round(di_chuyen_col/ click_scroll_dichuyen) ; 
    
-    let  vi_tri_cat_truoc_do =  a.current.children[0 + 1].children[0].innerHTML ; // là vị trí cắt trước đó
-    let i_array_2d =parseInt((a.current.children[0 + 1].children[0].innerHTML)); 
-    let j_array_2d =parseInt((a.current.children[0].children[0 + 1].innerHTML)); 
-
+        let  vi_tri_cat_truoc_do =  a.current.children[0 + dong_co_dinh + 1].children[0].innerHTML ; // là vị trí cắt trước đó
+           
+        let  vi_tri_cat_truoc_do_col =  a.current.children[0 ].children[0 + cot_co_dinh + 1].innerHTML ; // là vị trí cắt trước đó
+        let i_array_2d =parseInt((a.current.children[0 + dong_co_dinh + 1].children[0].innerHTML)); 
+        let j_array_2d =parseInt((a.current.children[0].children[0 + cot_co_dinh + 1].innerHTML)); 
+    
 
               // scrollHeight chiều cao của cả thanh scroll
                   // scrollTop khoảng cách từ top 0 đến vị trí hiện tại
@@ -3199,7 +3200,7 @@ let _table  = table_excel.current;
                   
                   
                      
-                      let  vi_tri_cat_truoc_do_col =  a.current.children[0 ].children[0 + 1].innerHTML ; // là vị trí cắt trước đó
+        
                      
                       
   
@@ -3234,133 +3235,189 @@ let _table  = table_excel.current;
                             }
                            
 
-                         // cập nhật lại dữ liệu khi scroll -- bước1
-                         for (let index = 0; index <= limit_view ; index++) {
-                      
-                          a.current.children[index + 1].children[0].innerHTML = index + vi_tri_cat;
-                         
-                          for (let index_j = 0; index_j <= limit_col_view  ; index_j++) {
-                                      if (index === 0) { a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; }
+ //------------// cập nhật lại dữ liệu khi scroll -- bước1  ---------------------------------------------------
+                         function update_data(dong_co_dinh, cot_co_dinh) {
 
-                                          
+                          // tạo function
+                          function xac_dinh_zIndex_cell(index, index_j , vi_tri_cat  , vi_tri_cat_col ) {
+                            // với  cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
+                      let max_zindex  = limit_col_view + 1;
+                                
+                      for (let x = limit_col_view ; x >= 0 ; x--) {
 
-                                        // với  cell hiện lên trang web bảng tính thì ta duyệt từ cuối tới đầu dòng đó để xác định zIndex cho cell đó
-                                        let max_zindex  = limit_col_view + 1;
-                                                  
-                                        for (let x = limit_col_view ; x >= 0 ; x--) {
+                        if (Data[index ][x  ] === null) {
 
-                                          if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
-
-                                            a.current.children[index + 1].children[x+1].style.zIndex = x ;
-                                          
-                                          }else{
-                                            a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
-                                            max_zindex = x ;
-                                          } 
-                                        }
-
-
-                      
-                                        if ( Data[index + vi_tri_cat][index_j + vi_tri_cat_col] === null) {
-                                                      
-                                                 
-                                      a.current.children[index + 1].children[index_j+1].innerHTML = null ;
-                                  
-                                        }else{
-
-                                          
-                                      a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;   "> ${ Data[index + vi_tri_cat  ][index_j + vi_tri_cat_col]  }  </div>`;
-                                  
-                                               
-                                        }
-       
+                          a.current.children[index + 1].children[x+1].style.zIndex = x ;
                         
-                        }
-                        }  
-
-
-
-
-                        // các cell bị ẩn bên trái trục
-                        // tìm các cell cell bị ẩn bên trái trục gần nhất để hiện dữ liệu lên div show các cell ẩn
-                      // sau đó di chuyển div đó phù hợp với khung nhìn
-                        for (let index = 0; index <= limit_view ; index++) {
-                          let sum_col_hide = 1 ;
-                          for (let x = vi_tri_cat_col - 1 ; x >= 0 ; x--) {
-                            a.current.children[ index + 1].children[limit_col+1].style.visibility = "hidden";
-                          
-  
-                            if (Data[index + vi_tri_cat ][x ] === null) {
-  
-                          sum_col_hide = sum_col_hide + 1 ;
-                            
-                            }else{
-                              a.current.children[ index + 1].children[limit_col+1].style.visibility = "visible";
-                              // div đó hiện dữ liệu
-                              a.current.children[ index + 1].children[limit_col+1].innerHTML = Data[index + vi_tri_cat][x]  ;
-                              // di chuyển div đó phù hợp với khung nhìn
-                              a.current.children[ index + 1].children[limit_col+1].style.left = (-tro_ve_vi_tri_begin -sum_col_hide*85) + 'px' ;
-                                        // xác dịnh zindex cho div đó
-                                        for (let x = 0 ; x <= limit_col_view ; x++) {
-                                          if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
-
-                                          
-                                          
-                                          }else{
-                                            a.current.children[ index + 1].children[limit_col+1].style.zIndex = x ;
-                                            break ;
-                                          } 
-
-                                        }
-
-                              break ;
-                            } 
-  
-                          }
-                        }
-                       
-                       
-                       
-
-
-                    //Bước 2:  nếu công thức chưa hoàn thành(xuất hiện thẻ input)
-
-                    if (xuat_hien_the_input) {
-                      console.log(     'xuat_hien_the_input--' +  xuat_hien_the_input ) ;
-                      change_input_scroll(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col))); 
-                         
-                    }
-                    else
-
-                    {
-
-                        // Bước 2: nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
-                        console.log('key_enter:   ',vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-vi_tri_cat + vi_tri_cat_truoc_do,vi_tri_o_truoc[1]-vi_tri_cat_col + vi_tri_cat_truoc_do_col ) ;
-                            // set địa chỉ ô click  sau hành động trên
-                           dia_chi_o_click(vi_tri_o_truoc[0]+ i_array_2d,vi_tri_o_truoc[1] + j_array_2d,(vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do)) ,(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) ) ;
-                           key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col - vi_tri_cat_truoc_do_col)) );
-                        console.log(vi_tri_click_in_Data);
-                        console.log(vi_tri_o_truoc)
-                       
+                        }else{
+                          a.current.children[index + 1].children[x+1].style.zIndex = max_zindex ;
+                          max_zindex = x ;
+                        } 
                       }
 
 
-                      console.log("---------/////////////////////////////////////////////////////////////--------------------------");
+    
+                      if ( Data[index +vi_tri_cat][index_j + vi_tri_cat_col] === null) {
+                                    
+                              
+                    a.current.children[index + 1].children[index_j+1].innerHTML = null ;
+                 
+                      }else{
 
-                      console.log(vi_tri_o_truoc);
-   
-                      // bước 4 
-                          // vịtrí ô viết công thức không nằm trong khung nhìn thì focus tại thanh công thức
-                         if ( (vi_tri_o_truoc[0] <= limit_view - 1 )&( vi_tri_o_truoc[0] >= 0) && (vi_tri_o_truoc[1] <= limit_col_view - 1 )&( vi_tri_o_truoc[1] >= 0)  ) {
-                         }else{
-                           console.log("---------/////////////////////////////////////////////////////////////--------------------------");
-                           thanh_dia_chi_0.current.focus({preventScroll:true}) ;}
-                       
-                                     
-                               
+                      
+                    a.current.children[index + 1].children[index_j+1].innerHTML = ` <div    style="  position:absolute;      background: inherit;   height: inherit ;   white-space: nowrap;   pointer-events: none;   "> ${ Data[index +vi_tri_cat    ][index_j + vi_tri_cat_col ]  }  </div>`;
+                
+                            
+                      }
+
+                        
+                      }
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------                    
+
+                           //  nếu cố định dòng đầu thì  cật nhật sẽ không cộng  ---- vi_tri_cat  ------------------
+                           for (let index = 0; index < dong_co_dinh ; index++) {
+                
+                            a.current.children[index + 1].children[0].innerHTML = index ;
+                             //********************************* */
+                             //  nếu cố định cột đầu thì  cật nhật sẽ không cộng  ---- vi_tri_cat_col  ------------------
+                               for (let index_j = 0; index_j < cot_co_dinh  ; index_j++) {
+                              a.current.children[0].children[index_j+1].innerHTML = index_j ; 
+                                xac_dinh_zIndex_cell(index, index_j, 0,0  );
+                            
+                
+                }
+                              // cập nhật dữ liệu khi scroll cột không cố định cột
+                                for (let index_j = cot_co_dinh; index_j <= limit_col_view  ; index_j++) {
+                                       a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; 
+  
+                                            xac_dinh_zIndex_cell(index, index_j ,0, vi_tri_cat_col );        
+
+                              }
+  
+  
+  
+  
+                          } 
+                           //  // cập nhật dữ liệu khi scroll  cột không cố định dòng từ dòng 1
+
+                   for (let index = dong_co_dinh; index <= limit_view ; index++) {
+                
+                    a.current.children[index +1].children[0].innerHTML = index + vi_tri_cat ;
+                     //********************************* */
+                     //  nếu cố định cột đầu thì  cật nhật sẽ không cộng  ---- vi_tri_cat_col  ------------------
+                       for (let index_j = 0; index_j <cot_co_dinh ; index_j++) {
+                    a.current.children[0].children[index_j+1].innerHTML = index_j ;
+                      xac_dinh_zIndex_cell(index, index_j , vi_tri_cat  , 0 );      
+        
+        }
+                      // cập nhật dữ liệu khi scroll cột không cố định cột
+                        for (let index_j = cot_co_dinh; index_j <= limit_col_view  ; index_j++) {
+                                 a.current.children[0].children[index_j+1].innerHTML = index_j + vi_tri_cat_col; 
+
+                                    xac_dinh_zIndex_cell(index, index_j , vi_tri_cat  , vi_tri_cat_col );   
+                      }
+
+
+
+
+                  }  
+
+
+                    
+                  }
+
+
+
+                  update_data(dong_co_dinh, cot_co_dinh);
+
+
+           
+
+
+              // các cell bị ẩn bên trái trục
+              // tìm các cell cell bị ẩn bên trái trục gần nhất để hiện dữ liệu lên div show các cell ẩn
+            // sau đó di chuyển div đó phù hợp với khung nhìn
+              for (let index = 0; index <= limit_view ; index++) {
+                let sum_col_hide = 1 ;
+                for (let x = vi_tri_cat_col - 1 ; x >= 0 ; x--) {
+                  a.current.children[ index + 1].children[limit_col+1].style.visibility = "hidden";
+                
+
+                  if (Data[index + vi_tri_cat ][x ] === null) {
+
+                sum_col_hide = sum_col_hide + 1 ;
+                  
+                  }else{
+                    a.current.children[ index + 1].children[limit_col+1].style.visibility = "visible";
+                    // div đó hiện dữ liệu
+                    a.current.children[ index + 1].children[limit_col+1].innerHTML = Data[index + vi_tri_cat][x]  ;
+                    // di chuyển div đó phù hợp với khung nhìn
+                    a.current.children[ index + 1].children[limit_col+1].style.left = (-tro_ve_vi_tri_begin -sum_col_hide*85) + 'px' ;
+                              // xác dịnh zindex cho div đó
+                              for (let x = 0 ; x <= limit_col_view ; x++) {
+                                if (Data[index + vi_tri_cat][x  + vi_tri_cat_col] === null) {
+
+                                
+                                
+                                }else{
+                                  a.current.children[ index + 1].children[limit_col+1].style.zIndex = x ;
+                                  break ;
+                                } 
+
+                              }
+
+                    break ;
+                  } 
+
+                }
+              }
+             
+             
+             
+
+
+
+              if (xuat_hien_the_input) {
+                console.log(     'xuat_hien_the_input--' +  xuat_hien_the_input ) ;
+                console.log(i_array_2d, j_array_2d);
+                
+                console.log(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat +dong_co_dinh - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col + cot_co_dinh - vi_tri_cat_truoc_do_col)));
+                console.log(vi_tri_cat +dong_co_dinh - vi_tri_cat_truoc_do,vi_tri_cat_col + cot_co_dinh - vi_tri_cat_truoc_do_col );
+                change_input_scroll(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat +dong_co_dinh - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col + cot_co_dinh - vi_tri_cat_truoc_do_col))); 
+                   
+              }
+              else
+
+              {
+
+                  // Bước 2: nếu sau khi scroll vị trí tô màu update nằm trong khung nhìn thì tô màu lại ngược lại thì không tô màu lại
+                  console.log('key_enter:   ',vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-vi_tri_cat + vi_tri_cat_truoc_do,vi_tri_o_truoc[1]-vi_tri_cat_col + vi_tri_cat_truoc_do_col ) ;
+                      // set địa chỉ ô click  sau hành động trên
+                     dia_chi_o_click(vi_tri_o_truoc[0]+ i_array_2d,vi_tri_o_truoc[1] + j_array_2d,(vi_tri_o_truoc[0]-(vi_tri_cat +dong_co_dinh - vi_tri_cat_truoc_do)) ,(vi_tri_o_truoc[1]-(vi_tri_cat_col + cot_co_dinh - vi_tri_cat_truoc_do_col)) ) ;
+                     key_enter(vi_tri_o_truoc[0],vi_tri_o_truoc[1],vi_tri_o_truoc[0]-(vi_tri_cat + dong_co_dinh - vi_tri_cat_truoc_do),(vi_tri_o_truoc[1]-(vi_tri_cat_col + cot_co_dinh - vi_tri_cat_truoc_do_col)) );
+                  console.log(vi_tri_click_in_Data);
+                  console.log(vi_tri_o_truoc)
+                 
+                }
+
+
+                console.log("---------/////////////////////////////////////////////////////////////--------------------------");
+
+                console.log(vi_tri_o_truoc);
+
+                   // Bước 3: di chuyển thumb trên thanh scroll bar tự tạo
+
+
+
+            
+             ref_thumb_col.current.style.top = table_excel.current.scrollTop/((limit_scroll+1)*click_scroll_dichuyen)*ref_track_col.current.getBoundingClientRect().height +20+ "px"  ;
+             ref_thumb.current.style.left = table_excel.current.scrollLeft/((limit_scroll_col+1)*click_scroll_dichuyen)*ref_track.current.getBoundingClientRect().width + 20+"px"  ; 
+          
+
+               
 
                      
-                      // bước 3 : vẽ lại muền select
+                      // bước 4 : vẽ lại muền select
 
 
 
@@ -3454,15 +3511,6 @@ let _table  = table_excel.current;
 
 
 
-
-                   // Bước 4: di chuyển thumb trên thanh scroll bar tự tạo
-             
-                   ref_thumb_col.current.style.top = table_excel.current.scrollTop/((limit_scroll+1)*click_scroll_dichuyen)*ref_track_col.current.getBoundingClientRect().height +20+ "px"  ;
-                   ref_thumb.current.style.left = table_excel.current.scrollLeft/((limit_scroll_col+1)*click_scroll_dichuyen)*ref_track.current.getBoundingClientRect().width + 20+"px"  ; 
- 
- 
- 
-            
 
 
 
