@@ -726,7 +726,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                 
                             }
 
-                                run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d , j_array_2d);
+                            run_function_when_input_focus (input_,row_vi_tri_add,col_vi_tri_add,i_array_2d - dong_co_dinh, j_array_2d - cot_co_dinh);
 
                                  // set địa chỉ ô click  sau hành động trên
                            dia_chi_o_click(row_vi_tri_add+i_array_2d - dong_co_dinh,col_vi_tri_add + j_array_2d - cot_co_dinh,row_vi_tri_add  ,col_vi_tri_add) ;
@@ -901,7 +901,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       { 
         console.log('công thức chưa hoàn thành kết thúc ở đây không tính toán');
         console.log(cong_thuc_chua_hoan_thanh); 
-           return  cong_thuc_chua_hoan_thanh = [i,j,text] ;
+           return  cong_thuc_chua_hoan_thanh = [i,j,text,i_array_2d, j_array_2d] ;
        }
     
     
@@ -1035,7 +1035,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                                   var array_loi_tham_chieu = []  ;
                                   let vi_tri_loi_tham_chieu ;
-                                  text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if (j_item!==null) {   if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
+                                  text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if ( j_item!==null&& isNaN(Number(j_item))) {   if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
                                   
                                   if ( (array_loi_tham_chieu.some((item,index) => { vi_tri_loi_tham_chieu = item ;  return text.indexOf("Data["+item[0]+ "]["+item[1]+"]") !== -1 }) === true) ){
                                        // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
@@ -1098,7 +1098,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
 
                    var array_loi_tham_chieu = []  ;
                    let vi_tri_loi_tham_chieu ;
-                   text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if (j_item!==null) {  console.log(j_item); if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
+                   text_formular.map((item, index)=>{   item.map((j_item, index_j) =>{ if ( j_item!==null&& isNaN(Number(j_item))) {  console.log(j_item); if (j_item.indexOf("Data["+(i+i_array_2d)+ "]["+(j + j_array_2d)+"]")!== -1) { array_loi_tham_chieu.push([index,index_j ])   }  } })   })
                    
                    if ( (array_loi_tham_chieu.some((item,index) => { vi_tri_loi_tham_chieu = item ;  return text.indexOf("Data["+item[0]+ "]["+item[1]+"]") !== -1 }) === true) ){
                       // phải có ( ) trước, sau function vì để sau này chạy function ta dùng ()() mới chạy được
@@ -2087,6 +2087,7 @@ console.log('_onKeyDown------------------------------');
                       // khi tính toán xong nếu trả về   cong_thuc_chua_hoan_thanh khác ""  thì viết tiếp công thức vào thẻ input
                       // ngược lại  cong_thuc_chua_hoan_thanh bằng ""  thì tô màu và focus  
                     if (cong_thuc_chua_hoan_thanh != "") {
+                      
                       console.log("_onClick---viet tiếp công thức vào thẻ input");
                       // viet tiếp công thức vào thẻ input nên phải  để  onKeyDown_1_element = true; để không lắng nghe sụ kiện keydown ở element cha của input
                       onKeyDown_1_element = true;
@@ -2097,10 +2098,11 @@ console.log('_onKeyDown------------------------------');
                       mien_select_array_2d[1] =mien_select_array_2d[3] ;
                       // nếu công thức đang viết dở thì khi onclick sẽ viết tiếp công thức vào ô trước đó.
                       // r,c là vị trí r,c thẻ input trong khung nhìn nếu là số âm hoặc lớn hơn limit thì là vị trí đó cách toạ độ 0,0 của khung nhìn 
-                      // r + i_array_2d là vị trí thực tế
+                      // r + i_array_2d_old là vị trí thực tế
                         var r = parseInt(cong_thuc_chua_hoan_thanh[0] )  ;
                         var c = parseInt(cong_thuc_chua_hoan_thanh[1] )  ;
-                   
+                      let i_array_2d_old = cong_thuc_chua_hoan_thanh[3] ;
+                      let j_array_2d_old = cong_thuc_chua_hoan_thanh[4] ;
                         // gán công thức cũ vào text
                         var text = cong_thuc_chua_hoan_thanh[2]  ;
                         let len_text = text.length ;
@@ -2110,10 +2112,10 @@ console.log('_onKeyDown------------------------------');
                       // nếu ấn tiếp vào ô khác mà không viết thêm ký tự + đừng sau. ta cần xoá công thức cũ đã viết đi
 
           
-                     console.log("cong_thuc_chua_hoan_thanh    "+ r +'    '+ c);
+                     console.log("cong_thuc_chua_hoan_thanh" , r, c,text, i_array_2d_old,j_array_2d_old );
 
                        
-                        console.log( cong_thuc_them_vao[0]);
+                     
                         // khi click vào ô khác lần 2,3 để thay đổi công thức viết ta cần xoá công thức cũ đã viết đi
                         // click vào ô khác lần 2,3 thì input_truoc_do.cong_thuc_them_vao[0] và  input_truoc_do.vi_tri_cong_thuc_them_vao[0]  đã được set value
                         // nếu input_truoc_do.cong_thuc_them_vao[0] === undefined tức lần nhấn đầu thì không có công thức cũ để xoá nên không làm gì
@@ -2127,14 +2129,15 @@ console.log('_onKeyDown------------------------------');
                        }
                        
                        // update công thức mới
+                       // i,j , i_array_2d , j_array_2d là vị trí mouse down khi viết công thức
                        let text_update = text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) + "(Data["+(i+i_array_2d)+"]["+(j + j_array_2d )+ "])" +text.slice(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ,len_text) ;
                        
                         cong_thuc_them_vao[0] = "(Data["+(i+i_array_2d)+"]["+ (j + j_array_2d )+ "])" ;
-                        cong_thuc_them_vao[1] = i+i_array_2d;
-                        cong_thuc_them_vao[2] = j + j_array_2d;
+                        cong_thuc_them_vao[1] = r+i_array_2d_old;
+                        cong_thuc_them_vao[2] = c + j_array_2d_old;
 
                         vi_tri_cong_thuc_them_vao = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input ;
-                        console.log( cong_thuc_them_vao[0]);
+                     
 
                        // khi scroll nếu input trước đó nằm trong khung nhìn thì viết tiếp công thức vào input đó
                         // nếu input trước đó không nằm trong khung nhìn thì viết rồi lưu công thức vào mảng text_formular
@@ -2150,8 +2153,9 @@ console.log('_onKeyDown------------------------------');
                               
                               
                               console.log(text_update);
-                                text_formular[r+i_array_2d][c + j_array_2d] =  text_update;
+                                text_formular[cong_thuc_them_vao[1]][cong_thuc_them_vao[2]] =  text_update;
                                 cong_thuc_chua_hoan_thanh[2] = text_update ;
+                                console.log( "cong_thuc_chua_hoan_thanh    ",text_update,cong_thuc_them_vao[1],cong_thuc_them_vao[2]);
                                 let paint =  paint_text(text_update,vi_tri_focus ) ;
                                   console.log(paint);
                                 input_truoc_do.innerHTML = paint[0] ;
@@ -2170,42 +2174,12 @@ console.log('_onKeyDown------------------------------');
                                   }, 0);
                                   
                                
-                                    
-                        // hiện công thức đó lên thanh formular để người dùng viết tiếp.
-                        var input_formula = thanh_dia_chi_0.current;
-                        input_formula.value = text_formular[r+i_array_2d][c + j_array_2d ] ;
-                        console.log(text_formular[r+i_array_2d][c + j_array_2d ]);
-                        input_formula.vi_tri = [r+i_array_2d,c + j_array_2d] ;
-                                  if (thanh_dia_chi_0_on_keydown === true) {
-
-                                    
-                                
-                                    setTimeout(() => {
-
-                                       input_formula.focus({preventScroll:true});
-                                   
-                                      }, 0);
-                                  }
-                       
+                           
                                                       
                          
                         }else  {
-                             text_formular[r+i_array_2d][c + j_array_2d] =  text_update; 
-                              cong_thuc_chua_hoan_thanh[2] = text_formular[r+i_array_2d][c + j_array_2d ] ; 
-                                // hiện công thức đó lên thanh formular để người dùng viết tiếp.
-                                var input_formula = thanh_dia_chi_0.current;
-                            input_formula.value = text_formular[r+i_array_2d][c + j_array_2d ] ;
-                            input_formula.vi_tri = [r+i_array_2d,c + j_array_2d] ;
-                                  // thay đổi độ rộng của input phù hợp với ký tự nhập vào
-                                  var length_ = ((input_formula.value.length + 1) * 8) ;
-                                  if ( length_ >= 100) {
-                                    input_formula.style.width =  length_ + 'px';
-                                
-                                  
-                                  }
-                            setTimeout(() => { input_formula.focus({preventScroll:true}); }, 0);
-                                  
-
+                          text_formular[cong_thuc_them_vao[1]][cong_thuc_them_vao[2]] =  text_update;
+                          cong_thuc_chua_hoan_thanh[2] = text_update ;
                              }  
                         
                         onclick_tinh_toan = true ;
