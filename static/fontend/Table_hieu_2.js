@@ -406,7 +406,8 @@ if (top_thumb+move +15 >= rect_ref_track.height +20 ) {
       ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // hàm này trả về array trong đó array[1], và array[2] dùng để xác định vị trí của con trỏ trong text mới
       function paint_text(text, vi_tri_focus) {
-  
+        console.log("functioc paint_text",text, vi_tri_focus );
+        text = text.toString();
         text =  text.slice(0, vi_tri_focus) + "|_|_|" + text.slice(vi_tri_focus);
         console.log(text);
         var array_color = [ 'red' , 'blue','orange', '#34568b', '#FF6F61','#88B04B' ,'#9C4722' ,'#00A170'   , '#CE3175', '#0072B5', '	#999900', '#926AA6','#00008B' ,'#CD212A', '#282D3C' ] ;
@@ -701,7 +702,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
                                 if (cong_thuc_them_vao[0] === null) {
                                    vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input  ;  
                                 } else {
-                                   vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ;  
+                                   vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].toString().length ;  
                                 }
                                
                                 console.log(vi_tri_focus);
@@ -828,6 +829,7 @@ function dia_chi_o_click(dia_chi_o_click_array_2d_row,dia_chi_o_click_array_2d_c
       if (text == null) { text = '' ; }
    // Bước 1: kiểm tra xem công thức hoàn thành chưa nếu chưa viết tiếp được.    
 // khi bấm enter thì xoá ký tự công thức thừa gần focus nhất để công thức không hoàn thành cũng tính
+        text = text.toString() ;
         let text_den_vi_tri_con_tro = text.slice(0,vi_tri_con_tro_khi_di_chuyen_trong_double_click_input) ;
     // z chỗ này chạy khi tính toán bằng cách bấm enter    
     // kết thúc công thức toàn bộ text co nhiều dấu chẳng hạn +9+6+++ thì xoá hết dấu + ở cuối đi
@@ -2002,7 +2004,7 @@ console.log('_onKeyDown------------------------------');
                           Object.assign(input_.style,css.input_focus , { width: width_input_focus} ) ;
      
                         
-                          let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
+                          let len  = text_formular[i+i_array_2d][j + j_array_2d].toString().length  ;
                           let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
                        
                          input_.innerHTML = paint[0] ;
@@ -2147,7 +2149,7 @@ console.log('_onKeyDown------------------------------');
                           var input_truoc_do = a.current.children[r + 1].children[c+1].children[0]; 
 
                          // focus tại vị trí mới nhưng không set lại vi_tri_con_tro_khi_di_chuyen_trong_double_click_input. Biến này vẫn ở trạng thái trước đó
-                         let vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].length ; 
+                         let vi_tri_focus = vi_tri_con_tro_khi_di_chuyen_trong_double_click_input + cong_thuc_them_vao[0].toString().length ; 
                          console.log('vi_tri_focus      ' + vi_tri_focus)
                          console.log('vi_tri_con_tro_khi_di_chuyen_trong_double_click_input      ' + vi_tri_con_tro_khi_di_chuyen_trong_double_click_input)
                               
@@ -2353,7 +2355,7 @@ console.log('_onKeyDown------------------------------');
                // mục đích của người dùng là viết tiếp công thức khi ấn phím thì
              // di chuyển con trỏ tới vị trí focus trước  đó.
               // nếu thẻ element table trước đó được double click thì vi_tri_con_tro_khi_di_chuyen_trong_double_click_input sẽ là khác undefined
-              let len  = text_formular[i+i_array_2d][j + j_array_2d].length  ;
+              let len  = text_formular[i+i_array_2d][j + j_array_2d].toString().length  ;
               let paint =  paint_text(text_formular[i+i_array_2d][j + j_array_2d],len ) ;
            
              input_.innerHTML = paint[0] ;
@@ -2374,20 +2376,26 @@ console.log('_onKeyDown------------------------------');
              // phải setTimeout ở đây vì phải đợi input lấy giá trị từ bàn phím mới gán vào text_formular
              // sau đó gán giá trị khi nhấn lên input_formula
              setTimeout(() => { 
-               text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
+              text_formular[i + i_array_2d][j + j_array_2d] = input_.textContent ; 
                console.log( text_formular[i + i_array_2d][j + j_array_2d]) ; 
-                input_formula.value =  text_formular[i + i_array_2d][j + j_array_2d] ;
-                 input_formula.vi_tri = [i + i_array_2d,j + j_array_2d] ; 
+             
                  let range = document.createRange();
                  let selection = window.getSelection();
                 // setTimeout ở đây để window.getSelection() lấy vị trí xong mới cho vào range
                   
                      console.log(selection.anchorNode , selection.anchorOffset);
-                     range.setStart(input_.firstChild, 0);
+               
+                     if (input_.firstChild === null) {
+                      vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = 0 ;
+                    } else {
+                      // xác định vị trí con trỏ trong input
+                      range.setStart(input_.firstChild, 0);
                      range.setEnd(selection.anchorNode , selection.anchorOffset);
                       vi_tri_con_tro_khi_di_chuyen_trong_double_click_input = range.toString().length;
                      console.log(vi_tri_con_tro_khi_di_chuyen_trong_double_click_input);
-                 
+                    }
+
+
 
                  } , 0);
              
@@ -3219,7 +3227,7 @@ let _table  = table_excel.current;
                                 
                       for (let x = limit_col_view ; x >= 0 ; x--) {
 
-                        if (Data[index ][x  ] === null) {
+                        if (Data[index +vi_tri_cat ][x + vi_tri_cat_col] === null) {
 
                           a.current.children[index + 1].children[x+1].style.zIndex = x ;
                         
